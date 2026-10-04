@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ingredient Index — ConsumerRise | Search 12 Controversial Food Ingredients</title>
+<meta name="description" content="Search the ConsumerRise Ingredient Index: 12 debated food ingredients rated High, Medium, or Low risk, with E-numbers, aliases, and plain-word explanations.">
+<meta property="og:title" content="Ingredient Index — ConsumerRise">
+<meta property="og:description" content="Twelve debated ingredients, rated High / Medium / Low, with plain-word explanations and label aliases.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23D93A2B'/%3E%3Ctext x='32' y='44' font-family='Arial Black,Arial' font-size='30' font-weight='900' fill='white' text-anchor='middle'%3ECR%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<div class="ticker" aria-hidden="true"><span>Consumer Rising &nbsp;·&nbsp; Free every Tuesday at 7am &nbsp;·&nbsp; <b>Subscribe free</b> &nbsp;·&nbsp; Consumer Rising &nbsp;·&nbsp; Free every Tuesday at 7am &nbsp;·&nbsp; <b>Subscribe free</b> &nbsp;·&nbsp;&nbsp;</span></div>
+<header class="site-header">
+  <div class="header-in">
+    <a class="brand" href="/index.html" aria-label="ConsumerRise home">
+      <span class="brand-mark">CR</span>
+      <span><span class="brand-name">Consumer<em>Rise</em></span><br><span class="brand-sub">Independent food intelligence</span></span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="mainnav">Menu</button>
+    <nav class="main-nav" id="mainnav" aria-label="Main">
+      <a href="/index.html">Home</a>
+      <a href="/investigations.html">Investigations</a>
+      <a href="/ingredients.html" class="active">Ingredients</a>
+      <a href="/scanner.html">Scanner</a>
+      <a href="/pro.html">Pro</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/about.html">About</a>
+      <a href="/faq.html">FAQ</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="page-hero">
+    <div class="wrap">
+      <span class="kicker">The dossier</span>
+      <h1>Ingredient Index</h1>
+      <p class="lead">Twelve of the most debated ingredients in American food. Search by name or alias, filter by risk or category. Risk ratings are our editorial judgment — the evidence is right there next to each one.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="filters" role="search">
+        <div class="filter-row">
+          <div class="filter-group">
+            <label for="ing-search">Search by ingredient name or alias</label>
+            <input type="search" id="ing-search" placeholder="Try &quot;Red 40&quot;, &quot;E211&quot;, &quot;HFCS&quot;…" autocomplete="off">
+          </div>
+          <div class="filter-group">
+            <label for="ing-cat">Category</label>
+            <select id="ing-cat">
+              <option value="">All categories</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Risk level</label>
+            <div class="risk-btns" role="group" aria-label="Risk level filter">
+              <button class="risk-btn" data-risk="" aria-pressed="true">All</button>
+              <button class="risk-btn" data-risk="high" aria-pressed="false">High</button>
+              <button class="risk-btn" data-risk="medium" aria-pressed="false">Medium</button>
+              <button class="risk-btn" data-risk="low" aria-pressed="false">Low</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="ing-count" id="ing-count" role="status"></p>
+      <div class="ing-grid" id="ing-grid"></div>
+      <div class="disclaimer">Risk ratings reflect ConsumerRise's editorial judgment based on published research and regulator actions. This index is general information, not medical advice. Talk to your doctor about your own health.</div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="brand" href="/index.html" aria-label="ConsumerRise home" style="color:var(--paper)">
+        <span class="brand-mark">CR</span>
+        <span><span class="brand-name">Consumer<em>Rise</em></span><br><span class="brand-sub" style="color:rgba(250,244,232,.6)">Independent food intelligence</span></span>
+      </a>
+      <p>Independent investigations into the ingredients hiding in American groceries.</p>
+      <p class="footer-tag">Decoding labels. Protecting families. Rising together.</p>
+      <p style="margin-top:14px"><a href="mailto:hello@consumerrising.com" style="color:var(--paper)">hello@consumerrising.com</a></p>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="/investigations.html">Investigations</a></li>
+        <li><a href="/ingredients.html">Ingredient Index</a></li>
+        <li><a href="/scanner.html">Label Scanner</a></li>
+        <li><a href="/pro.html">Pro Membership</a></li>
+        <li><a href="/resources.html">Resources</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/faq.html">FAQ</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+        <li><a href="/privacy.html">Privacy</a></li>
+        <li><a href="/terms.html">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>© <span data-year>2026</span> ConsumerRise. All rights reserved.</span>
+    <span>General information only — not medical advice.</span>
+  </div>
+</footer>
+<script src="/js/config.js"></script>
+<script src="/js/ingredients-data.js"></script>
+<script src="/js/site.js"></script>
+<script>
+(function () {
+  var data = window.CR_INGREDIENTS || [];
+  var grid = document.getElementById("ing-grid");
+  var count = document.getElementById("ing-count");
+  var search = document.getElementById("ing-search");
+  var catSel = document.getElementById("ing-cat");
+  var risk = "";
+
+  var cats = [];
+  data.forEach(function (d) { if (cats.indexOf(d.category) === -1) cats.push(d.category); });
+  cats.sort().forEach(function (c) {
+    var o = document.createElement("option");
+    o.value = c; o.textContent = c;
+    catSel.appendChild(o);
+  });
+
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function render() {
+    var q = search.value.trim().toLowerCase();
+    var cat = catSel.value;
+    var list = data.filter(function (d) {
+      if (risk && d.risk !== risk) return false;
+      if (cat && d.category !== cat) return false;
+      if (q) {
+        var hay = (d.name + " " + d.aliases.join(" ") + " " + d.category).toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+    count.textContent = list.length === data.length
+      ? "Showing all " + data.length + " ingredients"
+      : "Showing " + list.length + " of " + data.length + " ingredients";
+    if (!list.length) {
+      grid.innerHTML = '<div class="no-results">No ingredients match. Try a different search — for example "dye", "E320", or "sweetener".</div>';
+      return;
+    }
+    grid.innerHTML = list.map(function (d) {
+      var bullets = d.bullets.map(function (b) { return "<li>" + esc(b) + "</li>"; }).join("");
+      var link = d.link ? '<p style="margin-top:12px"><a href="' + d.link + '" style="font-weight:800">Read the full investigation →</a></p>' : "";
+      return (
+        '<article class="ing-card">' +
+          '<div class="ing-card-head"><div><h3>' + esc(d.name) + '</h3>' +
+          '<p class="ing-cat">' + esc(d.category) + '</p></div>' +
+          '<span class="risk risk-' + d.risk + '">' + d.risk + '</span></div>' +
+          '<div class="ing-card-body">' +
+            '<p class="ing-aliases"><b>Also called:</b> ' + esc(d.aliases.join(", ")) + '</p>' +
+            '<p>' + esc(d.description) + '</p>' +
+            '<ul>' + bullets + '</ul>' + link +
+          '</div>' +
+        '</article>'
+      );
+    }).join("");
+  }
+
+  search.addEventListener("input", render);
+  catSel.addEventListener("change", render);
+  document.querySelectorAll(".risk-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      risk = btn.getAttribute("data-risk");
+      document.querySelectorAll(".risk-btn").forEach(function (b) {
+        b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+      });
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

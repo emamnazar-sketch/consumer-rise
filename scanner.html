@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Label Scanner — ConsumerRise | Decode Any Food Label</title>
+<meta name="description" content="Snap a photo of any food label and ConsumerRise decodes what's really inside. Free members get 3 scans a day.">
+<meta property="og:title" content="Label Scanner — ConsumerRise">
+<meta property="og:description" content="Point, shoot, know. Snap any label and get every flagged ingredient explained in plain words.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23D93A2B'/%3E%3Ctext x='32' y='44' font-family='Arial Black,Arial' font-size='30' font-weight='900' fill='white' text-anchor='middle'%3ECR%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<div class="ticker" aria-hidden="true"><span>Consumer Rising &nbsp;·&nbsp; Free every Tuesday at 7am &nbsp;·&nbsp; <b>Subscribe free</b> &nbsp;·&nbsp; Consumer Rising &nbsp;·&nbsp; Free every Tuesday at 7am &nbsp;·&nbsp; <b>Subscribe free</b> &nbsp;·&nbsp;&nbsp;</span></div>
+<header class="site-header">
+  <div class="header-in">
+    <a class="brand" href="/index.html" aria-label="ConsumerRise home">
+      <span class="brand-mark">CR</span>
+      <span><span class="brand-name">Consumer<em>Rise</em></span><br><span class="brand-sub">Independent food intelligence</span></span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="mainnav">Menu</button>
+    <nav class="main-nav" id="mainnav" aria-label="Main">
+      <a href="/index.html">Home</a>
+      <a href="/investigations.html">Investigations</a>
+      <a href="/ingredients.html">Ingredients</a>
+      <a href="/scanner.html" class="active">Scanner</a>
+      <a href="/pro.html">Pro</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/about.html">About</a>
+      <a href="/faq.html">FAQ</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="page-hero">
+    <div class="wrap">
+      <span class="kicker">The label scanner</span>
+      <h1>Point. Shoot. Know.</h1>
+      <p class="lead">Snap a photo of any product label. We decode what's really inside — matched against our Ingredient Index, explained in plain words.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="scan-steps">
+        <div class="scan-step"><span class="step-no">Step 1</span><h3>Join free</h3><p>One email unlocks the scanner. Free members get <strong>3 scans a day</strong> — no card, no catch.</p></div>
+        <div class="scan-step"><span class="step-no">Step 2</span><h3>Snap the label</h3><p>Take a photo in the store or upload one from your camera roll. Aim for the ingredients panel.</p></div>
+        <div class="scan-step"><span class="step-no">Step 3</span><h3>Get the truth</h3><p>Every flagged ingredient explained in plain words, with its risk rating and what to buy instead.</p></div>
+      </div>
+
+      <!-- Email gate -->
+      <div id="scan-gate" class="dossier gate-card">
+        <h2 style="font-weight:900;text-transform:uppercase;font-size:26px;margin-bottom:12px">Unlock the scanner</h2>
+        <p style="color:var(--ink-soft);margin-bottom:22px">Join the free ConsumerRise community to scan up to <strong>3 food products every single day</strong>.</p>
+        <form action="#" method="post">
+          <div class="field">
+            <label for="gate-email">Email address</label>
+            <input type="email" id="gate-email" name="email" placeholder="you@example.com" required>
+          </div>
+          <button class="btn" type="submit" style="width:100%">Join free &amp; scan now →</button>
+        </form>
+        <p class="newsletter-note">No spam. Unsubscribe anytime. Your photos stay yours.</p>
+      </div>
+
+      <!-- Scanner tool (hidden until gate passes) -->
+      <div id="scan-tool" class="dossier gate-card" hidden>
+        <h2 style="font-weight:900;text-transform:uppercase;font-size:26px;margin-bottom:12px">Scan a label</h2>
+        <p style="color:var(--ink-soft);margin-bottom:22px">Take a clear photo of the <strong>ingredients panel</strong> — flat, well-lit, text readable.</p>
+        <label class="upload-zone" for="scan-file">
+          <span class="big">📷 Take a photo / upload</span><br>
+          <span style="color:var(--ink-soft);font-size:15px">Tap to use your camera or choose a photo</span>
+          <input type="file" id="scan-file" accept="image/*" capture="environment">
+        </label>
+        <div id="scan-preview"></div>
+        <p class="center mt"><button class="btn" id="scan-analyze" disabled>Decode this label</button></p>
+        <div id="scan-result"></div>
+      </div>
+
+      <div class="disclaimer" style="max-width:820px;margin-left:auto;margin-right:auto">
+        <strong>How your photos are handled:</strong> label photos are used only to decode ingredients for you. We never sell your photos or your data. See the <a href="/privacy.html">privacy policy</a> for details.
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="brand" href="/index.html" aria-label="ConsumerRise home" style="color:var(--paper)">
+        <span class="brand-mark">CR</span>
+        <span><span class="brand-name">Consumer<em>Rise</em></span><br><span class="brand-sub" style="color:rgba(250,244,232,.6)">Independent food intelligence</span></span>
+      </a>
+      <p>Independent investigations into the ingredients hiding in American groceries.</p>
+      <p class="footer-tag">Decoding labels. Protecting families. Rising together.</p>
+      <p style="margin-top:14px"><a href="mailto:hello@consumerrising.com" style="color:var(--paper)">hello@consumerrising.com</a></p>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="/investigations.html">Investigations</a></li>
+        <li><a href="/ingredients.html">Ingredient Index</a></li>
+        <li><a href="/scanner.html">Label Scanner</a></li>
+        <li><a href="/pro.html">Pro Membership</a></li>
+        <li><a href="/resources.html">Resources</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/faq.html">FAQ</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+        <li><a href="/privacy.html">Privacy</a></li>
+        <li><a href="/terms.html">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>© <span data-year>2026</span> ConsumerRise. All rights reserved.</span>
+    <span>General information only — not medical advice.</span>
+  </div>
+</footer>
+<script src="/js/config.js"></script>
+<script src="/js/site.js"></script>
+</body>
+</html>

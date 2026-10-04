@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://consumerrising.com/sitemap.xml
