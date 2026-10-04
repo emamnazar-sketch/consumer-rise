@@ -1,17 +1,19 @@
 /* ConsumerRise — shared front-end config.
-   Hook up real backends later by filling in these values (one-line changes).
-   All values default to null = static/demo behavior with graceful fallbacks. */
+   API endpoints below are Cloudflare Pages Functions in /functions (repo).
+   They need the D1 database + binding "DB" wired up in the Pages dashboard
+   (see README). If a call fails, forms fall back gracefully — never lose a signup. */
 window.CR_CONFIG = {
-  // POST JSON {email, source} — e.g. a Kit/ConvertKit form endpoint or
-  // Cloudflare Pages Function URL. null = store locally + show success state.
-  NEWSLETTER_ENDPOINT: null,
+  // POST JSON {email, source} → /functions/api/subscribe.js (D1 subscribers table)
+  NEWSLETTER_ENDPOINT: "/api/subscribe",
 
-  // POST JSON {name, email, subject, message} for the contact form.
-  // null = show success state without sending (demo).
-  CONTACT_ENDPOINT: null,
+  // POST JSON {name, email, subject, message} → /functions/api/contact.js (D1)
+  CONTACT_ENDPOINT: "/api/contact",
 
-  // POST multipart/form-data {photo} -> {ingredients:[...]} for the scanner.
-  // null = scanner shows the "analysis coming soon" state (documented TODO).
+  // POST JSON {email} → /functions/api/scan.js — enforces 3 free scans/day per email (D1)
+  SCAN_ENDPOINT: "/api/scan",
+
+  // POST multipart/form-data {photo} -> {ingredients:[...]} for REAL label analysis.
+  // null = scanner shows the honest "analysis being built" state (documented TODO).
   SCANNER_API: null,
 
   // Set to a Stripe Payment Link / Checkout URL when Pro billing is wired.

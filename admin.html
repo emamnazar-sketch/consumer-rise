@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin Dashboard — ConsumerRise</title>
+<meta name="description" content="Private admin dashboard for ConsumerRise. Not for the public.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  .admin-wrap{max-width:1060px;margin:0 auto;padding:40px 20px 80px}
+  .stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px;margin:26px 0 40px}
+  .stat-card{background:#fff;border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink);padding:20px}
+  .stat-card .num{font-family:Archivo,sans-serif;font-weight:900;font-size:44px;line-height:1}
+  .stat-card .lbl{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin-top:8px}
+  .chart-box{background:#fff;border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink);padding:22px;margin-bottom:34px}
+  .chart-box h2{font-family:Archivo,sans-serif;font-weight:800;text-transform:uppercase;font-size:18px;margin-bottom:16px}
+  .chart-box canvas{max-height:300px}
+  table.sources{width:100%;border-collapse:collapse;background:#fff;border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink)}
+  table.sources th,table.sources td{text-align:left;padding:12px 16px;border-bottom:2px solid var(--paper-dark,#e8dfc9)}
+  table.sources th{font-family:Archivo,sans-serif;text-transform:uppercase;font-size:13px;letter-spacing:.06em}
+  #admin-login{max-width:460px;margin:60px auto}
+  .err{color:#b3261e;font-weight:700;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="ticker" aria-hidden="true"><span>Consumer Rising &nbsp;·&nbsp; Admin — private &nbsp;·&nbsp; Consumer Rising &nbsp;·&nbsp; Admin — private &nbsp;·&nbsp;&nbsp;</span></div>
+<header class="site-header">
+  <div class="header-in">
+    <a class="brand" href="/index.html" aria-label="ConsumerRise home">
+      <span class="brand-mark">CR</span>
+      <span><span class="brand-name">Consumer<em>Rise</em></span><br><span class="brand-sub">Independent food intelligence</span></span>
+    </a>
+  </div>
+</header>
+
+<main class="admin-wrap">
+  <!-- Step 1: password gate. Key is never stored — it is only sent with the stats request. -->
+  <div id="admin-login" class="dossier">
+    <h1 style="font-family:Archivo,sans-serif;font-weight:900;text-transform:uppercase;font-size:26px;margin-bottom:12px">Admin sign in</h1>
+    <p style="color:var(--ink-soft);margin-bottom:20px">This page is private. Enter your admin password to see the numbers.</p>
+    <form id="admin-form" action="#" method="post">
+      <div class="field">
+        <label for="admin-key">Admin password</label>
+        <input type="password" id="admin-key" name="key" autocomplete="current-password" required>
+      </div>
+      <button class="btn" type="submit" style="width:100%">Show dashboard</button>
+      <p class="err" id="admin-err" role="alert" hidden></p>
+    </form>
+  </div>
+
+  <!-- Step 2: dashboard (hidden until the password checks out) -->
+  <div id="admin-dash" hidden>
+    <h1 style="font-family:Archivo,sans-serif;font-weight:900;text-transform:uppercase;font-size:34px;margin-bottom:6px">Site numbers</h1>
+    <p style="color:var(--ink-soft);margin-bottom:10px">Counts only — no email addresses are shown here, ever.</p>
+
+    <div class="stat-cards">
+      <div class="stat-card"><div class="num" id="t-subs">–</div><div class="lbl">Newsletter subscribers</div></div>
+      <div class="stat-card"><div class="num" id="t-msgs">–</div><div class="lbl">Contact messages</div></div>
+      <div class="stat-card"><div class="num" id="t-scans">–</div><div class="lbl">Label scans (all time)</div></div>
+    </div>
+
+    <div class="chart-box">
+      <h2>New subscribers per day — last 30 days</h2>
+      <canvas id="ch-signups"></canvas>
+    </div>
+
+    <div class="chart-box">
+      <h2>Scans per day — last 30 days</h2>
+      <canvas id="ch-scans"></canvas>
+    </div>
+
+    <div class="chart-box">
+      <h2>Where subscribers come from</h2>
+      <table class="sources">
+        <thead><tr><th>Page</th><th>Signups</th></tr></thead>
+        <tbody id="src-body"><tr><td colspan="2">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var form = document.getElementById("admin-form");
+  var err = document.getElementById("admin-err");
+  var charts = [];
+
+  function showErr(msg) {
+    err.textContent = msg;
+    err.hidden = false;
+  }
+
+  function fillSeries(rows) {
+    // Build a full 30-day series (zeros for quiet days) so the chart reads honestly.
+    var map = {};
+    rows.forEach(function (r) { map[r.day] = r.count; });
+    var labels = [], data = [];
+    var d = new Date();
+    for (var i = 29; i >= 0; i--) {
+      var day = new Date(d.getTime() - i * 86400000);
+      var key = day.toISOString().slice(0, 10);
+      labels.push(key.slice(5));
+      data.push(map[key] || 0);
+    }
+    return { labels: labels, data: data };
+  }
+
+  function draw(id, series, label, color, type) {
+    var ctx = document.getElementById(id).getContext("2d");
+    charts.push(new Chart(ctx, {
+      type: type,
+      data: {
+        labels: series.labels,
+        datasets: [{
+          label: label,
+          data: series.data,
+          borderColor: color,
+          backgroundColor: type === "bar" ? color : color + "33",
+          borderWidth: 3,
+          fill: type !== "bar",
+          tension: 0.25
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+      }
+    }));
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    err.hidden = true;
+    var key = document.getElementById("admin-key").value;
+    if (!key) return;
+
+    fetch("/api/admin/stats?key=" + encodeURIComponent(key))
+      .then(function (r) {
+        if (r.status === 403) throw new Error("wrong");
+        if (!r.ok) throw new Error("bad");
+        return r.json();
+      })
+      .then(function (res) {
+        if (!res || !res.ok) throw new Error("bad");
+        document.getElementById("admin-login").hidden = true;
+        document.getElementById("admin-dash").hidden = false;
+        document.getElementById("t-subs").textContent = res.totals.subscribers;
+        document.getElementById("t-msgs").textContent = res.totals.messages;
+        document.getElementById("t-scans").textContent = res.totals.scans;
+        draw("ch-signups", fillSeries(res.signupsByDay), "Signups", "#2F7D4E", "line");
+        draw("ch-scans", fillSeries(res.scansByDay), "Scans", "#D93A2B", "bar");
+        var tb = document.getElementById("src-body");
+        tb.innerHTML = "";
+        if (!res.topSources.length) {
+          tb.innerHTML = "<tr><td colspan='2'>No signups yet.</td></tr>";
+        } else {
+          res.topSources.forEach(function (s) {
+            var tr = document.createElement("tr");
+            var td1 = document.createElement("td");
+            td1.textContent = s.source;
+            var td2 = document.createElement("td");
+            td2.textContent = s.count;
+            tr.appendChild(td1); tr.appendChild(td2);
+            tb.appendChild(tr);
+          });
+        }
+      })
+      .catch(function (e) {
+        showErr(e.message === "wrong"
+          ? "Wrong password. Try again."
+          : "Could not load the numbers. Check your connection and try again.");
+      });
+  });
+})();
+</script>
+</body>
+</html>

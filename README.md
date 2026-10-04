@@ -42,32 +42,53 @@ print-inspired. Deliberately NOT The Family Ground's forest-green branding.
 | `privacy.html` / `terms.html` | Rewritten policies, dated May 2026 |
 | `404.html`, `robots.txt`, `sitemap.xml` | Standard |
 
-Shared: `css/style.css`, `js/config.js` (all backend endpoints in ONE place),
+Shared: `css/style.css`, `js/config.js` (all endpoints in ONE place),
 `js/site.js` (nav, newsletter/contact forms, scanner gate, pro notice).
 
-## TODOs (backend hookups — all one-line changes in `js/config.js`)
+## Database — Cloudflare D1 + Pages Functions (no Supabase needed)
 
-1. **Newsletter endpoint** — `NEWSLETTER_ENDPOINT: null`. Set to the Kit/email
-   form endpoint (POST JSON `{email, source}`). Until then, signups are stored
-   in the visitor's own `localStorage` and show a success state.
-2. **Scanner analysis API** — `SCANNER_API: null`. Needs a real image-analysis
-   backend: accept a label photo, return flagged ingredients matched to the
-   index. Until then, the scanner shows an honest "analysis being built" state
-   and the photo never leaves the device.
-3. **Pro checkout** — `PRO_CHECKOUT_URL: null`. Set to a Stripe Payment Link /
+All data lives in the owner's Cloudflare account (free tier). No other services.
+
+| Endpoint | Function file | What it does |
+|---|---|---|
+| `POST /api/subscribe` | `functions/api/subscribe.js` | `{email, source}` → dedupes by email → `{ok:true}` / `{ok:true, already:true}`. Rate-limited: 10 req/min per IP. |
+| `POST /api/contact` | `functions/api/contact.js` | `{name, email, subject, message}` → saved → `{ok:true}` |
+| `POST /api/scan` | `functions/api/scan.js` | `{email}` → counts scans in last 24h → `{ok:true, remaining}` or `{ok:false, reason:"limit", remaining:0}` (3/day). No photo bytes accepted or stored. |
+| `GET /api/admin/stats?key=…` | `functions/api/admin/stats.js` | Password-gated (`ADMIN_PASSWORD` env var). Returns totals, 30-day signups/scans series, top sources. Counts only — never emails. |
+
+`schema.sql` (repo root) creates `subscribers`, `contact_messages`, `scans`
+(+ indexes). `admin.html` is the private dashboard — password field, Chart.js
+charts, totals cards, top-sources table. It is intentionally NOT in the nav or
+sitemap; visit it directly. Frontend forms POST to `/api/*` and fall back
+gracefully (newsletter keeps a local copy) if the API is ever unreachable.
+
+**One-time dashboard setup** (parent agent — do NOT skip):
+1. Cloudflare dashboard → Workers & Pages → **D1** → Create database named `consumer-rise`.
+2. Open the database → **Console** → paste the full contents of `schema.sql` → Execute.
+3. Pages project `consumer-rise` → **Settings → Functions → D1 database bindings** → Add binding: variable name `DB`, select the `consumer-rise` database → Save, then **redeploy** the project (bindings need a fresh deploy).
+4. Same project → **Settings → Environment variables** → add `ADMIN_PASSWORD` = a long random password (Production). Keep it secret — anyone with it sees the stats.
+5. Test: open `https://consumer-rise.pages.dev/api/admin/stats?key=WRONG` → expect `{"ok":false,"reason":"forbidden"}`. Then open `/admin.html` and sign in with the real password.
+
+## TODOs (remaining — backend hookups)
+
+1. **Real label-photo analysis** — `SCANNER_API: null` in `js/config.js`. Needs an
+   image-analysis backend: accept a label photo, return flagged ingredients
+   matched to the index. Until then, the scanner page honestly says "analysis
+   being built", the photo never leaves the device, and `/api/scan` only runs
+   the 3-free-scans/day counter.
+2. **Pro checkout** — `PRO_CHECKOUT_URL: null`. Set to a Stripe Payment Link /
    Checkout URL for the $12/mo plan. Until then, the trial button shows an
    "opening soon" notice and captures the email via the newsletter form.
-4. **Contact form delivery** — `CONTACT_ENDPOINT: null`. POST JSON
-   `{name, email, subject, message}` to an inbox/forwarding endpoint.
-   Until then, shows a success state without sending.
+3. **Newsletter delivery** — signups are stored in D1 (`subscribers` table), but
+   nobody is *emailed* yet. Hook the table to an email sender (Kit, Resend, or a
+   scheduled Pages Function) for the Tuesday 7am send.
+4. **Toolkit downloads** — the 4 resource downloads (Label Reader Checklist,
+   Shopping List Template, Restaurant Guide, School Lunch Advocacy Toolkit)
+   are "coming soon" cards; generate the PDFs when ready.
 5. **Archive** — the old nav had a dead `/archive` link; the investigations
    index replaces it. Old `/home`, `/fast`, `/fast-admin` routes were 404s and
    are intentionally not carried over.
-6. **Toolkit downloads** — the 4 resource downloads (Label Reader Checklist,
-   Shopping List Template, Restaurant Guide, School Lunch Advocacy Toolkit)
-   are "coming soon" cards; generate the PDFs when ready.
-7. **Supabase** — parked (org at free-plan limit). If a project frees up, the
-   scanner gate + newsletter could move to Supabase Auth/tables.
+6. **Supabase** — no longer needed. Parked permanently for this site; D1 covers it.
 
 ## Local preview
 
