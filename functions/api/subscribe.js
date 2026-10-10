@@ -60,6 +60,13 @@ function json(data, status) {
 
 export async function onRequest(context) {
   const { request, env } = context;
+  /* TEMPORARY DEBUG — GET ?dbg=email lets us see Beehiiv's exact response. Remove. */
+  if (request.method === "GET") {
+    const email = new URL(request.url).searchParams.get("dbg") || "";
+    if (!EMAIL_RE.test(email)) return json({ ok: false, reason: "invalid-email" }, 400);
+    const r = await forwardToBeehiiv(env, email, "/debug-get");
+    return json({ ok: true, debug_beehiiv: r });
+  }
   if (request.method !== "POST") return json({ ok: false, reason: "method" }, 405);
 
   const ip = request.headers.get("cf-connecting-ip") || "unknown";
