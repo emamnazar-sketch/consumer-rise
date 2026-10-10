@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/style.css?v=2">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23D93A2B'/%3E%3Ctext x='32' y='44' font-family='Arial Black,Arial' font-size='30' font-weight='900' fill='white' text-anchor='middle'%3ECR%3C/text%3E%3C/svg%3E">
 <style>
 .quiz-shell{max-width:680px;margin:0 auto;padding:0 20px}
@@ -114,8 +114,8 @@
     <span>General information only — not medical advice.</span>
   </div>
 </footer>
-<script src="/js/config.js"></script>
-<script src="/js/site.js"></script>
+<script src="/js/config.js?v=2"></script>
+<script src="/js/site.js?v=2"></script>
 <script>
 (function(){
   "use strict";
@@ -236,7 +236,7 @@
     var label, blurb;
     if (score >= 85) { label = "Label Detective"; blurb = "You already shop like someone who reads the fine print. Your cart is cleaner than most American kitchens."; }
     else if (score >= 60) { label = "Careful Shopper"; blurb = "You dodge the worst of it, but a few sneaky ingredients are still slipping into your cart every week."; }
-    else { label = "Trusting Buyer"; blurb = "Your cart looks like most American carts — which means food companies are counting on you not flipping the box over."; }
+    else { label = "Trusting Buyer"; blurb = "Your cart looks like most American carts — which means most labels are designed to be skimmed, not studied."; }
 
     var tags = topTags().slice(0, 3);
     var h = '<div class="quiz-result">';
@@ -270,7 +270,7 @@
       var done = function(ok){
         box.innerHTML = '<div class="quiz-result"><div class="quiz-step-tag">You are in</div>'
           + '<div class="quiz-result-label">Check your inbox.</div>'
-          + "<p>Your Label Decoder cheat sheet is on its way, and your first investigation arrives Tuesday morning at 7am.</p>"
+          + "<p>Your first investigation arrives Tuesday morning at 7am.</p>"
           + '<p><a class="btn btn-ink" href="/ingredients.html">Browse the Ingredient Index meanwhile</a></p></div>';
         bar.style.width = "100%";
       };
