@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
 <script>try{var __t=localStorage.getItem("cr-theme");if(__t){document.documentElement.setAttribute("data-theme",__t)}else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches){document.documentElement.setAttribute("data-theme","dark")}}catch(e){}</script>
-<link rel="stylesheet" href="/css/style.css?v=7">
+<link rel="stylesheet" href="/css/style.css?v=8">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23D93A2B'/%3E%3Ctext x='32' y='44' font-family='Arial Black,Arial' font-size='30' font-weight='900' fill='white' text-anchor='middle'%3ECR%3C/text%3E%3C/svg%3E">
 </head>
 <body>
@@ -158,7 +158,7 @@
 </footer>
 <script src="/js/config.js?v=5"></script>
 <script src="/js/ingredients-data.js?v=4"></script>
-<script src="/js/site.js?v=6"></script>
+<script src="/js/site.js?v=7"></script>
 <script>
 (function () {
   var data = window.CR_INGREDIENTS || [];
@@ -247,7 +247,7 @@
     if (invLoading) return invLoading;
     invLoading = new Promise(function (resolve, reject) {
       var s = document.createElement("script");
-      s.src = "/js/inventory-data.js?v=1";
+      s.src = "/js/inventory-data.js?v=2";
       s.onload = function () { resolve(window.CR_INVENTORY || []); };
       s.onerror = function () { reject(new Error("inv-load")); };
       document.head.appendChild(s);
@@ -267,12 +267,43 @@
     }) : invData;
     invCount.textContent = "Showing " + Math.min(list.length, 100) + " of " +
       list.length.toLocaleString() + " substances" + (q ? ' matching "' + invSearch.value.trim() + '"' : "");
-    invList.innerHTML = list.slice(0, 100).map(function (r) {
-      return '<div class="inv-row"><div><span class="inv-name">' + esc2(r[0]) + "</span>" +
-        (r[1] ? '<span class="inv-cas">CAS ' + esc2(r[1]) + "</span>" : "") + "</div>" +
+    invList.innerHTML = list.slice(0, 100).map(function (r, i) {
+      var detailId = "inv-detail-" + i;
+      var aliases = r[2] ? r[2].split("|").join(", ") : "";
+      var fdaUrl = "https://hfpappexternal.fda.gov/scripts/fdcc/index.cfm?set=FoodSubstances&search=" +
+        encodeURIComponent(r[0]);
+      return '<div class="inv-item">' +
+        '<button class="inv-row" aria-expanded="false" aria-controls="' + detailId + '">' +
+        '<span class="inv-row-top"><span class="inv-name">' + esc2(r[0]) + "</span>" +
+        (r[1] ? '<span class="inv-cas">CAS ' + esc2(r[1]) + "</span>" : "") +
         '<span class="inv-status">' + esc2(r[4]) + "</span>" +
-        '<p class="inv-effect">' + esc2(r[3]) + "</p></div>";
+        '<span class="inv-toggle" aria-hidden="true">+</span></span>' +
+        '<span class="inv-effect">' + esc2(r[3] || "—") + "</span></button>" +
+        '<div class="inv-detail" id="' + detailId + '" hidden>' +
+        '<dl class="inv-dl">' +
+        "<div><dt>CAS Reg No.</dt><dd>" + esc2(r[1] || "—") + "</dd></div>" +
+        "<div><dt>Also known as</dt><dd>" + esc2(aliases || "—") + "</dd></div>" +
+        "<div><dt>Technical effect</dt><dd>" + esc2(r[3] || "—") + "</dd></div>" +
+        "<div><dt>Status</dt><dd>" + esc2(r[4]) + "</dd></div>" +
+        "<div><dt>FDA references</dt><dd>" + esc2(r[5] || "—") + "</dd></div>" +
+        "</dl>" +
+        '<p class="inv-fda"><a href="' + fdaUrl + '" target="_blank" rel="noopener">View FDA record →</a></p>' +
+        "<p class=\"inv-honest\">Consumer Rising hasn't researched this substance — no verdict.</p>" +
+        "</div></div>";
     }).join("");
+    var btns = invList.querySelectorAll(".inv-row");
+    for (var b = 0; b < btns.length; b++) {
+      (function (btn) {
+        btn.addEventListener("click", function () {
+          var isOpen = btn.getAttribute("aria-expanded") === "true";
+          var panel = document.getElementById(btn.getAttribute("aria-controls"));
+          btn.setAttribute("aria-expanded", String(!isOpen));
+          if (panel) panel.hidden = isOpen;
+          var tg = btn.querySelector(".inv-toggle");
+          if (tg) tg.textContent = isOpen ? "+" : "\u2013";
+        });
+      })(btns[b]);
+    }
   }
 
   function openInvTab() {

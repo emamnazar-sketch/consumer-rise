@@ -267,7 +267,7 @@
     if (invLoadPromise) return invLoadPromise;
     invLoadPromise = new Promise(function (resolve) {
       var s = document.createElement("script");
-      s.src = "/js/inventory-data.js?v=1";
+      s.src = "/js/inventory-data.js?v=2";
       s.onload = function () { resolve(window.CR_INVENTORY || []); };
       s.onerror = function () { resolve([]); };
       document.head.appendChild(s);
