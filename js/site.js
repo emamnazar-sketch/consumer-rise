@@ -254,4 +254,25 @@
       }
     });
   }
+  /* ---- theme toggle ---- */
+  var themeBtn = document.getElementById("theme-toggle");
+  function syncThemeBtn() {
+    if (!themeBtn) return;
+    var dark = document.documentElement.getAttribute("data-theme") === "dark";
+    var icon = themeBtn.querySelector(".tt-icon");
+    var label = themeBtn.querySelector(".tt-label");
+    if (icon) icon.textContent = dark ? "\u2600\uFE0F" : "\uD83C\uDF19";
+    if (label) label.textContent = dark ? "Light" : "Dark";
+    themeBtn.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+  }
+  if (themeBtn) {
+    themeBtn.addEventListener("click", function () {
+      var h = document.documentElement;
+      var dark = h.getAttribute("data-theme") !== "dark";
+      h.setAttribute("data-theme", dark ? "dark" : "light");
+      try { localStorage.setItem("cr-theme", dark ? "dark" : "light"); } catch (e) {}
+      syncThemeBtn();
+    });
+    syncThemeBtn();
+  }
 })();
