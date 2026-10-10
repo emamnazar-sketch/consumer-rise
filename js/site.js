@@ -228,7 +228,7 @@
     return normText(String(t).replace(/\([^)]*\)/g, " ")).trim();
   }
 
-  /* Match OCR text against the 12-ingredient database. Returns [{ing, term}]. */
+  /* Match OCR text against the ingredient database. Returns [{ing, term}]. */
   function matchIngredients(ocrText) {
     var data = window.CR_INGREDIENTS || [];
     var text = normText(ocrText);
