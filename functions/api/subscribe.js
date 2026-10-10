@@ -1,6 +1,40 @@
 /* POST /api/subscribe — body {email, source}
+   Writes to D1 (subscribers table), then best-effort forwards to Beehiiv
+   when BEEHIIV_API_KEY + BEEHIIV_PUBLICATION_ID env vars are configured.
+   Beehiiv failures never fail the signup — D1 stays the source of truth.
    Responses: {ok:true} | {ok:true, already:true} | {ok:false, reason} */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/* Best-effort: push one subscriber into the Beehiiv publication.
+   Never throws — callers must not let a Beehiiv outage break signups. */
+async function forwardToBeehiiv(env, email, source) {
+  const apiKey = env.BEEHIIV_API_KEY;
+  const pubId = env.BEEHIIV_PUBLICATION_ID;
+  if (!apiKey || !pubId) return; // not configured yet — D1 only
+  try {
+    const res = await fetch(
+      "https://api.beehiiv.com/v2/publications/" + encodeURIComponent(pubId) + "/subscriptions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + apiKey,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: email,
+          reactivate_existing: false, // never re-subscribe someone who opted out
+          send_welcome_email: true,
+          utm_source: "consumerrising.com",
+          utm_medium: "website",
+          utm_campaign: source || undefined
+        })
+      }
+    );
+    if (!res.ok) console.log("beehiiv forward failed:", res.status, email);
+  } catch (e) {
+    console.log("beehiiv forward error:", String((e && e.message) || e));
+  }
+}
 
 /* Best-effort rate limit: max 10 requests/min per IP (per isolate). */
 const hits = new Map();
@@ -42,11 +76,16 @@ export async function onRequest(context) {
     const existing = await env.DB.prepare(
       "SELECT id FROM subscribers WHERE email = ?"
     ).bind(email).first();
-    if (existing) return json({ ok: true, already: true });
+    if (existing) {
+      // Already in D1 — still forward in case Beehiiv missed them earlier.
+      await forwardToBeehiiv(env, email, source);
+      return json({ ok: true, already: true });
+    }
 
     await env.DB.prepare(
       "INSERT INTO subscribers (id, email, source, created_at) VALUES (?, ?, ?, ?)"
     ).bind(crypto.randomUUID(), email, source || null, new Date().toISOString()).run();
+    await forwardToBeehiiv(env, email, source);
     return json({ ok: true });
   } catch (e) {
     return json({ ok: false, reason: "error" }, 500);
