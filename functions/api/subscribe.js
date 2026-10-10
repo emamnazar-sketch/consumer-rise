@@ -7,10 +7,12 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /* Best-effort: push one subscriber into the Beehiiv publication.
    Never throws — callers must not let a Beehiiv outage break signups. */
+/* TEMPORARY DEBUG — returns Beehiiv's response in the JSON body so the
+   failing forward can be diagnosed. Remove before considering this done. */
 async function forwardToBeehiiv(env, email, source) {
   const apiKey = env.BEEHIIV_API_KEY;
   const pubId = env.BEEHIIV_PUBLICATION_ID;
-  if (!apiKey || !pubId) return; // not configured yet — D1 only
+  if (!apiKey || !pubId) return { skipped: true }; // not configured yet — D1 only
   try {
     const res = await fetch(
       "https://api.beehiiv.com/v2/publications/" + encodeURIComponent(pubId) + "/subscriptions",
@@ -30,9 +32,12 @@ async function forwardToBeehiiv(env, email, source) {
         })
       }
     );
+    const text = await res.text();
     if (!res.ok) console.log("beehiiv forward failed:", res.status, email);
+    return { status: res.status, body: text.slice(0, 500) };
   } catch (e) {
     console.log("beehiiv forward error:", String((e && e.message) || e));
+    return { error: String((e && e.message) || e) };
   }
 }
 
@@ -85,8 +90,8 @@ export async function onRequest(context) {
     await env.DB.prepare(
       "INSERT INTO subscribers (id, email, source, created_at) VALUES (?, ?, ?, ?)"
     ).bind(crypto.randomUUID(), email, source || null, new Date().toISOString()).run();
-    await forwardToBeehiiv(env, email, source);
-    return json({ ok: true });
+    const beehiiv = await forwardToBeehiiv(env, email, source);
+    return json({ ok: true, debug_beehiiv: beehiiv }); // TEMPORARY DEBUG — remove
   } catch (e) {
     return json({ ok: false, reason: "error" }, 500);
   }
