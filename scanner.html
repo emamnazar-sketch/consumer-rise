@@ -14,9 +14,10 @@
 <script>try{var __t=localStorage.getItem("cr-theme");if(__t){document.documentElement.setAttribute("data-theme",__t)}else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches){document.documentElement.setAttribute("data-theme","dark")}}catch(e){}</script>
 <link rel="stylesheet" href="/css/style.css?v=8">
 <style>
-.alg-chip{border:2px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:8px 16px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.alg-chip{border:2px solid var(--line-c);background:var(--paper);color:var(--ink);border-radius:999px;padding:8px 16px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:inherit}
 .alg-chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .alg-chip:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.allergen-box{display:block;margin:0 0 28px 0;border:var(--line);border-radius:var(--radius);padding:14px 16px 18px;background:var(--paper)}
 </style>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23D93A2B'/%3E%3Ctext x='32' y='44' font-family='Arial Black,Arial' font-size='30' font-weight='900' fill='white' text-anchor='middle'%3ECR%3C/text%3E%3C/svg%3E">
 </head>
@@ -78,9 +79,9 @@
       <div id="scan-tool" class="dossier gate-card" hidden>
         <h2 style="font-weight:900;text-transform:uppercase;font-size:26px;margin-bottom:12px">Scan a label</h2>
         <p style="color:var(--ink-soft);margin-bottom:22px">Take a clear photo of the <strong>ingredients panel</strong> — flat, well-lit, text readable.</p>
-        <details style="margin-bottom:20px;border:var(--line);border-radius:var(--radius);padding:12px 16px;background:var(--paper)">
+        <details class="allergen-box">
           <summary style="cursor:pointer;font-weight:800;font-size:15px">Allergen alerts (optional)</summary>
-          <p style="font-size:14px;color:var(--ink-soft);margin:8px 0 4px">Pick any — we will flag them in your results.</p>
+          <p style="font-size:14px;color:var(--ink-soft);margin:8px 0 4px">Select your allergens <strong>before</strong> you scan. We will hunt for them — including their hidden label names like whey, casein, or lecithin — and warn you at the top of your results.</p>
           <div id="allergen-chips" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
             <button type="button" class="alg-chip" data-alg="milk" aria-pressed="false">Milk</button>
             <button type="button" class="alg-chip" data-alg="egg" aria-pressed="false">Egg</button>
