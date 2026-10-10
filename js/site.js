@@ -1,4 +1,4 @@
-/* ConsumerRise — shared site JS: nav, newsletter forms, contact, scanner gate, misc. */
+/* Consumer Rising — shared site JS: nav, newsletter forms, contact, scanner gate, misc. */
 (function () {
   "use strict";
   var CFG = window.CR_CONFIG || {};

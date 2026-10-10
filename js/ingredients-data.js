@@ -1,4 +1,4 @@
-/* ConsumerRise — Ingredient Index data (12 entries).
+/* Consumer Rising — Ingredient Index data (12 entries).
    Risk ratings are the site's editorial judgment. Keep language plain and
    non-alarmist; details live on the linked findings where they exist. */
 window.CR_INGREDIENTS = [

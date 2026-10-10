@@ -1,4 +1,4 @@
-/* ConsumerRise — shared front-end config.
+/* Consumer Rising — shared front-end config.
    API endpoints below are Cloudflare Pages Functions in /functions (repo).
    They need the D1 database + binding "DB" wired up in the Pages dashboard
    (see README). If a call fails, forms fall back gracefully — never lose a signup. */
