@@ -9,12 +9,11 @@ window.CR_CONFIG = {
   // POST JSON {name, email, subject, message} → /functions/api/contact.js (D1)
   CONTACT_ENDPOINT: "/api/contact",
 
-  // POST JSON {email} → /functions/api/scan.js — enforces 3 free scans/day per email (D1)
+  // POST JSON {email} → /functions/api/scan.js — records scans per email (D1) — unlimited, free forever
   SCAN_ENDPOINT: "/api/scan",
 
   // OCR runs on-device (Tesseract.js) — the photo never leaves the phone.
   // /api/scan only counts scans + stores the matched ingredient IDs and score.
 
   CONTACT_EMAIL: "consumerrising@gmail.com",
-  SCANS_PER_DAY_FREE: 3
 };

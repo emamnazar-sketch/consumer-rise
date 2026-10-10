@@ -274,7 +274,7 @@
     return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
 
-  function renderScanResults(hits, ocrText, remaining) {
+  function renderScanResults(hits, ocrText) {
     var h = '<div class="dossier scan-result" role="status">';
     if (!hits.length) {
       h += '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">No flagged ingredients detected</h3>' +
@@ -301,9 +301,6 @@
     }
     h += '<details style="margin-top:14px"><summary style="cursor:pointer;font-weight:700;font-size:14.5px">What we read from your photo</summary>' +
       '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:8px;white-space:pre-wrap">' + escHtml((ocrText || "").slice(0, 1200) || "(no text detected)") + "</p></details>";
-    if (typeof remaining === "number") {
-      h += '<p style="color:var(--ink-soft);margin-top:12px"><strong>Free scans left today: ' + remaining + ".</strong> Free forever — no paid tier.</p>";
-    }
     h += '<p class="center mt"><button class="btn btn-ink" id="scan-again">Scan another label</button></p>';
     h += '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:10px">Results depend on photo quality and cover only the 12 ingredients in our database. General information only — <a href="/disclaimer.html">not medical advice</a>.</p></div>';
     result.innerHTML = h;
@@ -383,9 +380,7 @@
           : "score 100 \u00b7 no flagged ingredients";
         if (CFG.SCAN_ENDPOINT && email) {
           postJSON(CFG.SCAN_ENDPOINT, { email: email, result_summary: summary, matches: ids })
-            .then(function (res) {
-              renderScanResults(hits, ocrText, res && typeof res.remaining === "number" ? res.remaining : undefined);
-            })
+            .then(function () { renderScanResults(hits, ocrText); })
             .catch(function () { renderScanResults(hits, ocrText); });
         } else {
           renderScanResults(hits, ocrText);
@@ -412,24 +407,7 @@
         });
       }
 
-      if (CFG.SCAN_ENDPOINT && email) {
-        result.innerHTML = '<div class="form-ok" role="status"><span class="big">One moment…</span>Checking your free scans.</div>';
-        postJSON(CFG.SCAN_ENDPOINT, { email: email, check_only: true })
-          .then(function (res) {
-            if (res && res.ok) { doOCR(); }
-            else if (res && res.reason === "limit") {
-              analyzeBtn.disabled = false;
-              result.innerHTML = '<div class="dossier scan-result" role="status">' +
-                '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">Daily limit reached</h3>' +
-                '<p style="color:var(--ink-soft)">You have used your 3 free scans for today. ' +
-                'Come back tomorrow — the counter resets every 24 hours. The scanner is free forever; the daily limit just keeps bots out.</p></div>';
-            }
-            else { analyzeBtn.disabled = false; doOCR(); }
-          })
-          .catch(function () { analyzeBtn.disabled = false; doOCR(); });
-      } else {
-        doOCR();
-      }
+      doOCR();
     });
   }
 
