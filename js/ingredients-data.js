@@ -93,7 +93,8 @@ window.CR_INGREDIENTS = [
     ],
     link: null,
     sources: [
-      { label: "FSAI summary of FDA benzene-in-drinks surveys 2005–2007", url: "https://www.fsai.ie/enforcement-and-legislation/official-controls/monitoring/surveillance/introduction-benzene-survey-2006" }
+      { label: "FSAI summary of FDA benzene-in-drinks surveys 2005–2007", url: "https://www.fsai.ie/enforcement-and-legislation/official-controls/monitoring/surveillance/introduction-benzene-survey-2006" },
+      { label: "McCann et al. (2007), The Lancet: Southampton children's hyperactivity study (PubMed 17825405)", url: "https://pubmed.ncbi.nlm.nih.gov/17825405/" }
     ]
   },
   {
@@ -402,8 +403,8 @@ window.CR_INGREDIENTS = [
     link: null,
     sources: [
       {
-        label: "FDA Constituent Update (Jan 15, 2025), via Ai Kahu reprint Red No. 3 in food and ingested drugs (reprint)",
-        url: "https://www.aikahuculinarysolutions.com/news-notes/2025/1/30/fda-bans-red-dye-40"
+        label: "FDA Constituent Update (Jan 15, 2025): revocation of FD&C Red No. 3 authorization",
+        url: "https://www.fda.gov/industry/color-additives/fdc-red-no-3"
       },
       {
         label: "Philippine DTI advisory: US FDA revokes authorization for FD&C Red No. 3",
@@ -542,8 +543,8 @@ window.CR_INGREDIENTS = [
         url: "https://www.law.cornell.edu/cfr/text/21/172.185"
       },
       {
-        label: "CSPI: TBHQ rated 'avoid' (IHOP pancakes ingredient review)",
-        url: "https://www.cspi.org/article/these-ihop-pancakes-pack-24-teaspoons-sugar"
+        label: "CSPI Chemical Cuisine: TBHQ rated 'avoid' (cancer concern)",
+        url: "https://www.cspi.org/page/chemical-cuisine-food-additive-safety-ratings"
       },
       {
         label: "EU Directive 2006/52/EC (authorizes TBHQ; withdraws propylparaben)",
@@ -670,8 +671,8 @@ window.CR_INGREDIENTS = [
     link: null,
     sources: [
       {
-        label: "Wikipedia: azodicarbonamide (E927a; regulation and safety)",
-        url: "https://en.wikipedia.org/wiki/Azodicarbonamide"
+        label: "FDA: Azodicarbonamide (ADA) frequently asked questions",
+        url: "https://www.fda.gov/food/food-additives-petitions/azodicarbonamide-ada-frequently-asked-questions"
       },
       {
         label: "Tasting Table: the 'yoga mat chemical' banned from food in multiple countries",
@@ -690,7 +691,7 @@ window.CR_INGREDIENTS = [
     category: "Preservative / Acidity Regulator / Leavening",
     description: "A huge family of additives doing dozens of jobs — leavening baked goods, emulsifying processed cheese, adding tang to colas. One recent study found phosphate additives in 56% of products from America's top 25 food makers.",
     regulatory_status: {
-      eu: "No specific restriction.",
+      eu: "Maximum permitted levels set under EU Regulation 1333/2008.",
       us: "The FDA permits phosphate additives across dozens of technical functions, and US labels don't have to disclose total phosphorus content — so there's no way to see your full intake."
     },
     last_reviewed: "2026-10-10",
@@ -938,8 +939,8 @@ window.CR_INGREDIENTS = [
         url: "https://www.cspi.org/chemical-cuisine/sulfites-sulfur-dioxide-sodium-sulfite-sodium-bisulfite-potassium-bisulfite-sodium"
       },
       {
-        label: "FSA technical guidance: allergen labelling under EU Regulation 1169/2011",
-        url: "https://webarchive.nationalarchives.gov.uk/ukgwa/20180411152518mp_/https://www.food.gov.uk/sites/default/files/food-allergen-labelling-technical-guidance.pdf"
+        label: "UK Food Standards Agency: sulphites listed among the 14 regulated allergens",
+        url: "https://www.gov.uk/government/publications/food-allergy-and-intolerance-advice-for-consumers/food-allergy-and-intolerance-advice-for-consumers"
       }
     ]
   },
@@ -1018,12 +1019,12 @@ window.CR_INGREDIENTS = [
       us: "No specific restriction on interesterified oils in the US."
     },
     last_reviewed: "2026-10-10",
-    bullets: ["A 2018 rat study found interesterified soybean oil caused more weight gain and worse glucose tolerance than regular soybean oil on otherwise identical diets.", "A 2007 human trial found interesterified fat raised fasting glucose by about 20% in a month and depressed fasting insulin and HDL cholesterol versus unmodified palm olein.", "The 2007 research team included the Malaysian Palm Oil Board's nutrition director, and the 2025 trial was funded by the same board — this debate has industry fingerprints on both sides.", "A 2025 King's College London / Maastricht double-blind trial of 47 adults found no meaningful harm to cholesterol, insulin sensitivity, inflammation, or liver fat from interesterified fats at realistic intakes.", "Both the King's researchers and the 2007 authors agree on one thing: longer-term human studies are still needed.", "Look for the words 'interesterified oil' or 'interesterified palm/soybean oil' in the ingredient list of margarines, pastries, and confectionery — especially ones marketed trans-fat-free."],
+    bullets: ["A 2018 rat study found interesterified soybean oil caused more weight gain and worse glucose tolerance than regular soybean oil on otherwise identical diets.", "A 2007 human trial found interesterified fat raised fasting glucose by about 20% in a month and depressed fasting insulin and HDL cholesterol versus unmodified palm olein.", "The 2007 research team included the Malaysian Palm Oil Board's nutrition director, and the 2025 trial was funded by the same board — though the 2025 paper states the funders were not involved in the study design, analysis, or publication. Industry fingerprints are on this debate, on both sides.", "A 2025 King's College London / Maastricht double-blind trial of 47 adults found no meaningful harm to cholesterol, insulin sensitivity, inflammation, or liver fat from interesterified fats at realistic intakes.", "Both the King's researchers and the 2007 authors agree on one thing: longer-term human studies are still needed.", "Look for the words 'interesterified oil' or 'interesterified palm/soybean oil' in the ingredient list of margarines, pastries, and confectionery — especially ones marketed trans-fat-free."],
     link: null,
     sources: [
       {
-        label: "2025 King's College London / Maastricht RCT on interesterified fats (ScienceDaily summary)",
-        url: "https://www.sciencedaily.com/releases/2025/10/251027224855.htm"
+        label: "2025 King's College London / Maastricht RCT on interesterified fats (full text, Am J Clin Nutr)",
+        url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12799373/"
       },
       {
         label: "2007 Sundram human trial on interesterified fat vs palm olein (MedicalXpress / Brandeis)",
@@ -1054,8 +1055,8 @@ window.CR_INGREDIENTS = [
     link: null,
     sources: [
       {
-        label: "Examining DATEM's path from bakery staple to health concern (NewsTarget, Oct 2026)",
-        url: "https://www.newstarget.com/2026-10-04-examining-datems-path-bakery-staple-health-concern.html"
+        label: "EFSA FAF Panel (2020): re-evaluation of E 472a-f — no safety concern at reported uses (PubMed 32874250)",
+        url: "https://pubmed.ncbi.nlm.nih.gov/32874250/"
       },
       {
         label: "EU Regulation 1333/2008: E472e on the authorized additive list (legislation.gov.uk)",
@@ -1142,8 +1143,8 @@ window.CR_INGREDIENTS = [
     link: null,
     sources: [
       {
-        label: "What 'natural flavors' really mean under FDA law (NuSpice)",
-        url: "https://www.nuproductsseasoning.com/nuspotlight/what-natural-flavors-really-mean-under-fda-law/"
+        label: "21 CFR 101.22(a)(3): FDA legal definition of natural flavor (eCFR)",
+        url: "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-101/subpart-B/section-101.22"
       },
       {
         label: "EU Regulation 1334/2008 on flavourings: 'natural' criteria (legislation.gov.uk)",
@@ -1210,12 +1211,8 @@ window.CR_INGREDIENTS = [
         url: "https://www.govinfo.gov/content/pkg/CFR-2012-title21-vol3/pdf/CFR-2012-title21-vol3-sec184-1444.pdf"
       },
       {
-        label: "Onnit (Advisory Board vetted): maltodextrin GI 85–105 vs glucose 100",
-        url: "https://www.onnit.com/blogs/the-edge/maltodextrin-the-time-and-place-for-high-glycemic-carbohydrates"
-      },
-      {
-        label: "Yarley et al. 2025 (IJMSCI): review of maltodextrin as a hidden sugar",
-        url: "https://mail.valleyinternational.net/index.php/ijmsci/article/download/5019/2753/14293"
+        label: "Atkinson, Foster-Powell & Brand-Miller (2008): international GI tables (PubMed 18835944)",
+        url: "https://pubmed.ncbi.nlm.nih.gov/18835944/"
       },
       {
         label: "Gonza et al. 2024 (PubMed 38519184): food additives and gut microbiota, in-vitro SHIME model",
@@ -1402,12 +1399,8 @@ window.CR_INGREDIENTS = [
         url: "https://www.just-food.com/news/australia-bread-preservative-linked-to-behavioural-problems-in-children/"
       },
       {
-        label: "FDA GRAS Notice 712 (Calcium acetate): lists Calcium propionate affirmed GRAS under 21 CFR 184.1221",
-        url: "https://www.FDA.Gov/media/107449/download"
-      },
-      {
-        label: "Niran Bio: Calcium Propionate regulatory and use summary",
-        url: "https://www.niranbio.com/calcium-propionate/"
+        label: "21 CFR 184.1221: calcium propionate affirmed GRAS (eCFR)",
+        url: "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-184/subpart-B/section-184.1221"
       }
     ]
   },
@@ -1470,8 +1463,8 @@ window.CR_INGREDIENTS = [
         url: "https://www.FDA.Gov/media/166068/download?attachment"
       },
       {
-        label: "Wikipedia: Allulose (regulatory history; EFSA June 2025 novel-food opinion)",
-        url: "http://en.wikipedia.org/wiki/Psicose"
+        label: "EFSA NDA Panel (June 2025): safety of D-allulose as a novel food could not be established",
+        url: "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2025.9468"
       }
     ]
   },
