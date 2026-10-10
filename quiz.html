@@ -191,10 +191,22 @@
     }
   };
 
-  var step = 0, counts = { dye: 0, sweetener: 0, oil: 0, additive: 0 };
+  var step = 0, answers = [];
 
   function esc(s){
     return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  /* Counts are derived from the answers array, so Back never double-counts. */
+  function tally(){
+    var c = { dye: 0, sweetener: 0, oil: 0, additive: 0 };
+    answers.forEach(function(i, s){
+      if (i == null || !QUESTIONS[s]) return;
+      var o = QUESTIONS[s].opts[i];
+      if (!o) return;
+      o.tags.forEach(function(t){ if (c[t] !== undefined) c[t]++; });
+    });
+    return c;
   }
 
   function render(){
@@ -216,7 +228,7 @@
     box.innerHTML = h;
     box.querySelectorAll(".quiz-opt").forEach(function(b){
       b.addEventListener("click", function(){
-        QUESTIONS[step].opts[+b.getAttribute("data-i")].tags.forEach(function(t){ counts[t]++; });
+        answers[step] = +b.getAttribute("data-i");
         step++;
         render();
         document.getElementById("quiz-box").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -232,6 +244,7 @@
 
   function renderResult(){
     bar.style.width = "100%";
+    var counts = tally();
     var total = counts.dye + counts.sweetener + counts.oil + counts.additive;
     var score = Math.max(20, 100 - total * 9);
     var label, blurb;
@@ -268,25 +281,34 @@
     form.addEventListener("submit", function(ev){
       ev.preventDefault();
       var email = form.email.value.trim();
-      var done = function(ok){
-        box.innerHTML = '<div class="quiz-result"><div class="quiz-step-tag">You are in</div>'
-          + '<div class="quiz-result-label">Check your inbox.</div>'
-          + "<p>Your first finding arrives soon.</p>"
-          + '<p><a class="btn btn-ink" href="/ingredients.html">Browse the Ingredient Index meanwhile</a></p></div>';
+      var btn = form.querySelector("button");
+      if (btn) btn.disabled = true;
+      var showDone = function(serverOk){
+        var h = '<div class="quiz-result"><div class="quiz-step-tag">You are in</div>';
+        if (serverOk) {
+          h += '<div class="quiz-result-label">Check your inbox.</div>'
+             + "<p>Your first finding arrives soon.</p>";
+        } else {
+          h += '<div class="quiz-result-label">Saved on this device.</div>'
+             + "<p>Something went wrong reaching our server, so we kept your email in this browser — you won't lose your spot. Please try subscribing again later to make sure you're on the list.</p>";
+        }
+        h += '<p><a class="btn" href="/downloads/label-decoder.pdf" download>Download your Label Decoder</a></p>'
+           + '<p><a class="btn btn-ink" href="/ingredients.html">Browse the Ingredient Index meanwhile</a></p></div>';
+        box.innerHTML = h;
         bar.style.width = "100%";
       };
+      try {
+        var list = JSON.parse(localStorage.getItem("cr_newsletter") || "[]");
+        if (list.indexOf(email) === -1) { list.push(email); localStorage.setItem("cr_newsletter", JSON.stringify(list)); }
+      } catch (e2) {}
       try {
         var endpoint = (window.CR_CONFIG && window.CR_CONFIG.NEWSLETTER_ENDPOINT) || "/api/subscribe";
         fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: email, source: "/quiz.html" })
-        }).then(function(r){ return r.json(); }).then(function(){ done(true); }).catch(function(){ done(false); });
-      } catch (e) { done(false); }
-      try {
-        var list = JSON.parse(localStorage.getItem("cr_newsletter") || "[]");
-        if (list.indexOf(email) === -1) { list.push(email); localStorage.setItem("cr_newsletter", JSON.stringify(list)); }
-      } catch (e2) {}
+        }).then(function(r){ return r.json(); }).then(function(res){ showDone(res && res.ok); }).catch(function(){ showDone(false); });
+      } catch (e) { showDone(false); }
     });
   }
 
