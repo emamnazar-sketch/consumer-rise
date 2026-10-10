@@ -416,3 +416,20 @@ a:hover{color:var(--red-text)}
   .ticker span{animation:none}
   html{scroll-behavior:auto}
 }
+
+/* ---- Full Inventory tabs ---- */
+.inv-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+.inv-tab{font-family:var(--font-ui);font-weight:800;font-size:15.5px;padding:12px 20px;border-radius:99px;
+  border:var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.inv-tab.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.gras-hook{font-family:var(--font-prose);font-size:18px;line-height:1.65;color:var(--ink);
+  border-left:4px solid var(--red);padding:4px 0 4px 18px;margin:0 0 24px;max-width:68ch}
+.inv-list{display:flex;flex-direction:column;gap:10px;margin-bottom:26px}
+.inv-row{background:var(--card);border:var(--line);border-radius:var(--radius);padding:14px 18px;
+  display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;justify-content:space-between}
+.inv-row .inv-name{font-weight:800;font-size:16.5px}
+.inv-row .inv-cas{font-size:13px;color:var(--ink-soft);font-weight:600;margin-left:10px;white-space:nowrap}
+.inv-row .inv-effect{flex:1 1 100%;font-size:14.5px;color:var(--ink-soft);margin:0}
+.inv-status{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;
+  border:1px solid var(--ink-soft);color:var(--ink-soft);border-radius:99px;padding:4px 12px}
+.inv-loading{padding:30px;text-align:center;color:var(--ink-soft);font-weight:700}

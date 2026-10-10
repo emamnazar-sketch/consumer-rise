@@ -261,6 +261,61 @@
     return hits;
   }
 
+  var invLoadPromise = null;
+  function ensureInventory() {
+    if (window.CR_INVENTORY) return Promise.resolve(window.CR_INVENTORY);
+    if (invLoadPromise) return invLoadPromise;
+    invLoadPromise = new Promise(function (resolve) {
+      var s = document.createElement("script");
+      s.src = "/js/inventory-data.js?v=1";
+      s.onload = function () { resolve(window.CR_INVENTORY || []); };
+      s.onerror = function () { resolve([]); };
+      document.head.appendChild(s);
+    });
+    return invLoadPromise;
+  }
+
+  /* Tier 2 pass: neutral recognition only. Never affects the score,
+     never shows risk badges. Skips anything Tier 1 already claimed. */
+  function matchInventory(ocrText, tier1Hits) {
+    var inv = window.CR_INVENTORY || [];
+    if (!inv.length) return [];
+    var text = normText(ocrText);
+    var nospace = text.replace(/\s+/g, "");
+    var claimed = {};
+    tier1Hits.forEach(function (h) {
+      claimed[normText(h.ing.name)] = 1;
+      claimed[normText(h.term)] = 1;
+      (h.ing.aliases || []).forEach(function (a) { claimed[cleanTerm(a)] = 1; });
+    });
+    var hits = [];
+    for (var i = 0; i < inv.length; i++) {
+      var r = inv[i];
+      var terms = [r[0]].concat(r[2] ? r[2].split("|") : []);
+      var found = null;
+      for (var j = 0; j < terms.length && !found; j++) {
+        var raw = terms[j];
+        var t = cleanTerm(raw);
+        if (!t || t.length < 3 || claimed[t]) continue;
+        /* Paren-stripping must not reduce an alias to a lone generic word when the
+           parens held the identity (e.g. "ACID(C8)" -> "acid" would match any
+           "... acid" on a label). Descriptor parens like "SALT (INGREDIENT)" stay. */
+        var pm = /\(([^)]*)\)/.exec(raw);
+        if (pm && /\d/.test(pm[1]) && t.split(" ").length === 1 && t.length <= 5) continue;
+        var tFlat = t.replace(/\s+/g, "");
+        if (/^e\d+$/.test(tFlat)) {
+          if (nospace.indexOf(tFlat) !== -1) found = terms[j];
+        } else if (t.length <= 4) {
+          if (new RegExp("(^|\\s)" + escRe(t) + "(\\s|$)").test(text)) found = terms[j];
+        } else if (text.indexOf(t) !== -1) {
+          found = terms[j];
+        }
+      }
+      if (found && !claimed[normText(r[0])]) hits.push({ row: r, term: found });
+    }
+    return hits;
+  }
+
   function scanScore(hits) {
     var w = 0;
     hits.forEach(function (h) { w += (h.ing.risk_weight || 0); });
@@ -274,11 +329,11 @@
     return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
 
-  function renderScanResults(hits, ocrText) {
+  function renderScanResults(hits, invHits, ocrText) {
     var h = '<div class="dossier scan-result" role="status">';
     if (!hits.length) {
       h += '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">No flagged ingredients detected</h3>' +
-        '<p style="color:var(--ink-soft)">We read your label and none of our 12 flagged ingredients showed up. ' +
+        '<p style="color:var(--ink-soft)">We read your label and none of our 50 flagged ingredients showed up. ' +
         'That is good news as far as our database goes — it is not a verdict that the product is healthy overall.</p>';
     } else {
       var score = scanScore(hits);
@@ -299,10 +354,29 @@
       });
       h += "</div>";
     }
+    if (invHits && invHits.length) {
+      var shown = invHits.slice(0, 12);
+      h += '<div style="margin-top:22px"><div class="quiz-step-tag">Also on this label</div>' +
+        '<p style="font-size:14.5px;color:var(--ink-soft)">Recognized from FDA\u2019s inventory — listed for transparency, no verdict:</p>' +
+        '<div style="display:flex;flex-direction:column;gap:8px;margin:12px 0">';
+      shown.forEach(function (x) {
+        var eff = x.row[3] === "\u2014" ? "Technical effect not specified in FDA records" : x.row[3];
+        h += '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:10px 14px;background:var(--paper);border:var(--line);border-radius:var(--radius)">' +
+          '<div><strong style="font-size:15px">' + escHtml(x.row[0]) + "</strong>" +
+          '<div style="font-size:13.5px;color:var(--ink-soft)">' + escHtml(eff) + "</div></div>" +
+          '<span class="inv-status">' + escHtml(x.row[4]) + "</span></div>";
+      });
+      h += "</div>";
+      if (invHits.length > 12) {
+        h += '<p style="font-size:14px;color:var(--ink-soft)">+' + (invHits.length - 12) +
+          ' more recognized — search them all in the <a href="/ingredients.html">Full Inventory</a>.</p>';
+      }
+      h += "</div>";
+    }
     h += '<details style="margin-top:14px"><summary style="cursor:pointer;font-weight:700;font-size:14.5px">What we read from your photo</summary>' +
       '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:8px;white-space:pre-wrap">' + escHtml((ocrText || "").slice(0, 1200) || "(no text detected)") + "</p></details>";
     h += '<p class="center mt"><button class="btn btn-ink" id="scan-again">Scan another label</button></p>';
-    h += '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:10px">Results depend on photo quality and cover only the 12 ingredients in our database. General information only — <a href="/disclaimer.html">not medical advice</a>.</p></div>';
+    h += '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:10px">Flagged results cover our 50-ingredient index. The inventory section below lists FDA-recorded names with no verdict attached. Results depend on photo quality. General information only — <a href="/disclaimer.html">not medical advice</a>.</p></div>';
     result.innerHTML = h;
     var again = document.getElementById("scan-again");
     if (again) again.addEventListener("click", function () {
@@ -373,17 +447,18 @@
       if (!file) return;
       analyzeBtn.disabled = true;
 
-      function recordResult(hits, ocrText) {
+      function recordResult(hits, invHits, ocrText) {
         var ids = hits.map(function (x) { return x.ing.id; });
         var summary = ids.length
           ? ("score " + scanScore(hits) + " \u00b7 matched: " + ids.join(", "))
           : "score 100 \u00b7 no flagged ingredients";
+        if (invHits && invHits.length) summary += " \u00b7 inv:" + invHits.length;
         if (CFG.SCAN_ENDPOINT && email) {
           postJSON(CFG.SCAN_ENDPOINT, { email: email, result_summary: summary, matches: ids })
-            .then(function () { renderScanResults(hits, ocrText); })
-            .catch(function () { renderScanResults(hits, ocrText); });
+            .then(function () { renderScanResults(hits, invHits, ocrText); })
+            .catch(function () { renderScanResults(hits, invHits, ocrText); });
         } else {
-          renderScanResults(hits, ocrText);
+          renderScanResults(hits, invHits, ocrText);
         }
       }
 
@@ -396,8 +471,11 @@
             return;
           }
           var hits = matchIngredients(text);
-          recordResult(hits, text);
-          analyzeBtn.disabled = false;
+          ensureInventory().then(function () {
+            var invHits = matchInventory(text, hits);
+            recordResult(hits, invHits, text);
+            analyzeBtn.disabled = false;
+          });
         }).catch(function (err) {
           analyzeBtn.disabled = false;
           var msg = (err && err.message === "tess-cdn")

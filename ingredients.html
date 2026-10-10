@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
 <script>try{var __t=localStorage.getItem("cr-theme");if(__t){document.documentElement.setAttribute("data-theme",__t)}else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches){document.documentElement.setAttribute("data-theme","dark")}}catch(e){}</script>
-<link rel="stylesheet" href="/css/style.css?v=6">
+<link rel="stylesheet" href="/css/style.css?v=7">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23D93A2B'/%3E%3Ctext x='32' y='44' font-family='Arial Black,Arial' font-size='30' font-weight='900' fill='white' text-anchor='middle'%3ECR%3C/text%3E%3C/svg%3E">
 </head>
 <body>
@@ -43,12 +43,17 @@
     <div class="wrap">
       <span class="kicker">The dossier</span>
       <h1>Ingredient Index</h1>
-      <p class="lead">Twelve of the most debated ingredients in American food. Search by name or alias, filter by risk or category. Risk ratings are our editorial judgment — the evidence is right there next to each one.</p>
+      <p class="lead">50 ingredients with full verdicts. 3,917 recognized from FDA's inventory. Know everything.</p>
     </div>
   </section>
 
   <section class="section">
     <div class="wrap">
+      <div class="inv-tabs" role="tablist" aria-label="Ingredient database">
+        <button class="inv-tab active" id="tab-index" role="tab" aria-selected="true" aria-controls="pane-index">Ingredient Index (50)</button>
+        <button class="inv-tab" id="tab-inv" role="tab" aria-selected="false" aria-controls="pane-inv">Full Inventory (3,917)</button>
+      </div>
+      <div id="pane-index" role="tabpanel" aria-labelledby="tab-index">
       <div class="filters" role="search">
         <div class="filter-row">
           <div class="filter-group">
@@ -75,6 +80,21 @@
       <p class="ing-count" id="ing-count" role="status"></p>
       <div class="ing-grid" id="ing-grid"></div>
       <div class="disclaimer">Risk ratings reflect Consumer Rising's editorial judgment based on published research and regulator actions. Consumer Rising is an independent education publication — not doctors, not scientists. This index is general information, not medical advice. Talk to your doctor about your own health. <a href="/disclaimer.html">Full disclaimer</a>.</div>
+      </div>
+      <div id="pane-inv" role="tabpanel" aria-labelledby="tab-inv" hidden>
+        <p class="gras-hook">Around a thousand of these entered through GRAS self-determination — companies declaring them safe themselves, never reviewed by the FDA.</p>
+        <div class="filters" role="search">
+          <div class="filter-row">
+            <div class="filter-group">
+              <label for="inv-search">Search all 3,917 substances</label>
+              <input type="search" id="inv-search" placeholder="Try &quot;xanthan gum&quot;, &quot;guar&quot;, &quot;lecithin&quot;…" autocomplete="off">
+            </div>
+          </div>
+        </div>
+        <p class="ing-count" id="inv-count" role="status"></p>
+        <div class="inv-list" id="inv-list"></div>
+        <div class="disclaimer">The Full Inventory is a transparency list drawn from the FDA's &ldquo;Substances Added to Food&rdquo; records — names, technical effects, and regulatory paperwork status only. It contains no health claims and no verdicts: a substance being listed here means it appears in FDA's records, nothing more. General information only — <a href="/disclaimer.html">not medical advice</a>.</div>
+      </div>
     </div>
   </section>
 
@@ -138,7 +158,7 @@
 </footer>
 <script src="/js/config.js?v=5"></script>
 <script src="/js/ingredients-data.js?v=4"></script>
-<script src="/js/site.js?v=5"></script>
+<script src="/js/site.js?v=6"></script>
 <script>
 (function () {
   var data = window.CR_INGREDIENTS || [];
@@ -211,6 +231,73 @@
     });
   });
   render();
+
+  /* ---- Full Inventory tab (Tier 2): lazy-loaded, neutral, no verdicts ---- */
+  var tabIndex = document.getElementById("tab-index");
+  var tabInv = document.getElementById("tab-inv");
+  var paneIndex = document.getElementById("pane-index");
+  var paneInv = document.getElementById("pane-inv");
+  var invSearch = document.getElementById("inv-search");
+  var invList = document.getElementById("inv-list");
+  var invCount = document.getElementById("inv-count");
+  var invData = null, invLoading = null, invReady = false;
+
+  function ensureInventory() {
+    if (window.CR_INVENTORY) return Promise.resolve(window.CR_INVENTORY);
+    if (invLoading) return invLoading;
+    invLoading = new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = "/js/inventory-data.js?v=1";
+      s.onload = function () { resolve(window.CR_INVENTORY || []); };
+      s.onerror = function () { reject(new Error("inv-load")); };
+      document.head.appendChild(s);
+    });
+    return invLoading;
+  }
+
+  function esc2(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function renderInv() {
+    if (!invData) return;
+    var q = invSearch.value.trim().toLowerCase();
+    var list = q ? invData.filter(function (r) {
+      return (r[0] + " " + r[2]).toLowerCase().indexOf(q) !== -1;
+    }) : invData;
+    invCount.textContent = "Showing " + Math.min(list.length, 100) + " of " +
+      list.length.toLocaleString() + " substances" + (q ? ' matching "' + invSearch.value.trim() + '"' : "");
+    invList.innerHTML = list.slice(0, 100).map(function (r) {
+      return '<div class="inv-row"><div><span class="inv-name">' + esc2(r[0]) + "</span>" +
+        (r[1] ? '<span class="inv-cas">CAS ' + esc2(r[1]) + "</span>" : "") + "</div>" +
+        '<span class="inv-status">' + esc2(r[4]) + "</span>" +
+        '<p class="inv-effect">' + esc2(r[3]) + "</p></div>";
+    }).join("");
+  }
+
+  function openInvTab() {
+    invList.innerHTML = '<div class="inv-loading">Loading the full inventory…</div>';
+    ensureInventory().then(function (d) {
+      invData = d; invReady = true;
+      renderInv();
+    }).catch(function () {
+      invList.innerHTML = '<div class="inv-loading">Could not load the inventory. Check your connection and try again.</div>';
+    });
+  }
+
+  function selectTab(which) {
+    var isInv = which === "inv";
+    tabIndex.classList.toggle("active", !isInv);
+    tabInv.classList.toggle("active", isInv);
+    tabIndex.setAttribute("aria-selected", String(!isInv));
+    tabInv.setAttribute("aria-selected", String(isInv));
+    paneIndex.hidden = isInv;
+    paneInv.hidden = !isInv;
+    if (isInv && !invReady) openInvTab();
+  }
+  tabIndex.addEventListener("click", function () { selectTab("index"); });
+  tabInv.addEventListener("click", function () { selectTab("inv"); });
+  invSearch.addEventListener("input", renderInv);
 })();
 </script>
 </body>
