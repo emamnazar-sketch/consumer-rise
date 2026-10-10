@@ -7,12 +7,10 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /* Best-effort: push one subscriber into the Beehiiv publication.
    Never throws — callers must not let a Beehiiv outage break signups. */
-/* TEMPORARY DEBUG — returns Beehiiv's response in the JSON body so the
-   failing forward can be diagnosed. Remove before considering this done. */
 async function forwardToBeehiiv(env, email, source) {
   const apiKey = env.BEEHIIV_API_KEY;
   const pubId = env.BEEHIIV_PUBLICATION_ID;
-  if (!apiKey || !pubId) return { skipped: true }; // not configured yet — D1 only
+  if (!apiKey || !pubId) return; // not configured yet — D1 only
   try {
     const res = await fetch(
       "https://api.beehiiv.com/v2/publications/" + encodeURIComponent(pubId) + "/subscriptions",
@@ -32,12 +30,9 @@ async function forwardToBeehiiv(env, email, source) {
         })
       }
     );
-    const text = await res.text();
     if (!res.ok) console.log("beehiiv forward failed:", res.status, email);
-    return { status: res.status, body: text.slice(0, 500) };
   } catch (e) {
     console.log("beehiiv forward error:", String((e && e.message) || e));
-    return { error: String((e && e.message) || e) };
   }
 }
 
@@ -60,13 +55,6 @@ function json(data, status) {
 
 export async function onRequest(context) {
   const { request, env } = context;
-  /* TEMPORARY DEBUG — GET ?dbg=email lets us see Beehiiv's exact response. Remove. */
-  if (request.method === "GET") {
-    const email = new URL(request.url).searchParams.get("dbg") || "";
-    if (!EMAIL_RE.test(email)) return json({ ok: false, reason: "invalid-email" }, 400);
-    const r = await forwardToBeehiiv(env, email, "/debug-get");
-    return json({ ok: true, debug_beehiiv: r });
-  }
   if (request.method !== "POST") return json({ ok: false, reason: "method" }, 405);
 
   const ip = request.headers.get("cf-connecting-ip") || "unknown";
@@ -97,8 +85,8 @@ export async function onRequest(context) {
     await env.DB.prepare(
       "INSERT INTO subscribers (id, email, source, created_at) VALUES (?, ?, ?, ?)"
     ).bind(crypto.randomUUID(), email, source || null, new Date().toISOString()).run();
-    const beehiiv = await forwardToBeehiiv(env, email, source);
-    return json({ ok: true, debug_beehiiv: beehiiv }); // TEMPORARY DEBUG — remove
+    await forwardToBeehiiv(env, email, source);
+    return json({ ok: true });
   } catch (e) {
     return json({ ok: false, reason: "error" }, 500);
   }
