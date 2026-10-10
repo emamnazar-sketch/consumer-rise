@@ -20,6 +20,6 @@ window.CR_CONFIG = {
   // null = Pro trial button shows the "opening soon" notice (documented TODO).
   PRO_CHECKOUT_URL: null,
 
-  CONTACT_EMAIL: "hello@consumerrising.com",
+  CONTACT_EMAIL: "consumerrising@gmail.com",
   SCANS_PER_DAY_FREE: 3
 };
