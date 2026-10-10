@@ -1,7 +1,9 @@
-/* POST /api/scan — body {email, result_summary?, matches?}
-   Scans are unlimited and free forever. Every scan is recorded so we can see
-   which ingredients get flagged most — that shapes what we research next.
-   OCR runs on the reader's device; photos are never sent here.
+/* POST /api/scan — body {email?, result_summary?, matches?}
+   Scans are unlimited and free forever; the first scan needs no email.
+   Email is optional: scans without a valid email are stored under "free-scan".
+   Every scan is recorded so we can see which ingredients get flagged most —
+   that shapes what we research next. OCR runs on the reader's device;
+   photos are never sent here.
    Responses: {ok:true} | {ok:false, reason} */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -22,10 +24,8 @@ export async function onRequest(context) {
   } catch (e) {
     return json({ ok: false, reason: "invalid" }, 400);
   }
-  const email = String((body && body.email) || "").trim().toLowerCase();
-  if (!EMAIL_RE.test(email) || email.length > 254) {
-    return json({ ok: false, reason: "invalid-email" }, 400);
-  }
+  const emailRaw = String((body && body.email) || "").trim().toLowerCase();
+  const email = (EMAIL_RE.test(emailRaw) && emailRaw.length <= 254) ? emailRaw : "free-scan";
 
   try {
     const summary = String((body && body.result_summary) || "pending-analysis").slice(0, 500);

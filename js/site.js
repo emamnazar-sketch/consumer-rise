@@ -144,6 +144,17 @@
     try { return localStorage.getItem("cr_scanner_email") || ""; }
     catch (err) { return ""; }
   }
+  function freeScanDone() {
+    try { return localStorage.getItem("cr_free_scan_done") === "1"; }
+    catch (err) { return false; }
+  }
+  /* First scan is free: tool shows immediately. After it completes, the gate
+     appears to unlock unlimited scans. Returns "tool" or "gate". */
+  function scannerViewState() {
+    if (getGateEmail()) return "tool";
+    if (freeScanDone()) return "gate";
+    return "tool";
+  }
   function unlockScanner(email) {
     try { localStorage.setItem("cr_scanner_email", email); } catch (err) {}
     if (gate) gate.hidden = true;
@@ -151,6 +162,19 @@
       tool.hidden = false;
       tool.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+  }
+  function setPostScanGateCopy() {
+    if (!gate) return;
+    var h2 = gate.querySelector("h2");
+    if (h2) h2.textContent = "Want unlimited scans?";
+    var ps = gate.querySelectorAll("p");
+    if (ps && ps.length) ps[0].textContent = "Your first scan is done. One email unlocks unlimited scans — free forever.";
+  }
+  function showPostScanGate() {
+    if (!gate || !result) return;
+    setPostScanGateCopy();
+    result.parentNode.insertBefore(gate, result.nextSibling);
+    gate.hidden = false;
   }
 
   if (gate && tool) {
@@ -175,9 +199,13 @@
         unlockScanner(email);
       }
     });
-    if (getGateEmail()) {
+    if (scannerViewState() === "tool") {
       gate.hidden = true;
       tool.hidden = false;
+    } else {
+      setPostScanGateCopy();
+      tool.hidden = true;
+      gate.hidden = false;
     }
   }
 
@@ -329,18 +357,137 @@
     return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
 
+  /* ---- allergen alerts (optional). Trigger words matched as case-insensitive
+     substrings against matched ingredient names + aliases. ---- */
+  var ALLERGENS = {
+    "milk": ["milk", "whey", "casein", "caseinate", "lactose", "ghee", "nougat", "curd", "custard", "lactalbumin", "buttermilk", "cream", "butter", "cheese", "yogurt", "kefir", "recaldent"],
+    "egg": ["egg", "albumin", "albumen", "lysozyme", "mayonnaise", "meringue", "ovalbumin"],
+    "soy": ["soy", "soya", "edamame", "miso", "natto", "tempeh", "tofu", "tamari", "shoyu"],
+    "wheat": ["wheat", "flour", "gluten", "semolina", "spelt", "farro", "einkorn", "kamut", "triticale", "malt", "couscous", "bulgur", "durum", "graham"],
+    "peanut": ["peanut", "arachis", "groundnut"],
+    "tree nuts": ["almond", "walnut", "cashew", "pecan", "pistachio", "hazelnut", "brazil nut", "macadamia", "pine nut", "chestnut", "coconut", "marzipan", "praline"],
+    "fish": ["anchovy", "bass", "cod", "flounder", "haddock", "halibut", "salmon", "sardine", "sole", "tuna", "trout", "surimi"],
+    "shellfish": ["shrimp", "crab", "lobster", "crayfish", "crawfish", "clam", "mussel", "oyster", "scallop", "squid", "octopus"],
+    "sesame": ["sesame", "tahini", "benne", "gingelly"]
+  };
+  var ALLERGEN_LABELS = {
+    "milk": "Milk", "egg": "Egg", "soy": "Soy", "wheat": "Wheat", "peanut": "Peanut",
+    "tree nuts": "Tree Nuts", "fish": "Fish", "shellfish": "Shellfish", "sesame": "Sesame"
+  };
+  function getAllergens() {
+    try {
+      var list = JSON.parse(localStorage.getItem("cr_allergens") || "[]");
+      return (Array.isArray(list) ? list : []).filter(function (k) { return !!ALLERGENS[k]; });
+    } catch (err) { return []; }
+  }
+  function saveAllergens(list) {
+    try { localStorage.setItem("cr_allergens", JSON.stringify(list)); } catch (err) {}
+  }
+  function checkAllergens(hits, invHits) {
+    var selected = getAllergens();
+    if (!selected.length) return [];
+    var corpus = [];
+    (hits || []).forEach(function (h) {
+      corpus.push(([h.ing.name].concat(h.ing.aliases || []).join(" ").toLowerCase()));
+    });
+    (invHits || []).forEach(function (x) {
+      corpus.push(([x.row[0]].concat(x.row[2] ? x.row[2].split("|") : []).join(" ").toLowerCase()));
+    });
+    var alerts = [];
+    selected.forEach(function (k) {
+      var matchedTerms = [];
+      ALLERGENS[k].forEach(function (t) {
+        var found = corpus.some(function (c) { return c.indexOf(t) !== -1; });
+        if (found && matchedTerms.indexOf(t) === -1) matchedTerms.push(t);
+      });
+      if (matchedTerms.length) alerts.push({ key: k, label: ALLERGEN_LABELS[k], terms: matchedTerms });
+    });
+    return alerts;
+  }
+
+  var chipBox = document.getElementById("allergen-chips");
+  function paintChips() {
+    if (!chipBox) return;
+    var sel = getAllergens();
+    chipBox.querySelectorAll(".alg-chip").forEach(function (c) {
+      c.setAttribute("aria-pressed", sel.indexOf(c.getAttribute("data-alg")) !== -1 ? "true" : "false");
+    });
+  }
+  if (chipBox) {
+    paintChips();
+    chipBox.addEventListener("click", function (e) {
+      var b = e.target && e.target.closest ? e.target.closest(".alg-chip") : null;
+      if (!b) return;
+      var k = b.getAttribute("data-alg");
+      var sel = getAllergens();
+      var i = sel.indexOf(k);
+      if (i === -1) sel.push(k); else sel.splice(i, 1);
+      saveAllergens(sel);
+      paintChips();
+    });
+  }
+
+  function allergenAlertHTML(hits, invHits) {
+    var alerts = checkAllergens(hits, invHits);
+    if (!alerts.length) return "";
+    return '<div role="alert" style="background:#fff8f0;border:2px solid var(--red);border-radius:var(--radius);padding:16px;margin-bottom:18px">' +
+      '<strong style="font-size:16px">\u26A0 Allergen alert \u2014 this label mentions: ' +
+      alerts.map(function (a) {
+        return escHtml(a.label) + " (" + a.terms.map(function (t) { return escHtml(t); }).join(", ") + ")";
+      }).join("; ") + "</strong>" +
+      '<p style="font-size:13.5px;color:var(--ink-soft);margin:8px 0 0">A helper, not a medical device. Always read the label yourself \u2014 especially for severe allergies.</p></div>';
+  }
+  function shareButtonHTML() {
+    return '<p class="center" style="margin:10px 0 4px"><button class="btn" id="scan-share" type="button">Share this result</button></p>';
+  }
+  function wireShare(score, hits) {
+    var btn = document.getElementById("scan-share");
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+      var names = hits.slice(0, 3).map(function (x) { return x.ing.name; });
+      var text = "I scanned a food label with Consumer Rising: " + score + "/100." +
+        (names.length ? " Flagged: " + names.join(", ") + "." : " No flagged ingredients.") +
+        " Scan yours free: https://consumerrising.com/scanner";
+      var done = function () {
+        var old = btn.textContent;
+        btn.textContent = "Copied!";
+        setTimeout(function () { btn.textContent = old; }, 1800);
+      };
+      if (navigator.share) {
+        navigator.share({ title: "Consumer Rising label scan", text: text, url: "https://consumerrising.com/scanner" })
+          .catch(function () { /* user dismissed — do nothing */ });
+      } else if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, done);
+      } else {
+        var ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand("copy"); } catch (e) {}
+        document.body.removeChild(ta);
+        done();
+      }
+    });
+  }
+
   function renderScanResults(hits, invHits, ocrText) {
     var h = '<div class="dossier scan-result" role="status">';
+    h += allergenAlertHTML(hits, invHits);
+    var shareScore = hits.length ? scanScore(hits) : 100;
     if (!hits.length) {
       h += '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">No flagged ingredients detected</h3>' +
         '<p style="color:var(--ink-soft)">We read your label and none of our 50 flagged ingredients showed up. ' +
-        'That is good news as far as our database goes — it is not a verdict that the product is healthy overall.</p>';
+        'That is good news as far as our database goes — it is not a verdict that the product is healthy overall.</p>' +
+        shareButtonHTML();
     } else {
       var score = scanScore(hits);
       var band = score >= 85 ? "Mostly clear" : score >= 65 ? "A few flags" : score >= 40 ? "Several concerns" : "Many concerns";
       h += '<div class="quiz-step-tag">Label score</div>' +
         '<div class="quiz-result-score">' + score + '<span style="font-size:28px">/100</span></div>' +
         '<div class="quiz-result-label">' + band + "</div>" +
+        shareButtonHTML() +
         '<p style="color:var(--ink-soft)">We found <strong>' + hits.length + " flagged ingredient" + (hits.length > 1 ? "s" : "") + "</strong> on this label:</p>";
       hits.sort(function (a, b) { return (b.ing.risk_weight || 0) - (a.ing.risk_weight || 0); });
       h += '<div style="display:flex;flex-direction:column;gap:12px;margin:16px 0">';
@@ -378,6 +525,7 @@
     h += '<p class="center mt"><button class="btn btn-ink" id="scan-again">Scan another label</button></p>';
     h += '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:10px">Flagged results cover our 50-ingredient index. The inventory section below lists FDA-recorded names with no verdict attached. Results depend on photo quality. General information only — <a href="/disclaimer.html">not medical advice</a>.</p></div>';
     result.innerHTML = h;
+    wireShare(shareScore, hits);
     var again = document.getElementById("scan-again");
     if (again) again.addEventListener("click", function () {
       result.innerHTML = "";
@@ -453,12 +601,22 @@
           ? ("score " + scanScore(hits) + " \u00b7 matched: " + ids.join(", "))
           : "score 100 \u00b7 no flagged ingredients";
         if (invHits && invHits.length) summary += " \u00b7 inv:" + invHits.length;
-        if (CFG.SCAN_ENDPOINT && email) {
-          postJSON(CFG.SCAN_ENDPOINT, { email: email, result_summary: summary, matches: ids })
-            .then(function () { renderScanResults(hits, invHits, ocrText); })
-            .catch(function () { renderScanResults(hits, invHits, ocrText); });
-        } else {
+        var isFreeScan = !getGateEmail();
+        function finish() {
+          if (isFreeScan) {
+            try { localStorage.setItem("cr_free_scan_done", "1"); } catch (e) {}
+          }
           renderScanResults(hits, invHits, ocrText);
+          if (isFreeScan) showPostScanGate();
+        }
+        /* Email is optional now (first scan is free): the API stores
+           free scans under "free-scan" instead of rejecting them. */
+        if (CFG.SCAN_ENDPOINT) {
+          postJSON(CFG.SCAN_ENDPOINT, { email: email, result_summary: summary, matches: ids })
+            .then(finish)
+            .catch(finish);
+        } else {
+          finish();
         }
       }
 
