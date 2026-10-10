@@ -216,6 +216,36 @@
 
   if (gate && tool) {
     var gateForm = gate.querySelector("form");
+    var gateMode = "subscribe"; /* or "lookup" — already subscribed elsewhere */
+    var gateH2 = gate.querySelector("h2");
+    var gateP = gate.querySelector("p");
+    var gateBtn = gateForm.querySelector('button[type="submit"]');
+    function renderGateMode() {
+      if (gateMode === "lookup") {
+        if (gateH2) gateH2.textContent = "Welcome back";
+        if (gateP) gateP.textContent = "Enter the email you subscribed with and we will unlock the scanner on this device too.";
+        if (gateBtn) gateBtn.innerHTML = "Unlock my scanner";
+        if (gateToggle) gateToggle.innerHTML = "&#8592; Join free instead";
+      } else if (!freeScanDone()) {
+        if (gateH2) gateH2.textContent = "Unlock the scanner";
+        if (gateP) gateP.textContent = "Join the free Consumer Rising community to scan as many food labels as you like.";
+        if (gateBtn) gateBtn.innerHTML = "Join free &amp; scan now &rarr;";
+        if (gateToggle) gateToggle.innerHTML = "Already subscribed on another device? Unlock with your email &rarr;";
+      } else {
+        setPostScanGateCopy();
+        if (gateBtn) gateBtn.innerHTML = "Join free &amp; scan now &rarr;";
+        if (gateToggle) gateToggle.innerHTML = "Already subscribed on another device? Unlock with your email &rarr;";
+      }
+    }
+    var gateToggle = document.createElement("button");
+    gateToggle.type = "button";
+    gateToggle.style.cssText = "background:none;border:none;padding:0;margin:14px 0 0;font:inherit;color:var(--red,#c0392b);font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:3px";
+    gateToggle.addEventListener("click", function () {
+      gateMode = gateMode === "lookup" ? "subscribe" : "lookup";
+      clearFormError(gateForm);
+      renderGateMode();
+    });
+    gateForm.insertAdjacentElement("afterend", gateToggle);
     gateForm.addEventListener("submit", function (e) {
       e.preventDefault();
       clearFormError(gateForm);
@@ -224,6 +254,26 @@
       if (!EMAIL_RE.test(email)) {
         input.focus();
         showFormError(gateForm, "Please enter a valid email address.");
+        return;
+      }
+      if (gateMode === "lookup") {
+        /* Cross-device unlock: check D1 for this email. */
+        gateBtn.disabled = true;
+        postJSON("/api/check-subscription", { email: email })
+          .then(function (res) {
+            gateBtn.disabled = false;
+            if (res && res.ok && res.subscribed) {
+              unlockScanner(email);
+            } else if (res && res.ok) {
+              showFormError(gateForm, "We couldn't find that email. Check the spelling — or join free, it takes ten seconds.");
+            } else {
+              showFormError(gateForm, "Something went wrong checking. Please try again.");
+            }
+          })
+          .catch(function () {
+            gateBtn.disabled = false;
+            showFormError(gateForm, "Something went wrong checking. Please try again.");
+          });
         return;
       }
       /* Join the newsletter too (source "scanner"), then unlock — even if the
@@ -236,11 +286,12 @@
         unlockScanner(email);
       }
     });
+    renderGateMode();
     if (scannerViewState() === "tool") {
       gate.hidden = true;
       tool.hidden = false;
     } else {
-      setPostScanGateCopy();
+      if (gateMode === "subscribe") setPostScanGateCopy();
       tool.hidden = true;
       gate.hidden = false;
     }
