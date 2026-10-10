@@ -12,9 +12,8 @@ window.CR_CONFIG = {
   // POST JSON {email} → /functions/api/scan.js — enforces 3 free scans/day per email (D1)
   SCAN_ENDPOINT: "/api/scan",
 
-  // POST multipart/form-data {photo} -> {ingredients:[...]} for REAL label analysis.
-  // null = scanner shows the honest "analysis being built" state (documented TODO).
-  SCANNER_API: null,
+  // OCR runs on-device (Tesseract.js) — the photo never leaves the phone.
+  // /api/scan only counts scans + stores the matched ingredient IDs and score.
 
   CONTACT_EMAIL: "consumerrising@gmail.com",
   SCANS_PER_DAY_FREE: 3

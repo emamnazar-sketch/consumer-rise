@@ -196,46 +196,239 @@
     });
   }
 
-  function analysisComingSoon(extra) {
-    return '<div class="dossier scan-result" role="status">' +
-      '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">Analysis is being built</h3>' +
-      '<p style="color:var(--ink-soft)">The photo stays on your device — nothing was uploaded. ' +
-      'Automatic label decoding is not connected yet. Until then, compare what you see ' +
-      'against the <a href="/ingredients.html">Ingredient Index</a>: search any word from the ' +
-      'ingredients list and check its risk rating.</p>' +
-      (extra || "") + "</div>";
+  /* ---- scanner: on-device OCR + ingredient matching. Free forever.
+     The photo never leaves the reader's phone: Tesseract.js reads it locally,
+     and only the matched ingredient IDs + score are sent to /api/scan. ---- */
+  var TESS_CDN = "https://cdn.jsdelivr.net/npm/tesseract.js@6/dist/tesseract.min.js";
+  var tessPromise = null;
+
+  function loadTesseract() {
+    if (window.Tesseract && window.Tesseract.recognize) return Promise.resolve();
+    if (tessPromise) return tessPromise;
+    tessPromise = new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = TESS_CDN;
+      s.onload = function () { resolve(); };
+      s.onerror = function () { reject(new Error("tess-cdn")); };
+      document.head.appendChild(s);
+    });
+    return tessPromise;
+  }
+
+  function normText(s) {
+    return String(s || "").toLowerCase()
+      .replace(/[^a-z0-9\s]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+  function escRe(s) {
+    return String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+  function cleanTerm(t) {
+    return normText(String(t).replace(/\([^)]*\)/g, " ")).trim();
+  }
+
+  /* Match OCR text against the 12-ingredient database. Returns [{ing, term}]. */
+  function matchIngredients(ocrText) {
+    var data = window.CR_INGREDIENTS || [];
+    var text = normText(ocrText);
+    var nospace = text.replace(/\s+/g, "");
+    var hits = [];
+    data.forEach(function (d) {
+      var terms = [d.name].concat(d.aliases || []);
+      if (d.e_number) terms.push(d.e_number);
+      var found = null;
+      for (var i = 0; i < terms.length && !found; i++) {
+        var t = cleanTerm(terms[i]);
+        if (!t) continue;
+        var tFlat = t.replace(/\s+/g, "");
+        if (/^e\d+$/.test(tFlat)) {
+          if (nospace.indexOf(tFlat) !== -1) found = terms[i];
+        } else if (t.length <= 4) {
+          if (new RegExp("(^|\\s)" + escRe(t) + "(\\s|$)").test(text)) found = terms[i];
+        } else if (text.indexOf(t) !== -1) {
+          found = terms[i];
+        } else {
+          var words = t.split(" ").filter(function (w) { return w.length > 1; });
+          var all = words.length > 1 && words.every(function (w) {
+            return new RegExp("(^|\\s)" + escRe(w) + "(\\s|$)").test(text);
+          });
+          if (all) found = terms[i];
+        }
+      }
+      if (found) hits.push({ ing: d, term: found });
+    });
+    return hits;
+  }
+
+  function scanScore(hits) {
+    var w = 0;
+    hits.forEach(function (h) { w += (h.ing.risk_weight || 0); });
+    return Math.max(5, 100 - w);
+  }
+  function riskBadge(risk) {
+    var labels = { high: "\u2715 Higher concern", medium: "\u26A0 Worth knowing", low: "\u2713 Lower concern" };
+    return '<span class="risk risk-' + risk + '">' + (labels[risk] || risk) + "</span>";
+  }
+  function escHtml(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function renderScanResults(hits, ocrText, remaining) {
+    var h = '<div class="dossier scan-result" role="status">';
+    if (!hits.length) {
+      h += '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">No flagged ingredients detected</h3>' +
+        '<p style="color:var(--ink-soft)">We read your label and none of our 12 flagged ingredients showed up. ' +
+        'That is good news as far as our database goes — it is not a verdict that the product is healthy overall.</p>';
+    } else {
+      var score = scanScore(hits);
+      var band = score >= 85 ? "Mostly clear" : score >= 65 ? "A few flags" : score >= 40 ? "Several concerns" : "Many concerns";
+      h += '<div class="quiz-step-tag">Label score</div>' +
+        '<div class="quiz-result-score">' + score + '<span style="font-size:28px">/100</span></div>' +
+        '<div class="quiz-result-label">' + band + "</div>" +
+        '<p style="color:var(--ink-soft)">We found <strong>' + hits.length + " flagged ingredient" + (hits.length > 1 ? "s" : "") + "</strong> on this label:</p>";
+      hits.sort(function (a, b) { return (b.ing.risk_weight || 0) - (a.ing.risk_weight || 0); });
+      h += '<div style="display:flex;flex-direction:column;gap:12px;margin:16px 0">';
+      hits.forEach(function (x) {
+        var d = x.ing;
+        h += '<div style="background:var(--paper);border:var(--line);border-radius:var(--radius);padding:14px 16px">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px">' +
+          "<strong>" + escHtml(d.name) + "</strong>" + riskBadge(d.risk) + "</div>" +
+          '<p style="font-size:15px;color:var(--ink-soft);margin:0 0 8px">' + escHtml(d.description.split(".")[0]) + ".</p>" +
+          '<a href="/ingredients.html#ing-' + escHtml(d.id) + '" style="font-weight:800;font-size:14.5px">Read the full dossier →</a></div>';
+      });
+      h += "</div>";
+    }
+    h += '<details style="margin-top:14px"><summary style="cursor:pointer;font-weight:700;font-size:14.5px">What we read from your photo</summary>' +
+      '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:8px;white-space:pre-wrap">' + escHtml((ocrText || "").slice(0, 1200) || "(no text detected)") + "</p></details>";
+    if (typeof remaining === "number") {
+      h += '<p style="color:var(--ink-soft);margin-top:12px"><strong>Free scans left today: ' + remaining + ".</strong> Free forever — no paid tier.</p>";
+    }
+    h += '<p class="center mt"><button class="btn btn-ink" id="scan-again">Scan another label</button></p>';
+    h += '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:10px">Results depend on photo quality and cover only the 12 ingredients in our database. General information only — <a href="/disclaimer.html">not medical advice</a>.</p></div>';
+    result.innerHTML = h;
+    var again = document.getElementById("scan-again");
+    if (again) again.addEventListener("click", function () {
+      result.innerHTML = "";
+      if (fileInput) fileInput.value = "";
+      if (preview) preview.innerHTML = "";
+      if (analyzeBtn) analyzeBtn.disabled = true;
+    });
+  }
+
+  function scanError(msg) {
+    result.innerHTML = '<div class="dossier scan-result" role="status">' +
+      '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">Could not read that photo</h3>' +
+      '<p style="color:var(--ink-soft)">' + msg + "</p>" +
+      '<p class="center mt"><button class=\"btn btn-ink\" id=\"scan-retry\">Try another photo</button></p></div>';
+    var r = document.getElementById("scan-retry");
+    if (r) r.addEventListener("click", function () {
+      result.innerHTML = "";
+      if (fileInput) fileInput.value = "";
+      if (preview) preview.innerHTML = "";
+      if (analyzeBtn) analyzeBtn.disabled = true;
+    });
+  }
+
+  /* Downscale huge photos so OCR is fast on phones. */
+  function prepImage(file) {
+    return new Promise(function (resolve, reject) {
+      var url = URL.createObjectURL(file);
+      var img = new Image();
+      img.onload = function () {
+        try {
+          var maxW = 1600;
+          var scale = Math.min(1, maxW / img.naturalWidth);
+          var cv = document.createElement("canvas");
+          cv.width = Math.round(img.naturalWidth * scale);
+          cv.height = Math.round(img.naturalHeight * scale);
+          cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
+          URL.revokeObjectURL(url);
+          resolve(cv);
+        } catch (e) { reject(e); }
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error("img")); };
+      img.src = url;
+    });
+  }
+
+  function runOCR(file) {
+    return loadTesseract().then(function () {
+      return prepImage(file);
+    }).then(function (canvas) {
+      return window.Tesseract.recognize(canvas, "eng", {
+        logger: function (m) {
+          if (m && m.status === "recognizing text" && typeof m.progress === "number") {
+            var pct = Math.round(m.progress * 100);
+            result.innerHTML = '<div class="form-ok" role="status"><span class="big">Reading… ' + pct + '%</span>Decoding your label on this device. Nothing is uploaded.</div>';
+          }
+        }
+      });
+    }).then(function (res) {
+      return (res && res.data && res.data.text) ? res.data.text : "";
+    });
   }
 
   if (analyzeBtn) {
     analyzeBtn.addEventListener("click", function () {
       var email = getGateEmail();
-      var finish = function (remaining) {
-        var note = (typeof remaining === "number")
-          ? '<p style="color:var(--ink-soft);margin-top:12px"><strong>Free scans left today: ' + remaining + '.</strong></p>'
-          : "";
-        result.innerHTML = analysisComingSoon(note);
-      };
+      var file = fileInput && fileInput.files && fileInput.files[0];
+      if (!file) return;
+      analyzeBtn.disabled = true;
+
+      function recordResult(hits, ocrText) {
+        var ids = hits.map(function (x) { return x.ing.id; });
+        var summary = ids.length
+          ? ("score " + scanScore(hits) + " \u00b7 matched: " + ids.join(", "))
+          : "score 100 \u00b7 no flagged ingredients";
+        if (CFG.SCAN_ENDPOINT && email) {
+          postJSON(CFG.SCAN_ENDPOINT, { email: email, result_summary: summary, matches: ids })
+            .then(function (res) {
+              renderScanResults(hits, ocrText, res && typeof res.remaining === "number" ? res.remaining : undefined);
+            })
+            .catch(function () { renderScanResults(hits, ocrText); });
+        } else {
+          renderScanResults(hits, ocrText);
+        }
+      }
+
+      function doOCR() {
+        result.innerHTML = '<div class="form-ok" role="status"><span class="big">Loading the reader…</span>First scan downloads a small reading engine. After that it is instant.</div>';
+        runOCR(file).then(function (text) {
+          if (!normText(text)) {
+            analyzeBtn.disabled = false;
+            scanError("We couldn't find any readable text in that photo. Try again: lay the package flat, get close to the <strong>ingredients</strong> panel (not the front), and avoid glare and shadows.");
+            return;
+          }
+          var hits = matchIngredients(text);
+          recordResult(hits, text);
+          analyzeBtn.disabled = false;
+        }).catch(function (err) {
+          analyzeBtn.disabled = false;
+          var msg = (err && err.message === "tess-cdn")
+            ? "The reading engine couldn't download. Check your connection and try again — the photo never left your device."
+            : "Something went wrong while reading the photo. Please try again with a clearer shot of the ingredients panel.";
+          scanError(msg);
+        });
+      }
+
       if (CFG.SCAN_ENDPOINT && email) {
         result.innerHTML = '<div class="form-ok" role="status"><span class="big">One moment…</span>Checking your free scans.</div>';
-        analyzeBtn.disabled = true;
-        postJSON(CFG.SCAN_ENDPOINT, { email: email })
+        postJSON(CFG.SCAN_ENDPOINT, { email: email, check_only: true })
           .then(function (res) {
-            analyzeBtn.disabled = false;
-            if (res && res.ok) { finish(res.remaining); }
+            if (res && res.ok) { doOCR(); }
             else if (res && res.reason === "limit") {
+              analyzeBtn.disabled = false;
               result.innerHTML = '<div class="dossier scan-result" role="status">' +
                 '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">Daily limit reached</h3>' +
                 '<p style="color:var(--ink-soft)">You have used your 3 free scans for today. ' +
-                'Come back tomorrow — the counter resets every 24 hours.</p></div>';
+                'Come back tomorrow — the counter resets every 24 hours. The scanner is free forever; the daily limit just keeps bots out.</p></div>';
             }
-            else { finish(); }
+            else { analyzeBtn.disabled = false; doOCR(); }
           })
-          .catch(function () { analyzeBtn.disabled = false; finish(); });
-      } else if (CFG.SCANNER_API) {
-        result.innerHTML = '<div class="form-ok" role="status"><span class="big">Scanning…</span>Reading your label now.</div>';
-        /* Real analysis call goes here once SCANNER_API is set (see README). */
+          .catch(function () { analyzeBtn.disabled = false; doOCR(); });
       } else {
-        finish();
+        doOCR();
       }
     });
   }
