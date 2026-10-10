@@ -32,7 +32,11 @@ window.CR_INGREDIENTS = [
       "Watchdog groups have petitioned the FDA for years to take a harder look at dyes.",
       "Look for 'Red 40', 'Allura Red', or 'E129' — brightest reds, oranges, and pinks are the usual suspects."
     ],
-    link: "/investigations/red-dye-40.html"
+    link: "/investigations/red-dye-40.html",
+    sources: [
+      { label: "FDA: color additives information for consumers", url: "https://www.fda.gov/food/food-ingredients-packaging/color-additives-information-consumers" },
+      { label: "EFSA: food colours", url: "https://www.efsa.europa.eu/en/topics/topic/food-colours" }
+    ]
   },
   {
     name: "Yellow 5",
@@ -43,12 +47,12 @@ window.CR_INGREDIENTS = [
     bullets: [
       "EU requires the same 'activity and attention in children' warning label as other artificial colors.",
       "Included in the color mixes studied for links to hyperactivity in sensitive children.",
-      "The FDA estimates hives in fewer than 1 in 10,000 people — that is why it must be named on labels.",
+      "Hives from tartrazine are rare — but unlike most dyes, the FDA requires it to be listed by name on labels, so sensitive people can avoid it.",
       "Check candy, sports drinks, flavored chips, and instant noodles for 'Yellow 5' or 'Tartrazine'."
     ],
     link: null,
     sources: [
-      { label: "FDA on tartrazine sensitivity (1 in 10,000)", url: "https://Www.news-medical.net/health/Tartrazine-Allergy.aspx" }
+      { label: "FDA: color additives information for consumers", url: "https://www.fda.gov/food/food-ingredients-packaging/color-additives-information-consumers" }
     ]
   },
   {
@@ -59,13 +63,13 @@ window.CR_INGREDIENTS = [
     description: "A preservative that keeps sodas, juices, and condiments from spoiling. Common in acidic drinks.",
     bullets: [
       "Was part of the color-plus-preservative mix tied to hyperactivity in the 2007 children's study.",
-      "Can form benzene when mixed with vitamin C in drinks: in 2005–2006 the FDA found 5 of 100+ tested beverages above the 5 ppb drinking-water limit, and makers reformulated.",
+      "Can form benzene when mixed with vitamin C in drinks: FDA surveys in 2005–2007 found a small handful of 100+ tested drinks above the 5 ppb drinking-water limit; makers reformulated and retests came back under 1.5 ppb.",
       "Generally considered safe at approved levels by the FDA.",
       "If you drink a lot of soda with both sodium benzoate and vitamin C, that is the combo to watch."
     ],
     link: null,
     sources: [
-      { label: "FDA benzene-in-soft-drinks survey 2005–2006 (FSAI summary)", url: "https://www.fsai.ie/enforcement-and-legislation/official-controls/monitoring/surveillance/introduction-benzene-survey-2006" }
+      { label: "FSAI summary of FDA benzene-in-drinks surveys 2005–2007", url: "https://www.fsai.ie/enforcement-and-legislation/official-controls/monitoring/surveillance/introduction-benzene-survey-2006" }
     ]
   },
   {
@@ -80,7 +84,10 @@ window.CR_INGREDIENTS = [
       "Glutamate occurs naturally in tomatoes, cheese, and mushrooms.",
       "Often hides under names like 'yeast extract' and 'hydrolyzed vegetable protein'."
     ],
-    link: "/investigations/msg.html"
+    link: "/investigations/msg.html",
+    sources: [
+      { label: "FDA: Questions and Answers on MSG", url: "https://www.fda.gov/food/food-additives-petitions/questions-and-answers-monosodium-glutamate-msg" }
+    ]
   },
   {
     name: "Partially Hydrogenated Oils",
@@ -94,7 +101,10 @@ window.CR_INGREDIENTS = [
       "Label trick: under 0.5g per serving can still be called '0g trans fat' — so '0g' is not always zero.",
       "Read ingredients for the words 'partially hydrogenated', especially in frosting, popcorn, and baked goods."
     ],
-    link: "/investigations/trans-fats-hiding.html"
+    link: "/investigations/trans-fats-hiding.html",
+    sources: [
+      { label: "FDA: final determination on partially hydrogenated oils", url: "https://www.fda.gov/food/food-additives-petitions/final-determination-regarding-partially-hydrogenated-oils-removing-trans-fat" }
+    ]
   },
   {
     name: "Aspartame",
@@ -121,14 +131,14 @@ window.CR_INGREDIENTS = [
     description: "Used to keep citrus flavor mixed in some sodas and sports drinks. The FDA revoked its authorization for use in food in 2024.",
     bullets: [
       "The FDA revoked BVO's food authorization in July 2024, concluding it was no longer considered safe after NIH-collaboration studies found potential adverse health effects.",
-      "The EU removed it from food years before the US acted.",
+      "California's Food Safety Act (AB 418) also bans it in food from January 2027.",
       "Companies were given time to reformulate — check citrus sodas bought before the switch.",
       "Look for 'brominated vegetable oil' in citrus-flavored drinks."
     ],
     link: null,
     sources: [
       { label: "FDA: BVO authorization revoked July 2024", url: "https://www.fda.gov/food/food-additives-petitions/brominated-vegetable-oil-bvo" },
-      { label: "California Food Safety Act (AB 418) — EU precedent", url: "https://WWW.CONFECTIONERYNEWS.COM/Article/2023/10/10/California-Food-Safety-Act-signed-into-law-bans-four-food-additives-by-Jan.-2027/" }
+      { label: "California AB 418 — text of the law", url: "https://leginfo.legislature.ca.gov/faces/billCompareClient.xhtml?bill_id=202320240AB418&showamends=false" }
     ]
   },
   {
@@ -164,7 +174,7 @@ window.CR_INGREDIENTS = [
     ],
     link: null,
     sources: [
-      { label: "EFSA/EU: BHA (E320) authorized, ADI 1.0 mg/kg bw/day", url: "https://foodadditives.net/antioxidant/butylated-hydroxyanisole-bha/" }
+      { label: "EFSA 2011: BHA (E320) re-evaluation, ADI 1.0 mg/kg bw/day", url: "https://doi.org/10.2903/j.efsa.2011.2392" }
     ]
   },
   {
@@ -196,6 +206,9 @@ window.CR_INGREDIENTS = [
       "Do not confuse food-grade carrageenan with 'degraded carrageenan' (poligeenan), a lab chemical not allowed in food.",
       "Many brands now print 'carrageenan-free' on the carton if you want to skip it."
     ],
-    link: "/investigations/carrageenan.html"
+    link: "/investigations/carrageenan.html",
+    sources: [
+      { label: "EFSA 2018: re-evaluation of carrageenan (E 407)", url: "https://doi.org/10.2903/j.efsa.2018.5238" }
+    ]
   }
 ];
