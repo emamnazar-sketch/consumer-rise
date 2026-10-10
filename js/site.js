@@ -65,7 +65,7 @@
         box.className = "form-ok";
         box.setAttribute("role", "status");
         box.innerHTML = okHTML(
-          "Watch your inbox every Tuesday at 7am. First investigation lands this week."
+          "Watch your inbox every Tuesday at 7am. First finding lands this week."
         );
         form.replaceWith(box);
       };

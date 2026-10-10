@@ -1,6 +1,6 @@
 /* ConsumerRise — Ingredient Index data (12 entries).
    Risk ratings are the site's editorial judgment. Keep language plain and
-   non-alarmist; details live on the linked investigations where they exist. */
+   non-alarmist; details live on the linked findings where they exist. */
 window.CR_INGREDIENTS = [
   {
     name: "High Fructose Corn Syrup",
