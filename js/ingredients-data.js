@@ -20,7 +20,7 @@ window.CR_INGREDIENTS = [
       "One 12-ounce soda carries about 39 grams of sugar — more than a full day's limit for most adults.",
       "US use peaked around 1999 and has fallen as soda sales dropped."
     ],
-    link: "/investigations/truth-about-hfcs.html",
+    link: "/investigations/truth-about-hfcs",
     sources: [
       { label: "Coca-Cola nutrition facts (39g sugar / 12 oz)", url: "https://coca-cola.com/us/en/brands/coca-cola/products/original" },
       { label: "USDA ERS: sweetener availability peaked 1999", url: "https://www.ers.usda.gov/data-products/ag-and-food-statistics-charting-the-essentials/food-availability-and-consumption?topicId=080e8d1d-e61e-4bd8-beac-51f0f1d1f0fe" }
@@ -44,7 +44,7 @@ window.CR_INGREDIENTS = [
       "Watchdog groups have petitioned the FDA for years to take a harder look at dyes.",
       "Look for 'Red 40', 'Allura Red', or 'E129' — brightest reds, oranges, and pinks are the usual suspects."
     ],
-    link: "/investigations/red-dye-40.html",
+    link: "/investigations/red-dye-40",
     sources: [
       { label: "FDA: color additives information for consumers", url: "https://www.fda.gov/food/food-ingredients-packaging/color-additives-information-consumers" },
       { label: "EFSA: food colours", url: "https://www.efsa.europa.eu/en/topics/topic/food-colours" }
@@ -114,7 +114,7 @@ window.CR_INGREDIENTS = [
       "Glutamate occurs naturally in tomatoes, cheese, and mushrooms.",
       "Often hides under names like 'yeast extract' and 'hydrolyzed vegetable protein'."
     ],
-    link: "/investigations/msg.html",
+    link: "/investigations/msg",
     sources: [
       { label: "FDA: Questions and Answers on MSG", url: "https://www.fda.gov/food/food-additives-petitions/questions-and-answers-monosodium-glutamate-msg" }
     ]
@@ -137,7 +137,7 @@ window.CR_INGREDIENTS = [
       "Label trick: under 0.5g per serving can still be called '0g trans fat' — so '0g' is not always zero.",
       "Read ingredients for the words 'partially hydrogenated', especially in frosting, popcorn, and baked goods."
     ],
-    link: "/investigations/trans-fats-hiding.html",
+    link: "/investigations/trans-fats-hiding",
     sources: [
       { label: "FDA: final determination on partially hydrogenated oils", url: "https://www.fda.gov/food/food-additives-petitions/final-determination-regarding-partially-hydrogenated-oils-removing-trans-fat" }
     ]
@@ -160,7 +160,7 @@ window.CR_INGREDIENTS = [
       "The WHO's May 2023 guideline says non-sugar sweeteners do not help with weight control.",
       "People with the rare disorder PKU must avoid it — the FDA requires every aspartame product to warn 'PHENYLKETONURICS: CONTAINS PHENYLALANINE.'"
     ],
-    link: "/investigations/artificial-sweeteners.html",
+    link: "/investigations/artificial-sweeteners",
     sources: [
       { label: "FDA: aspartame, PKU warning and labeling", url: "https://www.fda.gov/food/food-additives-petitions/aspartame-and-other-sweeteners-food" }
     ]
@@ -278,7 +278,7 @@ window.CR_INGREDIENTS = [
       "Do not confuse food-grade carrageenan with 'degraded carrageenan' (poligeenan), a lab chemical not allowed in food.",
       "Many brands now print 'carrageenan-free' on the carton if you want to skip it."
     ],
-    link: "/investigations/carrageenan.html",
+    link: "/investigations/carrageenan",
     sources: [
       { label: "EFSA 2018: re-evaluation of carrageenan (E 407)", url: "https://doi.org/10.2903/j.efsa.2018.5238" }
     ]

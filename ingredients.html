@@ -19,21 +19,21 @@
 <div class="ticker" aria-hidden="true"><span>Consumer Rising &nbsp;·&nbsp; Know what goes into your body &nbsp;·&nbsp; <b>Subscribe free</b> &nbsp;·&nbsp; Consumer Rising &nbsp;·&nbsp; Know what goes into your body &nbsp;·&nbsp; <b>Subscribe free</b> &nbsp;·&nbsp;&nbsp;</span></div>
 <header class="site-header">
   <div class="header-in">
-    <a class="brand" href="/index.html" aria-label="Consumer Rising home">
+    <a class="brand" href="/" aria-label="Consumer Rising home">
       <span class="brand-mark">CR</span>
       <span><span class="brand-name">Consumer <em>Rising</em></span><br><span class="brand-sub">Consumer education & awareness</span></span>
     </a>
     <button class="nav-toggle" aria-expanded="false" aria-controls="mainnav">Menu</button>
       <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode"><span class="tt-icon" aria-hidden="true">🌙</span><span class="tt-label">Dark</span></button>
     <nav class="main-nav" id="mainnav" aria-label="Main">
-      <a href="/index.html">Home</a>
-      <a href="/investigations.html">Findings</a>
-      <a href="/ingredients.html" class="active">Ingredients</a>
-      <a href="/scanner.html">Scanner</a>
-      <a href="/resources.html">Resources</a>
-      <a href="/about.html">About</a>
-      <a href="/faq.html">FAQ</a>
-      <a href="/contact.html">Contact</a>
+      <a href="/">Home</a>
+      <a href="/investigations">Findings</a>
+      <a href="/ingredients" class="active">Ingredients</a>
+      <a href="/scanner">Scanner</a>
+      <a href="/resources">Resources</a>
+      <a href="/about">About</a>
+      <a href="/faq">FAQ</a>
+      <a href="/contact">Contact</a>
     </nav>
   </div>
 </header>
@@ -79,7 +79,7 @@
       </div>
       <p class="ing-count" id="ing-count" role="status"></p>
       <div class="ing-grid" id="ing-grid"></div>
-      <div class="disclaimer">Risk ratings reflect Consumer Rising's editorial judgment based on published research and regulator actions. Consumer Rising is an independent education publication — not doctors, not scientists. This index is general information, not medical advice. Talk to your doctor about your own health. <a href="/disclaimer.html">Full disclaimer</a>.</div>
+      <div class="disclaimer">Risk ratings reflect Consumer Rising's editorial judgment based on published research and regulator actions. Consumer Rising is an independent education publication — not doctors, not scientists. This index is general information, not medical advice. Talk to your doctor about your own health. <a href="/disclaimer">Full disclaimer</a>.</div>
       </div>
       <div id="pane-inv" role="tabpanel" aria-labelledby="tab-inv" hidden>
         <p class="gras-hook">Around a thousand of these entered through GRAS self-determination — companies declaring them safe themselves, never reviewed by the FDA.</p>
@@ -93,7 +93,7 @@
         </div>
         <p class="ing-count" id="inv-count" role="status"></p>
         <div class="inv-list" id="inv-list"></div>
-        <div class="disclaimer">The Full Inventory is a transparency list drawn from the FDA's &ldquo;Substances Added to Food&rdquo; records — names, technical effects, and regulatory paperwork status only. It contains no health claims and no verdicts: a substance being listed here means it appears in FDA's records, nothing more. General information only — <a href="/disclaimer.html">not medical advice</a>.</div>
+        <div class="disclaimer">The Full Inventory is a transparency list drawn from the FDA's &ldquo;Substances Added to Food&rdquo; records — names, technical effects, and regulatory paperwork status only. It contains no health claims and no verdicts: a substance being listed here means it appears in FDA's records, nothing more. General information only — <a href="/disclaimer">not medical advice</a>.</div>
       </div>
     </div>
   </section>
@@ -122,7 +122,7 @@
   </div>
   <div class="footer-grid">
     <div class="footer-brand">
-      <a class="brand" href="/index.html" aria-label="Consumer Rising home">
+      <a class="brand" href="/" aria-label="Consumer Rising home">
         <span class="brand-mark">CR</span>
         <span><span class="brand-name">Consumer <em>Rising</em></span><br><span class="brand-sub" style="color:rgba(250,244,232,.6)">Consumer education & awareness</span></span>
       </a>
@@ -133,31 +133,31 @@
     <div class="footer-col">
       <h4>Explore</h4>
       <ul>
-        <li><a href="/investigations.html">Findings</a></li>
-        <li><a href="/ingredients.html">Ingredient Index</a></li>
-        <li><a href="/scanner.html">Label Scanner</a></li>
-        <li><a href="/resources.html">Resources</a></li>
+        <li><a href="/investigations">Findings</a></li>
+        <li><a href="/ingredients">Ingredient Index</a></li>
+        <li><a href="/scanner">Label Scanner</a></li>
+        <li><a href="/resources">Resources</a></li>
       </ul>
     </div>
     <div class="footer-col">
       <h4>Company</h4>
       <ul>
-        <li><a href="/about.html">About</a></li>
-        <li><a href="/faq.html">FAQ</a></li>
-        <li><a href="/contact.html">Contact</a></li>
-        <li><a href="/privacy.html">Privacy</a></li>
-        <li><a href="/terms.html">Terms</a></li>
-        <li><a href="/disclaimer.html">Disclaimer</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/faq">FAQ</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/terms">Terms</a></li>
+        <li><a href="/disclaimer">Disclaimer</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-base">
     <span>© <span data-year>2026</span> Consumer Rising. All rights reserved.</span>
-    <span>General information only — <a href="/disclaimer.html" class="f-link">not medical advice</a>.</span>
+    <span>General information only — <a href="/disclaimer" class="f-link">not medical advice</a>.</span>
   </div>
 </footer>
 <script src="/js/config.js?v=5"></script>
-<script src="/js/ingredients-data.js?v=4"></script>
+<script src="/js/ingredients-data.js?v=5"></script>
 <script src="/js/site.js?v=7"></script>
 <script>
 (function () {
@@ -270,8 +270,7 @@
     invList.innerHTML = list.slice(0, 100).map(function (r, i) {
       var detailId = "inv-detail-" + i;
       var aliases = r[2] ? r[2].split("|").join(", ") : "";
-      var fdaUrl = "https://hfpappexternal.fda.gov/scripts/fdcc/index.cfm?set=FoodSubstances&search=" +
-        encodeURIComponent(r[0]);
+      var fdaUrl = "https://hfpappexternal.fda.gov/scripts/fdcc/index.cfm?set=FoodSubstances&search=" + encodeURIComponent(r[1] && r[1].trim() ? r[1].trim() : r[0]);
       return '<div class="inv-item">' +
         '<button class="inv-row" aria-expanded="false" aria-controls="' + detailId + '">' +
         '<span class="inv-row-top"><span class="inv-name">' + esc2(r[0]) + "</span>" +
