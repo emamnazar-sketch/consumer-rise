@@ -47,8 +47,45 @@
     if (old) old.remove();
   }
 
+  /* ---- unified subscription: one signup counts everywhere.
+     Newsletter, scanner gate, and quiz all read/write this, so nobody
+     gets asked for their email twice on the same device. ---- */
+  function getSubscribedEmail() {
+    try {
+      var e = localStorage.getItem("cr_subscribed_email");
+      if (e) return e;
+      e = localStorage.getItem("cr_scanner_email"); /* legacy */
+      if (e) return e;
+      var list = JSON.parse(localStorage.getItem("cr_newsletter") || "[]");
+      if (list.length) return list[0];
+    } catch (err) {}
+    return "";
+  }
+  function setSubscribedEmail(email) {
+    email = (email || "").trim().toLowerCase();
+    if (!email) return;
+    try {
+      localStorage.setItem("cr_subscribed_email", email);
+      localStorage.setItem("cr_scanner_email", email); /* legacy readers */
+      var list = JSON.parse(localStorage.getItem("cr_newsletter") || "[]");
+      if (list.indexOf(email) === -1) list.push(email);
+      localStorage.setItem("cr_newsletter", JSON.stringify(list));
+    } catch (err) {}
+  }
+  window.crGetSubscribedEmail = getSubscribedEmail;
+  window.crSetSubscribedEmail = setSubscribedEmail;
+
   /* ---- newsletter forms (shared): home, quiz, footer ---- */
   document.querySelectorAll("form.newsletter-form").forEach(function (form) {
+    /* Already subscribed anywhere? Don't ask again — say so quietly. */
+    if (getSubscribedEmail()) {
+      var note = document.createElement("div");
+      note.className = "form-ok";
+      note.setAttribute("role", "status");
+      note.innerHTML = okHTML("You are on the list — new findings land in your inbox.");
+      form.replaceWith(note);
+      return;
+    }
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       clearFormError(form);
@@ -61,6 +98,7 @@
         return;
       }
       var done = function () {
+        setSubscribedEmail(email);
         var box = document.createElement("div");
         box.className = "form-ok";
         box.setAttribute("role", "status");
@@ -141,8 +179,7 @@
   var tool = document.getElementById("scan-tool");
 
   function getGateEmail() {
-    try { return localStorage.getItem("cr_scanner_email") || ""; }
-    catch (err) { return ""; }
+    return getSubscribedEmail();
   }
   function freeScanDone() {
     try { return localStorage.getItem("cr_free_scan_done") === "1"; }
@@ -156,7 +193,7 @@
     return "tool";
   }
   function unlockScanner(email) {
-    try { localStorage.setItem("cr_scanner_email", email); } catch (err) {}
+    setSubscribedEmail(email);
     if (gate) gate.hidden = true;
     if (tool) {
       tool.hidden = false;

@@ -123,7 +123,7 @@
   </div>
 </footer>
 <script src="/js/config.js?v=5"></script>
-<script src="/js/site.js?v=9"></script>
+<script src="/js/site.js?v=10"></script>
 <script>
 (function(){
   "use strict";
@@ -277,14 +277,21 @@
     }
     h += '<div class="quiz-gate"><h3>Get your free Label Decoder cheat sheet</h3>';
     h += "<p>The Label Decoder: all 50 ingredients to watch, what they're hiding in, and the exact words to look for on labels. Plus honest food findings as they publish.</p>";
-    h += '<form class="newsletter-form" id="quiz-form" action="#" method="post">'
-       + '<input type="email" name="email" placeholder="Your email address" required aria-label="Email address">'
-       + '<button class="btn" type="submit">Download my Label Decoder</button></form>';
+    var alreadySub = (window.crGetSubscribedEmail && window.crGetSubscribedEmail()) || "";
+    if (alreadySub) {
+      h += '<div class="form-ok" role="status">You are on the list — here is your Decoder.</div>'
+         + '<p><a class="btn" href="/downloads/label-decoder.pdf" download>Download your Label Decoder</a></p>';
+    } else {
+      h += '<form class="newsletter-form" id="quiz-form" action="#" method="post">'
+         + '<input type="email" name="email" placeholder="Your email address" required aria-label="Email address">'
+         + '<button class="btn" type="submit">Download my Label Decoder</button></form>';
+    }
     h += '<p class="quiz-fine">Free forever. No spam. Unsubscribe anytime.</p></div>';
     h += "</div>";
     box.innerHTML = h;
 
     var form = document.getElementById("quiz-form");
+    if (form) {
     form.addEventListener("submit", function(ev){
       ev.preventDefault();
       var email = form.email.value.trim();
@@ -305,8 +312,11 @@
         bar.style.width = "100%";
       };
       try {
-        var list = JSON.parse(localStorage.getItem("cr_newsletter") || "[]");
-        if (list.indexOf(email) === -1) { list.push(email); localStorage.setItem("cr_newsletter", JSON.stringify(list)); }
+        if (window.crSetSubscribedEmail) { window.crSetSubscribedEmail(email); }
+        else {
+          var list = JSON.parse(localStorage.getItem("cr_newsletter") || "[]");
+          if (list.indexOf(email) === -1) { list.push(email); localStorage.setItem("cr_newsletter", JSON.stringify(list)); }
+        }
       } catch (e2) {}
       try {
         var endpoint = (window.CR_CONFIG && window.CR_CONFIG.NEWSLETTER_ENDPOINT) || "/api/subscribe";
@@ -317,6 +327,7 @@
         }).then(function(r){ return r.json(); }).then(function(res){ showDone(res && res.ok); }).catch(function(){ showDone(false); });
       } catch (e) { showDone(false); }
     });
+    }
   }
 
   render();
