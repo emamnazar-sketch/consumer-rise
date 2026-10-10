@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What's Hiding in Your Groceries? — Take the 60-Second Quiz — ConsumerRise</title>
+<meta name="description" content="Answer 5 quick questions about your grocery cart and get your personal Label-Reading Score, plus the 3 swaps that matter most for your family. Free.">
+<meta property="og:title" content="What's Hiding in Your Groceries? — Take the 60-Second Quiz">
+<meta property="og:description" content="5 questions. Your personal Label-Reading Score. The 3 swaps that matter most for your family. Free.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23D93A2B'/%3E%3Ctext x='32' y='44' font-family='Arial Black,Arial' font-size='30' font-weight='900' fill='white' text-anchor='middle'%3ECR%3C/text%3E%3C/svg%3E">
+<style>
+.quiz-shell{max-width:680px;margin:0 auto;padding:0 20px}
+.quiz-card{background:var(--card);border:var(--line);box-shadow:var(--shadow);border-radius:var(--radius);padding:34px 30px;margin:26px 0}
+.quiz-progress{height:10px;background:var(--paper-2);border:var(--line);border-radius:99px;overflow:hidden;margin-bottom:26px}
+.quiz-progress > div{height:100%;background:var(--red);width:0;transition:width .35s ease}
+.quiz-q{font-size:23px;font-weight:800;line-height:1.35;margin-bottom:20px;letter-spacing:-.01em}
+.quiz-opts{display:flex;flex-direction:column;gap:12px}
+.quiz-opt{display:block;width:100%;text-align:left;font-family:var(--font-ui);font-size:16.5px;font-weight:600;background:var(--paper);color:var(--ink);border:var(--line);border-radius:var(--radius);padding:15px 18px;cursor:pointer;transition:transform .12s ease, box-shadow .12s ease}
+.quiz-opt:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink);background:#fff}
+.quiz-opt:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.quiz-back{background:none;border:none;color:var(--ink-soft);font-size:14px;font-weight:700;cursor:pointer;margin-top:18px;text-decoration:underline;text-underline-offset:3px}
+.quiz-step-tag{font-size:12px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+.quiz-result-score{font-size:64px;font-weight:900;letter-spacing:-.03em;line-height:1;margin:6px 0 4px}
+.quiz-result-label{font-size:20px;font-weight:800;margin-bottom:14px}
+.quiz-result p{font-family:var(--font-prose);font-size:17px;color:var(--ink-soft);margin-bottom:14px}
+.quiz-swaps{list-style:none;margin:18px 0;padding:0;display:flex;flex-direction:column;gap:12px}
+.quiz-swaps li{background:var(--paper);border:var(--line);border-radius:var(--radius);padding:14px 16px;font-size:15.5px}
+.quiz-swaps li b{display:block;font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.quiz-gate{margin-top:22px;padding-top:22px;border-top:var(--line)}
+.quiz-gate h3{font-size:21px;font-weight:800;margin-bottom:8px}
+.quiz-gate p{font-size:15.5px;color:var(--ink-soft);margin-bottom:16px}
+.quiz-fine{font-size:13px;color:var(--ink-soft);margin-top:12px}
+@media(max-width:560px){.quiz-card{padding:24px 18px}.quiz-q{font-size:20px}.quiz-result-score{font-size:52px}}
+</style>
+</head>
+<body>
+<div class="ticker" aria-hidden="true"><span>Consumer Rising &nbsp;·&nbsp; Free every Tuesday at 7am &nbsp;·&nbsp; <b>Subscribe free</b> &nbsp;·&nbsp; Consumer Rising &nbsp;·&nbsp; Free every Tuesday at 7am &nbsp;·&nbsp; <b>Subscribe free</b> &nbsp;·&nbsp;&nbsp;</span></div>
+<header class="site-header">
+  <div class="header-in">
+    <a class="brand" href="/index.html" aria-label="ConsumerRise home">
+      <span class="brand-mark">CR</span>
+      <span><span class="brand-name">Consumer<em>Rise</em></span><br><span class="brand-sub">Independent food intelligence</span></span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="mainnav">Menu</button>
+    <nav class="main-nav" id="mainnav" aria-label="Main">
+      <a href="/index.html">Home</a>
+      <a href="/investigations.html">Investigations</a>
+      <a href="/ingredients.html">Ingredients</a>
+      <a href="/scanner.html">Scanner</a>
+      <a href="/pro.html">Pro</a>
+      <a href="/resources.html">Resources</a>
+      <a href="/about.html">About</a>
+      <a href="/faq.html">FAQ</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <section class="article-hero">
+    <div class="wrap-narrow">
+      <span class="kicker">Free quiz · 60 seconds</span>
+      <h1>What's Hiding in Your Groceries?</h1>
+      <div class="article-meta"><span>5 questions</span><span>Your Label-Reading Score</span><span>3 personal swaps</span></div>
+    </div>
+  </section>
+
+  <div class="quiz-shell">
+    <div class="quiz-card" id="quiz-box">
+      <div class="quiz-progress" aria-hidden="true"><div id="quiz-bar"></div></div>
+      <div id="quiz-body"></div>
+    </div>
+    <p class="quiz-fine" style="text-align:center;margin-bottom:40px">General information only — not medical advice. Your answers stay in your browser; only your email is saved if you subscribe.</p>
+  </div>
+</main>
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="brand" href="/index.html" aria-label="ConsumerRise home" style="color:var(--paper)">
+        <span class="brand-mark">CR</span>
+        <span><span class="brand-name">Consumer<em>Rise</em></span><br><span class="brand-sub" style="color:rgba(250,244,232,.6)">Independent food intelligence</span></span>
+      </a>
+      <p>Independent investigations into the ingredients hiding in American groceries.</p>
+      <p class="footer-tag">Decoding labels. Protecting families. Rising together.</p>
+      <p style="margin-top:14px"><a href="mailto:hello@consumerrising.com" style="color:var(--paper)">hello@consumerrising.com</a></p>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="/investigations.html">Investigations</a></li>
+        <li><a href="/ingredients.html">Ingredient Index</a></li>
+        <li><a href="/scanner.html">Label Scanner</a></li>
+        <li><a href="/pro.html">Pro Membership</a></li>
+        <li><a href="/resources.html">Resources</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/faq.html">FAQ</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+        <li><a href="/privacy.html">Privacy</a></li>
+        <li><a href="/terms.html">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>© <span data-year>2026</span> ConsumerRise. All rights reserved.</span>
+    <span>General information only — not medical advice.</span>
+  </div>
+</footer>
+<script src="/js/config.js"></script>
+<script src="/js/site.js"></script>
+<script>
+(function(){
+  "use strict";
+  var box = document.getElementById("quiz-body");
+  var bar = document.getElementById("quiz-bar");
+
+  /* Each answer adds points to ingredient-concern buckets. */
+  var QUESTIONS = [
+    {
+      q: "Pick the drink your kid reaches for most.",
+      opts: [
+        { t: "Fruit punch or a bright-red sports drink", tags: ["dye"] },
+        { t: "Regular soda", tags: ["sweetener"] },
+        { t: "Diet soda or 'zero sugar' drink", tags: ["sweetener"] },
+        { t: "Water or milk, mostly", tags: [] }
+      ]
+    },
+    {
+      q: "What does breakfast look like on a school morning?",
+      opts: [
+        { t: "Brightly colored cereal", tags: ["dye","sweetener"] },
+        { t: "Toaster pastries or breakfast bars", tags: ["oil","sweetener"] },
+        { t: "Oatmeal, eggs, or toast", tags: [] },
+        { t: "Whatever they grab — we're rushing", tags: ["sweetener"] }
+      ]
+    },
+    {
+      q: "When you buy bread, do you check the label?",
+      opts: [
+        { t: "Never — bread is bread", tags: ["additive"] },
+        { t: "Sometimes, if I remember", tags: ["additive"] },
+        { t: "Always — I look for the short list", tags: [] },
+        { t: "We bake our own or buy bakery-fresh", tags: [] }
+      ]
+    },
+    {
+      q: "Snack time. Which one is in your pantry right now?",
+      opts: [
+        { t: "Cheese-flavored crackers or puffs", tags: ["dye","additive"] },
+        { t: "Candy or gummies", tags: ["dye","sweetener"] },
+        { t: "Chips (the regular kind)", tags: ["oil","additive"] },
+        { t: "Fruit, nuts, or popcorn", tags: [] }
+      ]
+    },
+    {
+      q: "Last one — be honest. How often do you flip a package over and read the ingredients?",
+      opts: [
+        { t: "Almost never", tags: ["dye","sweetener","oil","additive"] },
+        { t: "When something looks suspicious", tags: ["sweetener"] },
+        { t: "Most of the time", tags: [] },
+        { t: "Every single time", tags: [] }
+      ]
+    }
+  ];
+
+  var INFO = {
+    dye: {
+      name: "Food dyes",
+      swap: "Trade one bright-red or neon snack for a version colored with fruit or vegetable juice. Same fun, no warning label needed in Europe."
+    },
+    sweetener: {
+      name: "Added sweeteners",
+      swap: "Pick the product with the shortest sweetener list — if you see three different sugars hiding under three names, put it back."
+    },
+    oil: {
+      name: "Industrial seed oils",
+      swap: "For the chips and crackers you buy most, try one bag cooked in avocado or olive oil and see if the family notices."
+    },
+    additive: {
+      name: "Preservatives & flavor enhancers",
+      swap: "On bread and snacks, choose the label with ingredients you can pronounce. Fewer than 8 ingredients is a good rule of thumb."
+    }
+  };
+
+  var step = 0, counts = { dye: 0, sweetener: 0, oil: 0, additive: 0 };
+
+  function esc(s){
+    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  function render(){
+    bar.style.width = Math.round(step / QUESTIONS.length * 100) + "%";
+    if (step < QUESTIONS.length) return renderQ();
+    renderResult();
+  }
+
+  function renderQ(){
+    var q = QUESTIONS[step], h = "";
+    h += '<div class="quiz-step-tag">Question ' + (step + 1) + " of " + QUESTIONS.length + "</div>";
+    h += '<div class="quiz-q">' + esc(q.q) + "</div>";
+    h += '<div class="quiz-opts">';
+    q.opts.forEach(function(o, i){
+      h += '<button class="quiz-opt" data-i="' + i + '">' + esc(o.t) + "</button>";
+    });
+    h += "</div>";
+    if (step > 0) h += '<button class="quiz-back" id="quiz-back">← Back</button>';
+    box.innerHTML = h;
+    box.querySelectorAll(".quiz-opt").forEach(function(b){
+      b.addEventListener("click", function(){
+        QUESTIONS[step].opts[+b.getAttribute("data-i")].tags.forEach(function(t){ counts[t]++; });
+        step++;
+        render();
+        document.getElementById("quiz-box").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+    var back = document.getElementById("quiz-back");
+    if (back) back.addEventListener("click", function(){ step--; render(); });
+  }
+
+  function topTags(){
+    return Object.keys(counts).sort(function(a,b){ return counts[b] - counts[a]; }).filter(function(t){ return counts[t] > 0; });
+  }
+
+  function renderResult(){
+    bar.style.width = "100%";
+    var total = counts.dye + counts.sweetener + counts.oil + counts.additive;
+    var score = Math.max(20, 100 - total * 9);
+    var label, blurb;
+    if (score >= 85) { label = "Label Detective"; blurb = "You already shop like someone who reads the fine print. Your cart is cleaner than most American kitchens."; }
+    else if (score >= 60) { label = "Careful Shopper"; blurb = "You dodge the worst of it, but a few sneaky ingredients are still slipping into your cart every week."; }
+    else { label = "Trusting Buyer"; blurb = "Your cart looks like most American carts — which means food companies are counting on you not flipping the box over."; }
+
+    var tags = topTags().slice(0, 3);
+    var h = '<div class="quiz-result">';
+    h += '<div class="quiz-step-tag">Your result</div>';
+    h += '<div class="quiz-result-score">' + score + '<span style="font-size:28px">/100</span></div>';
+    h += '<div class="quiz-result-label">' + label + "</div>";
+    h += "<p>" + blurb + "</p>";
+    if (tags.length) {
+      h += "<p><b>Your 3 highest-impact swaps:</b></p>";
+      h += '<ul class="quiz-swaps">';
+      tags.forEach(function(t){
+        h += "<li><b>" + esc(INFO[t].name) + "</b>" + esc(INFO[t].swap) + "</li>";
+      });
+      h += "</ul>";
+    } else {
+      h += "<p><b>Keep doing what you're doing</b> — and forward this quiz to one friend whose cart needs the help.</p>";
+    }
+    h += '<div class="quiz-gate"><h3>Get your free Label Decoder cheat sheet</h3>';
+    h += "<p>One page. The 12 ingredients to watch, what they're hiding in, and the exact words to look for on labels. Plus one honest food investigation every Tuesday morning.</p>";
+    h += '<form class="newsletter-form" id="quiz-form" action="#" method="post">'
+       + '<input type="email" name="email" placeholder="Your email address" required aria-label="Email address">'
+       + '<button class="btn" type="submit">Send my cheat sheet</button></form>';
+    h += '<p class="quiz-fine">Free forever. No spam. Unsubscribe anytime.</p></div>';
+    h += "</div>";
+    box.innerHTML = h;
+
+    var form = document.getElementById("quiz-form");
+    form.addEventListener("submit", function(ev){
+      ev.preventDefault();
+      var email = form.email.value.trim();
+      var done = function(ok){
+        box.innerHTML = '<div class="quiz-result"><div class="quiz-step-tag">You are in</div>'
+          + '<div class="quiz-result-label">Check your inbox.</div>'
+          + "<p>Your Label Decoder cheat sheet is on its way, and your first investigation arrives Tuesday morning at 7am.</p>"
+          + '<p><a class="btn btn-ink" href="/ingredients.html">Browse the Ingredient Index meanwhile</a></p></div>';
+        bar.style.width = "100%";
+      };
+      try {
+        var endpoint = (window.CR_CONFIG && window.CR_CONFIG.NEWSLETTER_ENDPOINT) || "/api/subscribe";
+        fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email, source: "/quiz.html" })
+        }).then(function(r){ return r.json(); }).then(function(){ done(true); }).catch(function(){ done(false); });
+      } catch (e) { done(false); }
+      try {
+        var list = JSON.parse(localStorage.getItem("cr_newsletter") || "[]");
+        if (list.indexOf(email) === -1) { list.push(email); localStorage.setItem("cr_newsletter", JSON.stringify(list)); }
+      } catch (e2) {}
+    });
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
