@@ -47,7 +47,7 @@
     if (old) old.remove();
   }
 
-  /* ---- newsletter forms (shared): home, pro page ---- */
+  /* ---- newsletter forms (shared): home, quiz, footer ---- */
   document.querySelectorAll("form.newsletter-form").forEach(function (form) {
     form.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -65,7 +65,7 @@
         box.className = "form-ok";
         box.setAttribute("role", "status");
         box.innerHTML = okHTML(
-          "Watch your inbox every Tuesday at 7am. First finding lands this week."
+          "Watch your inbox. First finding lands this week."
         );
         form.replaceWith(box);
       };
@@ -226,8 +226,7 @@
               result.innerHTML = '<div class="dossier scan-result" role="status">' +
                 '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">Daily limit reached</h3>' +
                 '<p style="color:var(--ink-soft)">You have used your 3 free scans for today. ' +
-                'Come back tomorrow — the counter resets every 24 hours. ' +
-                'Want unlimited scans? <a href="/pro.html">Pro is coming soon.</a></p></div>';
+                'Come back tomorrow — the counter resets every 24 hours.</p></div>';
             }
             else { finish(); }
           })
@@ -241,19 +240,6 @@
     });
   }
 
-  /* ---- pro trial button ---- */
-  var proBtn = document.getElementById("pro-trial");
-  if (proBtn) {
-    proBtn.addEventListener("click", function (e) {
-      if (CFG.PRO_CHECKOUT_URL) return; /* let the link work */
-      e.preventDefault();
-      var note = document.getElementById("pro-note");
-      if (note) {
-        note.hidden = false;
-        note.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    });
-  }
   /* ---- theme toggle ---- */
   var themeBtn = document.getElementById("theme-toggle");
   function syncThemeBtn() {

@@ -16,10 +16,6 @@ window.CR_CONFIG = {
   // null = scanner shows the honest "analysis being built" state (documented TODO).
   SCANNER_API: null,
 
-  // Set to a Stripe Payment Link / Checkout URL when Pro billing is wired.
-  // null = Pro trial button shows the "opening soon" notice (documented TODO).
-  PRO_CHECKOUT_URL: null,
-
   CONTACT_EMAIL: "consumerrising@gmail.com",
   SCANS_PER_DAY_FREE: 3
 };
