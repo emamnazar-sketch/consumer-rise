@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
 <script>try{var __t=localStorage.getItem("cr-theme");if(__t){document.documentElement.setAttribute("data-theme",__t)}else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches){document.documentElement.setAttribute("data-theme","dark")}}catch(e){}</script>
-<link rel="stylesheet" href="/css/style.css?v=5">
+<link rel="stylesheet" href="/css/style.css?v=6">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23D93A2B'/%3E%3Ctext x='32' y='44' font-family='Arial Black,Arial' font-size='30' font-weight='900' fill='white' text-anchor='middle'%3ECR%3C/text%3E%3C/svg%3E">
 </head>
 <body>
@@ -53,6 +53,28 @@
         <span class="stamp">Free · Independent</span>
       </div>
       <p class="newsletter-note">No spam. Unsubscribe anytime. Read by parents, shoppers, and the simply curious.</p>
+    </div>
+  </section>
+
+  <!-- SCANNER PROMO -->
+  <section class="section" style="background:var(--ink);color:var(--paper);padding-top:60px;padding-bottom:60px">
+    <div class="wrap" style="display:flex;flex-wrap:wrap;gap:36px;align-items:center">
+      <div style="flex:1 1 340px">
+        <span class="kicker" style="background:var(--red)">Free forever · Unlimited scans</span>
+        <h2 style="font-weight:900;font-size:clamp(30px,5vw,52px);text-transform:uppercase;line-height:1.05;letter-spacing:-.01em;margin:16px 0">Point your phone at any label.<br>Know in seconds.</h2>
+        <p style="color:var(--paper-2);font-size:18px;max-width:44ch">Snap a photo of any ingredients panel. Your phone reads it on the spot — nothing is ever uploaded — and flags every one of our 50 watched ingredients in plain words.</p>
+        <p style="margin-top:24px"><a class="btn" href="/scanner.html">Scan a label free →</a></p>
+      </div>
+      <div style="flex:1 1 300px;max-width:460px">
+        <div style="background:var(--card);color:var(--ink);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)">
+          <div class="quiz-step-tag">Sample scan</div>
+          <div style="font-size:52px;font-weight:900;letter-spacing:-.03em;line-height:1">62<span style="font-size:22px">/100</span></div>
+          <div style="font-weight:800;margin:4px 0 12px">A few flags</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-top:var(--line)"><strong>High Fructose Corn Syrup</strong><span class="risk risk-high">✕ Higher concern</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-top:var(--line)"><strong>Yellow 5</strong><span class="risk risk-high">✕ Higher concern</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-top:var(--line);border-bottom:var(--line)"><strong>Sodium Benzoate</strong><span class="risk risk-medium">⚠ Worth knowing</span></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -198,6 +220,13 @@
 </main>
 
 <footer class="site-footer">
+  <div class="footer-cta">
+    <span>Get the next finding free.</span>
+    <form class="newsletter-form" action="#" method="post">
+      <input type="email" name="email" placeholder="Your email address" required aria-label="Email address">
+      <button class="btn" type="submit">Join free</button>
+    </form>
+  </div>
   <div class="footer-grid">
     <div class="footer-brand">
       <a class="brand" href="/index.html" aria-label="Consumer Rising home">
