@@ -51,8 +51,15 @@
 /* dark-mode legibility fixes for solid fills */
 [data-theme="dark"] .btn,[data-theme="dark"] .brand-mark,
 [data-theme="dark"] .price-flag,[data-theme="dark"] .section-head .no{color:#211C14}
+[data-theme="dark"] .btn:hover{color:#211C14}
 [data-theme="dark"] .site-footer{background:#171209}
+[data-theme="dark"] .footer-col a{color:#F1E8D2}
+[data-theme="dark"] .footer-cta .newsletter-form input[type=email]{color:#F1E8D2}
+[data-theme="dark"] .hero h1 .hl{background:linear-gradient(transparent 62%,var(--amber-tint) 62% 94%,transparent 94%)}
 [data-theme="dark"] .checklist li::before{color:#211C14}
+/* footer links stay cream in both modes */
+.site-footer .f-link{color:#F1E8D2}
+.footer-brand a.brand{color:#F1E8D2}
 
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
