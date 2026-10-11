@@ -1,4 +1,4 @@
-/* Consumer Rising — Ingredient Index data (53 entries, 5 risk tiers).
+/* Consumer Rising — Ingredient Index data (63 entries, 5 risk tiers).
    Risk ratings are the site's editorial judgment. Keep language plain and
    non-alarmist; details live on the linked findings where they exist. */
 window.CR_INGREDIENTS = [
@@ -1627,6 +1627,268 @@ window.CR_INGREDIENTS = [
     sources: [
       { label: "EFSA: Scientific Opinion on the safety of caffeine (2015)", url: "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2015.4102" },
       { label: "EUFIC: EFSA opinion on the safety of caffeine (summary)", url: "https://www.eufic.org/en/whats-in-food/article/efsa-opinion-on-the-safety-of-caffeine" }
+    ]
+  },
+  {
+    name: "Olestra (Olean)",
+    id: "olestra",
+    aliases: ["Olean", "Sucrose polyester"],
+    e_number: null,
+    ins_number: null,
+    risk: "avoid",
+    risk_weight: 30,
+    category: "Fat/Oil",
+    function: "Fat substitute",
+    description: "A lab-made fat that slides through the body undigested — the 'fat-free' frying oil behind 1990s WOW! chips. It tastes like fat, but your body can't absorb it.",
+    regulatory_status: { us: "FDA-approved food additive (21 CFR 172.867), limited to savory snacks", eu: "Not authorized in the EU" },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "FDA approved olestra in 1996 as a fat replacer for savory snacks like potato chips and crackers. (21 CFR 172.867)",
+      "Federal law requires vitamins A, D, E, and K to be added to every olestra food — because olestra interferes with the body's absorption of these fat-soluble vitamins. (21 CFR 172.867)",
+      "The FDA's original 1996 approval required packages to warn that olestra 'may cause abdominal cramping and loose stools.' The agency dropped the requirement in 2003 after reviewing post-market studies — but kept the vitamin rule. (Federal Register; Progressive Grocer)",
+      "Look for 'olestra' or 'Olean' in light chips and crackers."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 172.867 — Olestra (FDA approval, uses, vitamin requirement)", url: "https://www.law.cornell.edu/cfr/text/21/172.867" },
+      { label: "Federal Register: FDA notice on olestra labeling (2000) — quotes the 1996 warning requirement", url: "https://www.federalregister.gov/documents/full_text/text/2000/03/03/00-5096.txt" },
+      { label: "Progressive Grocer (Reuters): FDA drops olestra label warning (2003)", url: "https://progressivegrocer.com/fda-eliminates-digestive-warning-olestra" },
+      { label: "DelightedCooking: Olestra — history, WOW! chips, EU/Canada status", url: "https://www.delightedcooking.com/what-is-olestra.htm" }
+    ]
+  },
+  {
+    name: "Potassium Iodate",
+    id: "potassium-iodate",
+    aliases: ["KIO3"],
+    e_number: null,
+    ins_number: null,
+    risk: "avoid",
+    risk_weight: 30,
+    category: "Dough Conditioner / Flour Treatment",
+    function: "Dough conditioner",
+    description: "A chemical dough strengthener used in some American breads — the less-famous cousin of potassium bromate. It makes dough rise taller and hold its shape.",
+    regulatory_status: { us: "GRAS as a dough strengthener, capped at 0.0075% of flour weight (21 CFR 184.1635)", eu: "No EU authorization found in this review" },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "FDA permits potassium iodate only in bread, at no more than 0.0075% of the flour's weight. (21 CFR 184.1635)",
+      "In lab studies on thyroid tissue, potassium iodate increased oxidative damage to cell membranes, while potassium iodide was protective. (PMID 24004681)",
+      "The consumer group CSPI rates potassium iodate 'Avoid' in its Chemical Cuisine additive guide. (CSPI)",
+      "Look for 'potassium iodate' in bread and roll ingredient lists — the dough strengthener you rarely hear about."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 184.1635 — Potassium iodate (GRAS, use limit)", url: "https://www.law.cornell.edu/cfr/text/21/184.1635" },
+      { label: "PubMed 24004681: potassium iodate vs. potassium iodide effects on thyroid tissue", url: "https://pubmed.ncbi.nlm.nih.gov/24004681/" },
+      { label: "CSPI: Chemical Cuisine — potassium iodate ('Avoid')", url: "https://www.cspi.org/page/chemical-cuisine-food-additive-safety-ratings" }
+    ]
+  },
+  {
+    name: "Caramel Coloring (Class III & IV)",
+    id: "caramel-coloring",
+    aliases: ["Caramel color", "Ammonia caramel", "Sulphite ammonia caramel", "E150c", "E150d"],
+    e_number: "E150c/E150d",
+    ins_number: null,
+    risk: "avoid",
+    risk_weight: 30,
+    category: "Color",
+    function: "Color",
+    description: "The brown in cola, soy sauce, and gravy. But Classes III and IV aren't made like homemade caramel — they're cooked with ammonia compounds, which creates a byproduct called 4-MEI.",
+    regulatory_status: { us: "FDA-permitted color additive; 4-MEI listed under California Prop 65", eu: "Permitted (E150c, E150d)" },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "Classes III and IV are made by heating sugars with ammonia compounds, forming 4-methylimidazole (4-MEI) as a byproduct. (PLOS ONE, 2015)",
+      "The National Toxicology Program found 'clear evidence' that 4-MEI caused lung tumors in mice; IARC classifies it as possibly carcinogenic to humans (Group 2B). (PLOS ONE, 2015)",
+      "California listed 4-MEI under Prop 65 in 2011; afterward, major cola makers lowered 4-MEI levels in US sodas. (PLOS ONE, 2015)",
+      "Look for 'caramel color' or 'caramel coloring' — labels don't have to say which of the four classes it is."
+    ],
+    link: null,
+    sources: [
+      { label: "PLOS ONE: Caramel color III/IV, 4-MEI, NTP findings, Prop 65 listing", url: "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0118138&type=printable" },
+      { label: "OEHHA: 4-Methylimidazole (4-MEI) fact sheet", url: "https://oehha.ca.gov/proposition-65/4-methylimidazole-4-mei-fact-sheet" }
+    ]
+  },
+  {
+    name: "Transglutaminase (\"Meat Glue\")",
+    id: "transglutaminase",
+    aliases: ["Meat glue", "TG enzyme", "Microbial transglutaminase", "mTG"],
+    e_number: null,
+    ins_number: null,
+    risk: "caution",
+    risk_weight: 20,
+    category: "Processing Aid",
+    function: "Processing aid",
+    description: "An enzyme that glues proteins together — it can bind meat scraps into a steak-like cut and thicken yogurt. Chefs nicknamed it 'meat glue.'",
+    regulatory_status: { us: "GRAS; FDA raised no questions (e.g., GRN 1021, 2022); USDA requires it on meat/poultry ingredient labels", eu: "EFSA published a safety evaluation of it as a food enzyme in 2024" },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "FDA's 2022 review raised no questions about its GRAS status for use in meat, dairy, baked goods, pasta, and cereals. (FDA GRN 1021)",
+      "A 2020 peer-reviewed review found that microbial transglutaminase mimics the celiac autoantigen, and its cross-linked gliadin complexes are immunogenic in celiac patients. (PMID 32046248)",
+      "The safety case assumes the enzyme is inactivated by cooking heat — it isn't supposed to reach your plate in active form. (FDA GRN 1021)",
+      "On meat and poultry, USDA requires it declared in the ingredients statement; in other foods it may appear only as a processing aid. (FDA GRN 1021)"
+    ],
+    link: null,
+    sources: [
+      { label: "FDA: Agency response letter, GRAS Notice 1021 (transglutaminase, 2022)", url: "https://www.fda.gov/media/164003/download" },
+      { label: "PubMed 32046248: microbial transglutaminase and celiac disease (2020 review)", url: "https://pubmed.ncbi.nlm.nih.gov/32046248/" },
+      { label: "EFSA: Safety evaluation of food enzyme transglutaminase (2024)", url: "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2024.9083" }
+    ]
+  },
+  {
+    name: "Monk Fruit Extract",
+    id: "monk-fruit",
+    aliases: ["Monk fruit", "Luo Han Guo", "Mogrosides"],
+    e_number: null,
+    ins_number: null,
+    risk: "caution",
+    risk_weight: 20,
+    category: "Sweetener",
+    function: "Sweetener",
+    description: "A zero-calorie sweetener from a small green melon grown in southern China. Its sweetness comes from compounds called mogrosides — no sugar, no calories.",
+    regulatory_status: { us: "GRAS; FDA raised no questions (e.g., GRN 627, 2016)", eu: "EFSA (2019): toxicity data insufficient to confirm safety as a food additive" },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "FDA has raised no questions about monk fruit's GRAS status for use as a sweetener and flavoring. (FDA GRN 627)",
+      "Mogroside V, the main sweet compound, is about 250 times sweeter than sugar. (EFSA, 2019)",
+      "Europe's food safety authority reviewed the same ingredient in 2019 and said the toxicity data were insufficient to confirm its safety — a rare US/EU split in the other direction. (EFSA, 2019)",
+      "Look for 'monk fruit extract', 'mogrosides', or 'Luo Han Guo' in 'naturally sweetened' products."
+    ],
+    link: null,
+    sources: [
+      { label: "FDA: Agency response letter, GRAS Notice 627 (monk fruit, 2016)", url: "https://www.FDA.Gov/food/gras-notice-inventory/agency-response-letter-gras-notice-no-grn-000627" },
+      { label: "EFSA: Safety of monk fruit extract as a food additive (2019)", url: "https://efsa.onlinelibrary.wiley.com/doi/full/10.2903/j.efsa.2019.5921" }
+    ]
+  },
+  {
+    name: "Quinine",
+    id: "quinine",
+    aliases: [],
+    e_number: null,
+    ins_number: null,
+    risk: "certain",
+    risk_weight: 15,
+    category: "Flavoring",
+    function: "Flavoring",
+    description: "The bitter compound that gives tonic water its bite. It comes from cinchona tree bark — and it was once the world's main malaria drug.",
+    regulatory_status: { us: "FDA caps it at 83 ppm in carbonated beverages; labels must declare it (21 CFR 172.575)", eu: "Authorized flavoring with use limits (Reg. 1334/2008); EU labels must flag its presence" },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "Federal law caps quinine at 83 parts per million in tonic water and requires the label to declare it. (21 CFR 172.575)",
+      "The EU likewise authorizes quinine as a flavoring with use limits, and requires its presence flagged on drink labels. (Reg. 1334/2008; EC, 2002)",
+      "FDA warns quinine is not safe or effective for leg cramps — it's linked to serious bleeding problems, heart rhythm changes, and allergic reactions. (FDA)",
+      "The dose in tonic water is far below a malaria-treatment dose, but people sensitive to quinine can still react. (FDA)",
+      "Look for 'quinine' on tonic water and bitter lemon labels."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 172.575 — Quinine (83 ppm cap, labeling)", url: "https://www.law.cornell.edu/cfr/text/21/172.575" },
+      { label: "FDA: Serious risks of using quinine for leg cramps", url: "https://www.fda.gov/files/about%20fda/published/Serious-risks-associated-with-using-Quinine-to-prevent-or-treat-nocturnal-leg-cramps.pdf" },
+      { label: "EU: Regulation 1334/2008 — quinine in the Union list of flavorings", url: "https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:02008R1334-20241203" },
+      { label: "FoodNavigator: EU labeling rules for quinine in drinks (2002)", url: "https://WWW.FOODNAVIGATOR.COM/Article/2002/07/19/Stricter-labelling-rules-for-caffeine-and-quinine/" }
+    ]
+  },
+  {
+    name: "Mycoprotein (Quorn)",
+    id: "mycoprotein",
+    aliases: ["Quorn", "Fusarium venenatum"],
+    e_number: null,
+    ins_number: null,
+    risk: "certain",
+    risk_weight: 15,
+    category: "Meat Alternative",
+    function: "Meat alternative",
+    description: "A protein grown from a fungus — the basis of Quorn's meat-free nuggets, patties, and roasts. It's mold, fermented in giant vats, then shaped and flavored like meat.",
+    regulatory_status: { us: "GRAS; FDA raised no questions (GRN 945)", eu: "Marketed in the UK and EU as Quorn (CSPI, 2019)" },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "FDA raised no questions about mycoprotein's GRAS status as a meat substitute. (FDA GRN 945)",
+      "A 2018 peer-reviewed analysis of 1,752 self-reports found 312 allergic reactions — including hives and anaphylaxis — and 1,692 reports of nausea, vomiting, or diarrhea. (PMID 29567357)",
+      "The review notes cross-reactivity with common molds — relevant for people with mold allergies. (PMID 29567357)",
+      "Look for 'mycoprotein' in the ingredients of Quorn and similar meat-free products."
+    ],
+    link: null,
+    sources: [
+      { label: "FDA: Agency response letter, GRAS Notice 945 (mycoprotein)", url: "https://www.fda.gov/media/145554/download" },
+      { label: "PubMed 29567357: adverse reactions to mycoprotein (2018 review)", url: "https://pubmed.ncbi.nlm.nih.gov/29567357/" },
+      { label: "CSPI: Between the bun — Quorn's mycoprotein (2019)", url: "https://www.cspinet.org/article/between-bun-quorns-mycoprotein" }
+    ]
+  },
+  {
+    name: "Maltitol",
+    id: "maltitol",
+    aliases: ["Maltitol syrup", "E965"],
+    e_number: "E965",
+    ins_number: null,
+    risk: "cutback",
+    risk_weight: 10,
+    category: "Sweetener (sugar alcohol)",
+    function: "Sweetener",
+    description: "The sugar alcohol behind most 'sugar-free' chocolate and candy. It's about 90% as sweet as sugar with roughly half the calories — but your blood sugar notices more than the label suggests.",
+    regulatory_status: { us: "Self-affirmed GRAS; widely used in US sugar-free foods", eu: "Permitted (E965)" },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "Maltitol is about 90% as sweet as sugar, with 2.1 calories per gram — roughly half of sugar's 4. (J. Food Science, 2026)",
+      "Its glycemic index is about 35 — lower than sugar, but far from zero. In a clinical trial, 50 grams raised blood sugar and insulin less than glucose did, but still raised them. (J. Food Science, 2026; PMID 3520129)",
+      "It's only partly absorbed; the rest ferments in the colon, which can mean gas, bloating, and a laxative effect in sensitive people. (J. Food Science, 2026)",
+      "Look for 'maltitol' or 'maltitol syrup' — often the first ingredient in sugar-free chocolate."
+    ],
+    link: null,
+    sources: [
+      { label: "J. Food Science: Sugar alcohols as sugar replacers (2026 review)", url: "https://ift.onlinelibrary.wiley.com/doi/10.1111/1750-3841.71203" },
+      { label: "PubMed 3520129: maltitol vs. glucose — glycemic and insulin responses (clinical trial)", url: "https://pubmed.ncbi.nlm.nih.gov/3520129/" }
+    ]
+  },
+  {
+    name: "Mannitol",
+    id: "mannitol",
+    aliases: ["E421"],
+    e_number: "E421",
+    ins_number: null,
+    risk: "cutback",
+    risk_weight: 10,
+    category: "Sweetener (sugar alcohol)",
+    function: "Sweetener",
+    description: "A sugar alcohol about 60% as sweet as sugar, common in chewing gum, mints, and sugar-free candy. It's also used as a hospital IV drug — a reminder that dose is everything.",
+    regulatory_status: { us: "Regulated food additive (21 CFR 180.25); laxative warning required at 20 g/day", eu: "Permitted (E421)" },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "Federal rules set maximum mannitol levels for specific foods — including chewing gum, pressed mints, and candy — and require the warning 'Excess consumption may have a laxative effect' when a day's intake could reach 20 grams. (21 CFR 180.25)",
+      "Only about 20% of swallowed mannitol is absorbed; the rest stays in the gut and draws in water — which is exactly why it works as an osmotic laxative at higher doses. (Clin. Transl. Sci., 2022)",
+      "Chewing gum is its biggest stage — it's one of the few sweeteners federal rules allow at high levels in gum and mints. (21 CFR 180.25)",
+      "Look for 'mannitol' in sugar-free gum, mints, and 'no sugar added' candy."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 180.25 — Mannitol (use limits, laxative warning)", url: "https://www.law.cornell.edu/cfr/text/21/180.25" },
+      { label: "PMC: Pharmacokinetics of oral mannitol (~20% absorbed, osmotic laxative)", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9579383/" },
+      { label: "Cargill: Polyols sell sheet — mannitol 60% sweetness", url: "https://www.cargill.com/doc/1432075868655/polyols-sell-sheet.pdf" }
+    ]
+  },
+  {
+    name: "Neotame",
+    id: "neotame",
+    aliases: ["Newtame", "E961"],
+    e_number: "E961",
+    ins_number: null,
+    risk: "caution",
+    risk_weight: 20,
+    category: "Sweetener",
+    function: "Sweetener",
+    description: "Aspartame's chemical cousin — 7,000 to 13,000 times sweeter than sugar, approved in 2002. A pinch does the work of a spoonful, and unlike aspartame it survives baking heat.",
+    regulatory_status: { us: "FDA-approved food additive (21 CFR 172.829), 2002", eu: "Authorized as E961 after EFSA's 2007 review" },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "FDA approved neotame in July 2002 after reviewing 113 animal and human studies; it's cleared as a general-purpose sweetener and flavor enhancer. (NutraIngredients; 21 CFR 172.829)",
+      "Its chemical name shows it's built on the same aspartame backbone, with an added dimethylbutyl group that makes it thousands of times sweeter — and heat-stable enough for baked goods. (21 CFR 172.829; CSPI)",
+      "EFSA reviewed it in 2007, and the EU authorized it as E961. (EFSA)",
+      "The US approved it in 2002 and the EU in 2010, but it is still rarely used — so its real-world track record is short. (CSPI)",
+      "Look for 'neotame' in diet drinks, baked goods, and chewing gum."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 172.829 — Neotame (approval, chemical identity)", url: "https://www.law.cornell.edu/cfr/text/21/172.829" },
+      { label: "NutraIngredients-USA: FDA approves neotame (July 2002) — sweetness, 113 studies reviewed", url: "https://www.nutraingredients-usa.com/Article/2002/07/08/Approval-for-super-sweetener" },
+      { label: "EFSA: Neotame as a sweetener and flavour enhancer (2007)", url: "https://www.efsa.europa.eu/en/efsajournal/pub/581" },
+      { label: "CSPI Chemical Cuisine: Neotame", url: "https://www.cspi.org/chemical-cuisine/neotame" }
     ]
   }
 ];
