@@ -6,7 +6,7 @@ var CR_STATIC_CACHE = "cr-static-v1";
 var CR_PAGES_CACHE = "cr-pages-v1";
 
 var PRECACHE = [
-  "/offline.html",
+  "/offline",
   "/css/style.css",
   "/js/site.js",
   "/js/config.js",
@@ -71,7 +71,7 @@ self.addEventListener("fetch", function (e) {
       return res;
     }).catch(function () {
       return caches.match(e.request).then(function (hit) {
-        return hit || caches.match("/offline.html");
+        return hit || caches.match("/offline");
       });
     })
   );
