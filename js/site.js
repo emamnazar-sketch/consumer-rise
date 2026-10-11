@@ -332,22 +332,24 @@
   /* ---- scanner modes: food / skin / home ---- */
   var SCAN_MODE_HINTS = {
     food: 'Take a clear photo of the <strong>ingredients panel</strong> — flat, well-lit, text readable.',
+    pet: 'Take a clear photo of the <strong>pet food ingredients panel</strong> — flat, well-lit, text readable. They\'re family too.',
     skin: 'Take a clear photo of the <strong>INCI list</strong> on the back of the product — flat, well-lit, text readable.',
     home: 'Take a clear photo of the <strong>ingredients or warnings panel</strong> — flat, well-lit, text readable.'
   };
   var SCAN_MODE_PANEL = {
     food: "ingredients",
+    pet: "pet food ingredients",
     skin: "INCI list",
     home: "ingredients or warnings"
   };
   var scanMode = "food";
   try {
     var modeParam = (new URLSearchParams(window.location.search)).get("mode");
-    if (modeParam === "skin" || modeParam === "home") scanMode = modeParam;
+    if (modeParam === "skin" || modeParam === "home" || modeParam === "pet") scanMode = modeParam;
   } catch (e) {}
   var modeHint = document.getElementById("scan-mode-hint");
   function setScanMode(m) {
-    if (m !== "food" && m !== "skin" && m !== "home") m = "food";
+    if (m !== "food" && m !== "skin" && m !== "home" && m !== "pet") m = "food";
     scanMode = m;
     var btns = document.querySelectorAll("#scan-mode [data-mode]");
     for (var i = 0; i < btns.length; i++) {
@@ -364,10 +366,10 @@
       ab.hidden = hideAlg;
       ab.style.display = hideAlg ? "none" : "";
     }
-    /* Barcode lookup needs a product database — none exists for household
-       products, so the barcode button hides in Home mode (photo label only). */
+    /* Barcode lookup needs a product database — none exists for household or
+       pet products, so the barcode button hides in Home and Pet modes (photo label only). */
     var bcRow = document.getElementById("barcode-row");
-    if (bcRow) bcRow.hidden = (m === "home");
+    if (bcRow) bcRow.hidden = (m === "home" || m === "pet");
     /* Switching modes stops any active barcode camera. */
     if (typeof stopBarcodeScan === "function") stopBarcodeScan();
   }
@@ -439,6 +441,21 @@
 
   function matchIngredients(ocrText) {
     var data = window.CR_INGREDIENTS || [];
+    var text = normText(ocrText);
+    var nospace = text.replace(/\s+/g, "");
+    var hits = [];
+    data.forEach(function (d) {
+      var terms = [d.name].concat(d.aliases || []);
+      if (d.e_number) terms.push(d.e_number);
+      var found = findTerm(text, nospace, terms);
+      if (found) hits.push({ ing: d, term: found });
+    });
+    return hits;
+  }
+
+  /* Pet mode: same shape as food hits, matched against the pet dossier set. */
+  function matchPetIngredients(ocrText) {
+    var data = window.CR_PET_INGREDIENTS || [];
     var text = normText(ocrText);
     var nospace = text.replace(/\s+/g, "");
     var hits = [];
@@ -1079,6 +1096,13 @@
               recordHomeResult(matchHome(text), text);
               analyzeBtn.disabled = false;
             });
+            return;
+          }
+          if (scanMode === "pet") {
+            /* Pet mode: verdicts from the pet dossier set; no inventory pass
+               (the FDA inventory is human-food substances). */
+            recordResult(matchPetIngredients(text), [], text);
+            analyzeBtn.disabled = false;
             return;
           }
           var hits = matchIngredients(text);

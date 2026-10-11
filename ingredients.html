@@ -44,7 +44,7 @@
     <div class="wrap">
       <span class="kicker">The dossier</span>
       <h1>Ingredient Index</h1>
-      <p class="lead">100 ingredients with full verdicts. 3,924 recognized from FDA's inventory. Know everything.</p>
+      <p class="lead">100 ingredients with full verdicts. 10 pet food ingredients — they're family too. 3,924 recognized from FDA's inventory. Know everything.</p>
     </div>
   </section>
 
@@ -52,6 +52,7 @@
     <div class="wrap">
       <div class="inv-tabs" role="tablist" aria-label="Ingredient database">
         <button class="inv-tab active" id="tab-index" role="tab" aria-selected="true" aria-controls="pane-index">Food Ingredient Index (100)</button>
+        <button class="inv-tab" id="tab-pet" role="tab" aria-selected="false" aria-controls="pane-pet">Pet Index (10)</button>
         <button class="inv-tab" id="tab-inv" role="tab" aria-selected="false" aria-controls="pane-inv">FDA Ingredient List (3,924)</button>
         <button class="inv-tab" id="tab-skin" role="tab" aria-selected="false" aria-controls="pane-skin">Skin Index (7,138)</button>
         <button class="inv-tab" id="tab-home" role="tab" aria-selected="false" aria-controls="pane-home">Home Index (36)</button>
@@ -85,6 +86,36 @@
       <p class="ing-count" id="ing-count" role="status"></p>
       <div class="ing-grid" id="ing-grid"></div>
       <div class="disclaimer">Risk ratings reflect Consumer Rising's editorial judgment based on published research and regulator actions. Consumer Rising is an independent education publication — not doctors, not scientists. This index is general information, not medical advice. Talk to your doctor about your own health. <a href="/disclaimer">Full disclaimer</a>.</div>
+      </div>
+      <div id="pane-pet" role="tabpanel" aria-labelledby="tab-pet" hidden>
+      <p class="gras-hook">They're family too. Know what's in their bowl — debated pet food ingredients with full verdicts.</p>
+      <div class="filters" role="search">
+        <div class="filter-row">
+          <div class="filter-group">
+            <label for="pet-search">Search by ingredient name or alias</label>
+            <input type="search" id="pet-search" placeholder="Try &quot;carrageenan&quot;, &quot;BHA&quot;, &quot;menadione&quot;…" autocomplete="off">
+          </div>
+          <div class="filter-group">
+            <label for="pet-cat">Category</label>
+            <select id="pet-cat">
+              <option value="">All categories</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Risk level</label>
+            <div class="risk-btns" role="group" aria-label="Risk level filter">
+              <button class="risk-btn pet-risk-btn" data-risk="" aria-pressed="true">All</button>
+              <button class="risk-btn pet-risk-btn" data-risk="avoid" aria-pressed="false">Avoid</button>
+              <button class="risk-btn pet-risk-btn" data-risk="caution" aria-pressed="false">Caution</button>
+              <button class="risk-btn pet-risk-btn" data-risk="cutback" aria-pressed="false">Cut back</button>
+              <button class="risk-btn pet-risk-btn" data-risk="lower" aria-pressed="false">Lower concern</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="ing-count" id="pet-count" role="status"></p>
+      <div class="ing-grid" id="pet-grid"></div>
+      <div class="disclaimer">Risk ratings reflect Consumer Rising's editorial judgment based on published research and regulator actions (FDA Center for Veterinary Medicine, AAFCO, EFSA). General information only — not veterinary advice. Talk to your vet about your pet's diet. <a href="/disclaimer">Full disclaimer</a>.</div>
       </div>
       <div id="pane-inv" role="tabpanel" aria-labelledby="tab-inv" hidden>
         <p class="gras-hook">Around a thousand of these entered through GRAS self-determination — companies declaring them safe themselves, never reviewed by the FDA.</p>
@@ -192,7 +223,8 @@
 </footer>
 <script src="/js/config.js?v=5"></script>
 <script src="/js/ingredients-data.js?v=11"></script>
-<script src="/js/site.js?v=23"></script>
+<script src="/js/pet-data.js?v=1"></script>
+<script src="/js/site.js?v=24"></script>
 <script>
 (function () {
   var data = window.CR_INGREDIENTS || [];
@@ -266,10 +298,82 @@
   });
   render();
 
+  /* ---- Pet Index tab: debated pet food ingredients, full verdicts ---- */
+  (function () {
+    var pdata = window.CR_PET_INGREDIENTS || [];
+    var pgrid = document.getElementById("pet-grid");
+    var pcount = document.getElementById("pet-count");
+    var psearch = document.getElementById("pet-search");
+    var pcatSel = document.getElementById("pet-cat");
+    var prisk = "";
+
+    var pcats = [];
+    pdata.forEach(function (d) { if (pcats.indexOf(d.category) === -1) pcats.push(d.category); });
+    pcats.sort().forEach(function (c) {
+      var o = document.createElement("option");
+      o.value = c; o.textContent = c;
+      pcatSel.appendChild(o);
+    });
+
+    function prender() {
+      var q = psearch.value.trim().toLowerCase();
+      var cat = pcatSel.value;
+      var list = pdata.filter(function (d) {
+        if (prisk && d.risk !== prisk) return false;
+        if (cat && d.category !== cat) return false;
+        if (q) {
+          var hay = (d.name + " " + d.aliases.join(" ") + " " + d.category).toLowerCase();
+          if (hay.indexOf(q) === -1) return false;
+        }
+        return true;
+      });
+      pcount.textContent = list.length === pdata.length
+        ? "Showing all " + pdata.length + " pet ingredients"
+        : "Showing " + list.length + " of " + pdata.length + " pet ingredients";
+      if (!list.length) {
+        pgrid.innerHTML = '<div class="no-results">No pet ingredients match. Try a different search — for example "BHA" or "preservative".</div>';
+        return;
+      }
+      pgrid.innerHTML = list.map(function (d) {
+        var labels = { avoid: "\u2715 Avoid", caution: "\u26A0 Caution", cutback: "\u25D1 Cut back", lower: "\u2713 Lower concern" };
+        var bullets = d.bullets.map(function (b) { return "<li>" + esc(b) + "</li>"; }).join("");
+        var link = d.link ? '<p style="margin-top:12px"><a href="' + d.link + '" style="font-weight:800">Read the full finding →</a></p>' : "";
+        var sources = d.sources ? '<p class="ing-sources"><b>Sources:</b> ' + d.sources.map(function (s) { return '<a href="' + s.url + '" target="_blank" rel="noopener">' + esc(s.label) + '</a>'; }).join(' · ') + '</p>' : "";
+        return (
+          '<article class="ing-card" id="pet-' + d.id + '">' +
+            '<div class="ing-card-head"><div><h3>' + esc(d.name) + '</h3>' +
+            '<p class="ing-cat">' + esc(d.function || d.category) + '</p></div>' +
+            '<span class="risk risk-' + d.risk + '">' + labels[d.risk] + '</span></div>' +
+            '<div class="ing-card-body">' +
+              '<p class="ing-aliases"><b>Also called:</b> ' + esc(d.aliases.join(", ")) + '</p>' +
+              '<p>' + esc(d.description) + '</p>' +
+              '<ul>' + bullets + '</ul>' + link + sources +
+            '</div>' +
+          '</article>'
+        );
+      }).join("");
+    }
+
+    psearch.addEventListener("input", prender);
+    pcatSel.addEventListener("change", prender);
+    document.querySelectorAll(".pet-risk-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        prisk = btn.getAttribute("data-risk");
+        document.querySelectorAll(".pet-risk-btn").forEach(function (b) {
+          b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+        });
+        prender();
+      });
+    });
+    prender();
+  })();
+
   /* ---- Full Inventory tab (Tier 2): lazy-loaded, neutral, no verdicts ---- */
   var tabIndex = document.getElementById("tab-index");
+  var tabPet = document.getElementById("tab-pet");
   var tabInv = document.getElementById("tab-inv");
   var paneIndex = document.getElementById("pane-index");
+  var panePet = document.getElementById("pane-pet");
   var paneInv = document.getElementById("pane-inv");
   var tabSkin = document.getElementById("tab-skin");
   var tabHome = document.getElementById("tab-home");
@@ -354,7 +458,7 @@
   }
 
   function selectTab(which) {
-    var map = { index: [tabIndex, paneIndex], inv: [tabInv, paneInv], skin: [tabSkin, paneSkin], home: [tabHome, paneHome] };
+    var map = { index: [tabIndex, paneIndex], pet: [tabPet, panePet], inv: [tabInv, paneInv], skin: [tabSkin, paneSkin], home: [tabHome, paneHome] };
     Object.keys(map).forEach(function (k) {
       var on = (k === which);
       map[k][0].classList.toggle("active", on);
@@ -366,6 +470,7 @@
     if (which === "home" && !homeReady) openHomeTab();
   }
   tabIndex.addEventListener("click", function () { selectTab("index"); });
+  tabPet.addEventListener("click", function () { selectTab("pet"); });
   tabInv.addEventListener("click", function () { selectTab("inv"); });
   tabSkin.addEventListener("click", function () { selectTab("skin"); });
   tabHome.addEventListener("click", function () { selectTab("home"); });
