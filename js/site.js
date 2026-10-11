@@ -836,7 +836,7 @@
         }
         lastAlternatives = d.alternatives;
         var html = '<div style="margin-top:22px"><div class="quiz-step-tag">Better alternatives</div>' +
-          '<p style="font-size:14.5px;color:var(--ink-soft)">These scored higher in the same category. Our job is to make you aware — you make the decision. You will find them where you shop.</p>' +
+          '<p style="font-size:14.5px;color:var(--ink-soft)">These scored higher in the same category. Our goal is to make you aware — you make the decision. You will find them where you shop.</p>' +
           '<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">';
         d.alternatives.forEach(function (a) {
           var why = (a.whyBetter && a.whyBetter.length)
