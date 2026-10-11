@@ -329,6 +329,46 @@
     });
   }
 
+  /* ---- scanner modes: food / skin / home ---- */
+  var SCAN_MODE_HINTS = {
+    food: 'Take a clear photo of the <strong>ingredients panel</strong> — flat, well-lit, text readable.',
+    skin: 'Take a clear photo of the <strong>INCI list</strong> on the back of the product — flat, well-lit, text readable.',
+    home: 'Take a clear photo of the <strong>ingredients or warnings panel</strong> — flat, well-lit, text readable.'
+  };
+  var SCAN_MODE_PANEL = {
+    food: "ingredients",
+    skin: "INCI list",
+    home: "ingredients or warnings"
+  };
+  var scanMode = "food";
+  try {
+    var modeParam = (new URLSearchParams(window.location.search)).get("mode");
+    if (modeParam === "skin" || modeParam === "home") scanMode = modeParam;
+  } catch (e) {}
+  var modeHint = document.getElementById("scan-mode-hint");
+  var allergenBox = document.getElementById("allergen-box");
+  function setScanMode(m) {
+    if (m !== "food" && m !== "skin" && m !== "home") m = "food";
+    scanMode = m;
+    var btns = document.querySelectorAll("#scan-mode [data-mode]");
+    for (var i = 0; i < btns.length; i++) {
+      var on = btns[i].getAttribute("data-mode") === m;
+      btns[i].classList.toggle("active", on);
+      btns[i].setAttribute("aria-pressed", String(on));
+    }
+    if (modeHint) modeHint.innerHTML = SCAN_MODE_HINTS[m];
+    /* Allergen alerts are a food feature only. */
+    if (allergenBox) allergenBox.hidden = (m !== "food");
+  }
+  var modeCtl = document.getElementById("scan-mode");
+  if (modeCtl) {
+    modeCtl.addEventListener("click", function (e) {
+      var b = e.target && e.target.closest ? e.target.closest("[data-mode]") : null;
+      if (b) setScanMode(b.getAttribute("data-mode"));
+    });
+    setScanMode(scanMode);
+  }
+
   /* ---- scanner: on-device OCR + ingredient matching. Free forever.
      The photo never leaves the reader's phone: Tesseract.js reads it locally,
      and only the matched ingredient IDs + score are sent to /api/scan. ---- */
@@ -362,6 +402,30 @@
   }
 
   /* Match OCR text against the ingredient database. Returns [{ing, term}]. */
+  /* Shared term matcher used by every scan mode. Returns the matched raw term or null. */
+  function findTerm(text, nospace, terms) {
+    var found = null;
+    for (var i = 0; i < terms.length && !found; i++) {
+      var t = cleanTerm(terms[i]);
+      if (!t) continue;
+      var tFlat = t.replace(/\s+/g, "");
+      if (/^e\d+$/.test(tFlat)) {
+        if (nospace.indexOf(tFlat) !== -1) found = terms[i];
+      } else if (t.length <= 4) {
+        if (new RegExp("(^|\\s)" + escRe(t) + "(\\s|$)").test(text)) found = terms[i];
+      } else if (text.indexOf(t) !== -1) {
+        found = terms[i];
+      } else {
+        var words = t.split(" ").filter(function (w) { return w.length > 1; });
+        var all = words.length > 1 && words.every(function (w) {
+          return new RegExp("(^|\\s)" + escRe(w) + "(\\s|$)").test(text);
+        });
+        if (all) found = terms[i];
+      }
+    }
+    return found;
+  }
+
   function matchIngredients(ocrText) {
     var data = window.CR_INGREDIENTS || [];
     var text = normText(ocrText);
@@ -370,25 +434,7 @@
     data.forEach(function (d) {
       var terms = [d.name].concat(d.aliases || []);
       if (d.e_number) terms.push(d.e_number);
-      var found = null;
-      for (var i = 0; i < terms.length && !found; i++) {
-        var t = cleanTerm(terms[i]);
-        if (!t) continue;
-        var tFlat = t.replace(/\s+/g, "");
-        if (/^e\d+$/.test(tFlat)) {
-          if (nospace.indexOf(tFlat) !== -1) found = terms[i];
-        } else if (t.length <= 4) {
-          if (new RegExp("(^|\\s)" + escRe(t) + "(\\s|$)").test(text)) found = terms[i];
-        } else if (text.indexOf(t) !== -1) {
-          found = terms[i];
-        } else {
-          var words = t.split(" ").filter(function (w) { return w.length > 1; });
-          var all = words.length > 1 && words.every(function (w) {
-            return new RegExp("(^|\\s)" + escRe(w) + "(\\s|$)").test(text);
-          });
-          if (all) found = terms[i];
-        }
-      }
+      var found = findTerm(text, nospace, terms);
       if (found) hits.push({ ing: d, term: found });
     });
     return hits;
@@ -453,6 +499,71 @@
     var w = 0;
     hits.forEach(function (h) { w += (h.ing.risk_weight || 0); });
     return Math.max(5, 100 - w);
+  }
+
+  /* ---- Skin mode: match OCR against the cosmetic inventory (7,138 INCI names).
+     Neutral — returns ban flags only, no health scoring. ---- */
+  var cosLoadPromise = null;
+  function ensureCosmetics() {
+    if (window.CR_COSMETICS) return Promise.resolve(window.CR_COSMETICS);
+    if (cosLoadPromise) return cosLoadPromise;
+    cosLoadPromise = new Promise(function (resolve) {
+      var s = document.createElement("script");
+      s.src = "/js/cosmetic-data.js?v=1";
+      s.onload = function () { resolve(window.CR_COSMETICS || { items: [] }); };
+      s.onerror = function () { resolve({ items: [] }); };
+      document.head.appendChild(s);
+    });
+    return cosLoadPromise;
+  }
+
+  /* Common words that slipped into the crowdsourced cosmetic inventory as
+     "ingredients" — never match these, they'd hit every label. */
+  var SKIN_STOPWORDS = { a: 1, an: 1, and: 1, or: 1, the: 1, of: 1, "in": 1, on: 1, with: 1, "for": 1, to: 1, from: 1, by: 1, as: 1, at: 1 };
+
+  function matchCosmetics(ocrText) {
+    var items = (window.CR_COSMETICS && window.CR_COSMETICS.items) || [];
+    var text = normText(ocrText);
+    var nospace = text.replace(/\s+/g, "");
+    var hits = [];
+    for (var i = 0; i < items.length; i++) {
+      var r = items[i];
+      if (SKIN_STOPWORDS[cleanTerm(r[0])]) continue;
+      var found = findTerm(text, nospace, [r[0]]);
+      if (found) hits.push({ name: r[0], eu: !!r[2], us: !!r[3], ca: !!r[4], term: found });
+    }
+    /* Flagged entries first — the ones worth knowing about. */
+    hits.sort(function (a, b) { return ((b.eu ? 1 : 0) + (b.us ? 1 : 0) + (b.ca ? 1 : 0)) - ((a.eu ? 1 : 0) + (a.us ? 1 : 0) + (a.ca ? 1 : 0)); });
+    return hits;
+  }
+
+  /* ---- Home mode: match OCR against household chemicals (17 entries).
+     Facts only — no scoring, no verdicts. ---- */
+  var homeLoadPromise = null;
+  function ensureHome() {
+    if (window.CR_HOME) return Promise.resolve(window.CR_HOME);
+    if (homeLoadPromise) return homeLoadPromise;
+    homeLoadPromise = new Promise(function (resolve) {
+      var s = document.createElement("script");
+      s.src = "/js/home-data.js?v=1";
+      s.onload = function () { resolve(window.CR_HOME || { items: [] }); };
+      s.onerror = function () { resolve({ items: [] }); };
+      document.head.appendChild(s);
+    });
+    return homeLoadPromise;
+  }
+
+  function matchHome(ocrText) {
+    var items = (window.CR_HOME && window.CR_HOME.items) || [];
+    var text = normText(ocrText);
+    var nospace = text.replace(/\s+/g, "");
+    var hits = [];
+    items.forEach(function (e) {
+      var terms = [e.name].concat(e.aliases || []);
+      var found = findTerm(text, nospace, terms);
+      if (found) hits.push({ entry: e, term: found });
+    });
+    return hits;
   }
   function riskBadge(risk) {
     var labels = { avoid: "\u2715 Avoid", caution: "\u26A0 Caution", certain: "\u25D0 Certain people should avoid", cutback: "\u25D1 Cut back", lower: "\u2713 Lower concern" };
@@ -545,18 +656,32 @@
       }).join("; ") + "</strong>" +
       '<p style="font-size:13.5px;color:var(--ink-soft);margin:8px 0 0">A helper, not a medical device. Always read the label yourself \u2014 especially for severe allergies.</p></div>';
   }
-  function shareButtonHTML() {
+  function shareButtonHTML(mode) {
+    var tip = mode === "food"
+      ? "Tip: screenshot your score, then send it to one friend directly — it works 10x better than posting. "
+      : "Tip: send this to one friend directly — it works 10x better than posting. ";
     return '<p class="center" style="margin:10px 0 4px"><button class="btn" id="scan-share" type="button">Share this result</button></p>' +
-      '<p class="center" style="font-size:13.5px;color:var(--ink-soft);margin:0 0 6px">Tip: screenshot your score, then send it to one friend directly — it works 10x better than posting. <a href="/refer" style="font-weight:700">Refer friends, earn free tools →</a></p>';
+      '<p class="center" style="font-size:13.5px;color:var(--ink-soft);margin:0 0 6px">' + tip + '<a href="/refer" style="font-weight:700">Refer friends, earn free tools →</a></p>';
   }
-  function wireShare(score, hits) {
+  function wireShare(mode, data) {
     var btn = document.getElementById("scan-share");
     if (!btn) return;
     btn.addEventListener("click", function () {
-      var names = hits.slice(0, 3).map(function (x) { return x.ing.name; });
-      var text = "I scanned a food label with Consumer Rising: " + score + "/100." +
-        (names.length ? " Flagged: " + names.join(", ") + "." : " No flagged ingredients.") +
-        " Scan yours free: https://consumerrising.com/scanner";
+      var text;
+      if (mode === "skin") {
+        var eu = data.filter(function (x) { return x.eu; }).length;
+        text = "I scanned a cosmetics label with Consumer Rising: " + data.length + " ingredient" + (data.length === 1 ? "" : "s") + " matched" +
+          (eu ? " — " + eu + " banned in the EU." : ".") +
+          " Scan yours free: https://consumerrising.com/scanner?mode=skin";
+      } else if (mode === "home") {
+        text = "I checked a household product with Consumer Rising: " + data.length + " chemical" + (data.length === 1 ? "" : "s") + " matched — read the facts yourself." +
+          " Scan yours free: https://consumerrising.com/scanner?mode=home";
+      } else {
+        var names = data.hits.slice(0, 3).map(function (x) { return x.ing.name; });
+        text = "I scanned a food label with Consumer Rising: " + data.score + "/100." +
+          (names.length ? " Flagged: " + names.join(", ") + "." : " No flagged ingredients.") +
+          " Scan yours free: https://consumerrising.com/scanner";
+      }
       var done = function () {
         var old = btn.textContent;
         btn.textContent = "Copied!";
@@ -581,6 +706,20 @@
     });
   }
 
+  function ocrDetailsHTML(ocrText) {
+    return '<details style="margin-top:14px"><summary style="cursor:pointer;font-weight:700;font-size:14.5px">What we read from your photo</summary>' +
+      '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:8px;white-space:pre-wrap">' + escHtml((ocrText || "").slice(0, 1200) || "(no text detected)") + "</p></details>";
+  }
+  function wireScanAgain() {
+    var again = document.getElementById("scan-again");
+    if (again) again.addEventListener("click", function () {
+      result.innerHTML = "";
+      if (fileInput) fileInput.value = "";
+      if (preview) preview.innerHTML = "";
+      if (analyzeBtn) analyzeBtn.disabled = true;
+    });
+  }
+
   function renderScanResults(hits, invHits, ocrText) {
     var h = '<div class="dossier scan-result" role="status">';
     h += allergenAlertHTML(hits, invHits, ocrText);
@@ -589,14 +728,14 @@
       h += '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">No flagged ingredients detected</h3>' +
         '<p style="color:var(--ink-soft)">We read your label and none of our 100 flagged ingredients showed up. ' +
         'That is good news as far as our database goes — it is not a verdict that the product is healthy overall.</p>' +
-        shareButtonHTML();
+        shareButtonHTML("food");
     } else {
       var score = scanScore(hits);
       var band = score >= 85 ? "Mostly clear" : score >= 65 ? "A few flags" : score >= 40 ? "Several concerns" : "Many concerns";
       h += '<div class="quiz-step-tag">Label score</div>' +
         '<div class="quiz-result-score">' + score + '<span style="font-size:28px">/100</span></div>' +
         '<div class="quiz-result-label">' + band + "</div>" +
-        shareButtonHTML() +
+        shareButtonHTML("food") +
         '<p style="color:var(--ink-soft)">We found <strong>' + hits.length + " flagged ingredient" + (hits.length > 1 ? "s" : "") + "</strong> on this label:</p>";
       hits.sort(function (a, b) { return (b.ing.risk_weight || 0) - (a.ing.risk_weight || 0); });
       h += '<div style="display:flex;flex-direction:column;gap:12px;margin:16px 0">';
@@ -630,19 +769,107 @@
       }
       h += "</div>";
     }
-    h += '<details style="margin-top:14px"><summary style="cursor:pointer;font-weight:700;font-size:14.5px">What we read from your photo</summary>' +
-      '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:8px;white-space:pre-wrap">' + escHtml((ocrText || "").slice(0, 1200) || "(no text detected)") + "</p></details>";
+    h += ocrDetailsHTML(ocrText);
     h += '<p class="center mt"><button class="btn btn-ink" id="scan-again">Scan another label</button></p>';
     h += '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:10px">Flagged results cover our 100-ingredient index. The inventory section below lists FDA-recorded names with no verdict attached. Results depend on photo quality. General information only — <a href="/disclaimer">not medical advice</a>.</p></div>';
     result.innerHTML = h;
-    wireShare(shareScore, hits);
-    var again = document.getElementById("scan-again");
-    if (again) again.addEventListener("click", function () {
-      result.innerHTML = "";
-      if (fileInput) fileInput.value = "";
-      if (preview) preview.innerHTML = "";
-      if (analyzeBtn) analyzeBtn.disabled = true;
+    wireShare("food", { score: shareScore, hits: hits });
+    wireScanAgain();
+  }
+
+  /* ---- Skin mode results: neutral inventory matches, regulator flags only ---- */
+  function skinBanBadges(x) {
+    var b = "";
+    if (x.eu) b += '<span class="risk risk-avoid">Banned in the EU</span>';
+    if (x.us) b += '<span class="risk risk-caution">US restricted</span>';
+    if (x.ca) b += '<span class="risk risk-caution">Banned in CA</span>';
+    return b;
+  }
+
+  function renderSkinResults(hits, ocrText) {
+    var h = '<div class="dossier scan-result" role="status">';
+    if (!hits.length) {
+      h += '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">No cosmetic ingredients matched</h3>' +
+        '<p style="color:var(--ink-soft)">We read your label and none of our 7,138 cosmetic-ingredient names showed up. ' +
+        'That only means none of the names we track appeared — it is not a verdict about the product.</p>' +
+        shareButtonHTML("skin");
+    } else {
+      var euHits = hits.filter(function (x) { return x.eu; });
+      h += '<div class="quiz-step-tag">Cosmetics scan</div>' +
+        '<p style="color:var(--ink-soft)">We found <strong>' + hits.length + " ingredient" + (hits.length > 1 ? "s" : "") + "</strong> from the INCI list on this label" +
+        (euHits.length
+          ? ': <strong>' + euHits.length + "</strong> " + (euHits.length > 1 ? "are" : "is") + " banned in the EU.</p>"
+          : ". None are banned in the EU.</p>");
+      var shown = hits.slice(0, 25);
+      h += '<div style="display:flex;flex-direction:column;gap:8px;margin:16px 0">';
+      shown.forEach(function (x) {
+        h += '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;background:var(--paper);border:var(--line);border-radius:var(--radius)">' +
+          "<strong>" + escHtml(x.name) + "</strong>" +
+          '<span style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">' + skinBanBadges(x) + "</span></div>";
+      });
+      h += "</div>";
+      if (hits.length > 25) {
+        h += '<p style="font-size:14px;color:var(--ink-soft)">+' + (hits.length - 25) + " more matched.</p>";
+      }
+      h += shareButtonHTML("skin");
+    }
+    h += '<p style="margin-top:14px"><a href="/skin-index" style="font-weight:800;font-size:14.5px">Browse the full Skin Index &rarr;</a></p>';
+    h += ocrDetailsHTML(ocrText);
+    h += '<p class="center mt"><button class="btn btn-ink" id="scan-again">Scan another label</button></p>';
+    h += '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:10px">Ban flags reflect regulator action only — no Consumer Rising verdicts. Results depend on photo quality. General information only — <a href="/disclaimer">not medical advice</a>.</p></div>';
+    result.innerHTML = h;
+    wireShare("skin", hits);
+    wireScanAgain();
+  }
+
+  /* ---- Home mode results: facts only, expandable, no verdicts ---- */
+  function renderHomeResults(hits, ocrText) {
+    var h = '<div class="dossier scan-result" role="status">';
+    if (!hits.length) {
+      h += '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">No household chemicals matched</h3>' +
+        '<p style="color:var(--ink-soft)">We read your label and none of our 17 tracked household chemicals showed up. ' +
+        'That only means none of the chemicals we track appeared — it is not a verdict about the product.</p>' +
+        shareButtonHTML("home");
+    } else {
+      h += '<div class="quiz-step-tag">Home scan</div>' +
+        '<p style="color:var(--ink-soft)">We found <strong>' + hits.length + " chemical" + (hits.length > 1 ? "s" : "") + "</strong> from the Home Index on this label. Facts only — no verdicts:</p>";
+      h += '<div style="display:flex;flex-direction:column;gap:12px;margin:16px 0">';
+      hits.forEach(function (x, i) {
+        var e = x.entry;
+        var detailId = "home-scan-detail-" + i;
+        var facts = (e.facts || []).map(function (f) {
+          return "<li>" + escHtml(f.text) + ' <a href="' + escHtml(f.source.url) + '" target="_blank" rel="noopener">[' + escHtml(f.source.label) + "]</a></li>";
+        }).join("");
+        h += '<div style="background:var(--paper);border:var(--line);border-radius:var(--radius);padding:14px 16px">' +
+          '<button class="home-expand" aria-expanded="false" aria-controls="' + detailId + '" style="width:100%;text-align:left;background:none;border:none;padding:0;cursor:pointer;font:inherit;color:inherit">' +
+          "<strong>" + escHtml(e.name) + "</strong>" +
+          '<p style="font-size:14.5px;color:var(--ink-soft);margin:6px 0">' + escHtml(e.what_it_is || "") + "</p>" +
+          '<span style="font-weight:800;font-size:14px">Read the facts +</span></button>' +
+          '<div id="' + detailId + '" hidden>' +
+          "<ul>" + facts + "</ul>" +
+          '<p style="font-size:13.5px;color:var(--ink-soft)"><strong>US:</strong> ' + escHtml(e.us_status || "\u2014") +
+          " &middot; <strong>EU:</strong> " + escHtml(e.eu_status || "\u2014") +
+          " &middot; <strong>CA:</strong> " + escHtml(e.ca_status || "\u2014") + "</p>" +
+          "</div></div>";
+      });
+      h += "</div>";
+      h += shareButtonHTML("home");
+    }
+    h += '<p style="margin-top:14px"><a href="/home-index" style="font-weight:800;font-size:14.5px">Browse the full Home Index &rarr;</a></p>';
+    h += ocrDetailsHTML(ocrText);
+    h += '<p class="center mt"><button class="btn btn-ink" id="scan-again">Scan another label</button></p>';
+    h += '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:10px">Results depend on photo quality. Facts and studies only — no verdicts. General information only — <a href="/disclaimer">not medical advice</a>.</p></div>';
+    result.innerHTML = h;
+    wireShare("home", hits);
+    result.querySelectorAll(".home-expand").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var isOpen = btn.getAttribute("aria-expanded") === "true";
+        var panel = document.getElementById(btn.getAttribute("aria-controls"));
+        btn.setAttribute("aria-expanded", String(!isOpen));
+        if (panel) panel.hidden = isOpen;
+      });
     });
+    wireScanAgain();
   }
 
   function scanError(msg) {
@@ -705,22 +932,17 @@
       if (!file) return;
       analyzeBtn.disabled = true;
 
-      function recordResult(hits, invHits, ocrText) {
-        var ids = hits.map(function (x) { return x.ing.id; });
-        var summary = ids.length
-          ? ("score " + scanScore(hits) + " \u00b7 matched: " + ids.join(", "))
-          : "score 100 \u00b7 no flagged ingredients";
-        if (invHits && invHits.length) summary += " \u00b7 inv:" + invHits.length;
+      /* Shared finish: post the result, render, then show the post-scan gate
+         for free scans. The API stores free scans under "free-scan". */
+      function finishScan(summary, ids, renderFn) {
         var isFreeScan = !getGateEmail();
         function finish() {
           if (isFreeScan) {
             try { localStorage.setItem("cr_free_scan_done", "1"); } catch (e) {}
           }
-          renderScanResults(hits, invHits, ocrText);
+          renderFn();
           if (isFreeScan) showPostScanGate();
         }
-        /* Email is optional now (first scan is free): the API stores
-           free scans under "free-scan" instead of rejecting them. */
         if (CFG.SCAN_ENDPOINT) {
           postJSON(CFG.SCAN_ENDPOINT, { email: email, result_summary: summary, matches: ids })
             .then(finish)
@@ -730,12 +952,48 @@
         }
       }
 
+      function recordResult(hits, invHits, ocrText) {
+        var ids = hits.map(function (x) { return x.ing.id; });
+        var summary = ids.length
+          ? ("score " + scanScore(hits) + " \u00b7 matched: " + ids.join(", "))
+          : "score 100 \u00b7 no flagged ingredients";
+        if (invHits && invHits.length) summary += " \u00b7 inv:" + invHits.length;
+        finishScan(summary, ids, function () { renderScanResults(hits, invHits, ocrText); });
+      }
+
+      function recordSkinResult(hits, ocrText) {
+        var names = hits.map(function (x) { return x.name; });
+        var summary = "mode skin \u00b7 matched: " + (names.length ? names.join(", ") : "none");
+        finishScan(summary, names, function () { renderSkinResults(hits, ocrText); });
+      }
+
+      function recordHomeResult(hits, ocrText) {
+        var ids = hits.map(function (x) { return x.entry.id; });
+        var summary = "mode home \u00b7 matched: " + (ids.length ? ids.join(", ") : "none");
+        finishScan(summary, ids, function () { renderHomeResults(hits, ocrText); });
+      }
+
       function doOCR() {
         result.innerHTML = '<div class="form-ok" role="status"><span class="big">Loading the reader…</span>First scan downloads a small reading engine. After that it is instant.</div>';
         runOCR(file).then(function (text) {
           if (!normText(text)) {
             analyzeBtn.disabled = false;
-            scanError("We couldn't find any readable text in that photo. Try again: lay the package flat, get close to the <strong>ingredients</strong> panel (not the front), and avoid glare and shadows.");
+            var panelWord = SCAN_MODE_PANEL[scanMode] || "ingredients";
+            scanError("We couldn't find any readable text in that photo. Try again: lay the package flat, get close to the <strong>" + panelWord + "</strong> panel (not the front), and avoid glare and shadows.");
+            return;
+          }
+          if (scanMode === "skin") {
+            ensureCosmetics().then(function () {
+              recordSkinResult(matchCosmetics(text), text);
+              analyzeBtn.disabled = false;
+            });
+            return;
+          }
+          if (scanMode === "home") {
+            ensureHome().then(function () {
+              recordHomeResult(matchHome(text), text);
+              analyzeBtn.disabled = false;
+            });
             return;
           }
           var hits = matchIngredients(text);
@@ -746,9 +1004,10 @@
           });
         }).catch(function (err) {
           analyzeBtn.disabled = false;
+          var panelWord2 = SCAN_MODE_PANEL[scanMode] || "ingredients";
           var msg = (err && err.message === "tess-cdn")
             ? "The reading engine couldn't download. Check your connection and try again — the photo never left your device."
-            : "Something went wrong while reading the photo. Please try again with a clearer shot of the ingredients panel.";
+            : "Something went wrong while reading the photo. Please try again with a clearer shot of the " + panelWord2 + " panel.";
           scanError(msg);
         });
       }
