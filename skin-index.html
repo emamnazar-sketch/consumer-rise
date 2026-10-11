@@ -202,26 +202,30 @@
     if (it[2]) b.push("eu"); if (it[3]) b.push("us"); if (it[4]) b.push("ca");
     return badges(b);
   }
-  function render(q){
+  function render(q, append){
     q = (q || "").trim().toLowerCase();
     var res = [], i, it;
     if (!q) {
-      for (i = 0; i < data.length && res.length < 60; i++) { it = data[i]; if (it[2]||it[3]||it[4]) res.push(it); }
-      if (!res.length) res = data.slice(0, 60);
+      for (i = 0; i < data.length; i++) { it = data[i]; if (it[2]||it[3]||it[4]) res.push(it); }
+      for (i = 0; i < data.length && res.length < data.length; i++) { it = data[i]; if (!(it[2]||it[3]||it[4])) res.push(it); }
     } else {
-      for (i = 0; i < data.length && res.length < 200; i++) {
+      for (i = 0; i < data.length; i++) {
         it = data[i];
         if (it[0].toLowerCase().indexOf(q) !== -1 || it[1].indexOf(q) !== -1) res.push(it);
       }
     }
-    count.textContent = q ? (res.length >= 200 ? "Showing first 200 matches — refine your search" : res.length + " match" + (res.length === 1 ? "" : "es")) : "Showing flagged ingredients first — search to explore all 7,138";
-    list.innerHTML = res.map(function(it){
+    var shown = append ? Math.min(res.length, (render.shown || 200) + 200) : 200;
+    render.shown = shown;
+    count.textContent = q ? (res.length + " match" + (res.length === 1 ? "" : "es")) : ("Showing " + Math.min(shown, res.length).toLocaleString() + " of " + res.length.toLocaleString() + " ingredients");
+    list.innerHTML = res.slice(0, shown).map(function(it){
       var bd = flagBadges(it);
       return '<div class="cos-row"><span class="nm">'+esc(it[0])+'</span><span class="bans">'+bd+'</span></div>';
-    }).join('');
+    }).join('') + (res.length > shown ? '<p class="center mt"><button class="btn" id="cos-more">Show more (' + (res.length - shown).toLocaleString() + ' remaining)</button></p>' : '');
+    var more = document.getElementById("cos-more");
+    if (more) more.addEventListener("click", function(){ render(q, true); });
   }
   var t;
-  search.addEventListener("input", function(){ clearTimeout(t); t = setTimeout(function(){ render(search.value); }, 180); });
+  search.addEventListener("input", function(){ clearTimeout(t); t = setTimeout(function(){ render.shown = 0; render(search.value); }, 180); });
   render("");
 })();
 </script>

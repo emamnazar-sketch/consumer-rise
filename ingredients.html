@@ -415,18 +415,25 @@
     return b;
   }
 
+  var skinShown = 200;
+  function flaggedFirst(a, b) {
+    return ((b[2] ? 1 : 0) + (b[3] ? 1 : 0) + (b[4] ? 1 : 0)) - ((a[2] ? 1 : 0) + (a[3] ? 1 : 0) + (a[4] ? 1 : 0));
+  }
   function renderSkin() {
     if (!skinData) return;
     var q = skinSearch.value.trim().toLowerCase();
     var items = skinData.items || [];
     var list = q ? items.filter(function (r) {
       return r[0].toLowerCase().indexOf(q) !== -1;
-    }) : items.filter(function (r) { return r[2] || r[3] || r[4]; });
-    skinCount.textContent = "Showing " + Math.min(list.length, 100) + " of " +
-      list.length.toLocaleString() + " ingredients" + (q ? ' matching "' + skinSearch.value.trim() + '"' : " (flagged first — search to browse all)");
-    skinList.innerHTML = list.slice(0, 100).map(function (r) {
+    }) : items.slice().sort(flaggedFirst);
+    var shown = Math.min(list.length, skinShown);
+    skinCount.textContent = "Showing " + shown.toLocaleString() + " of " +
+      list.length.toLocaleString() + " ingredients" + (q ? ' matching "' + skinSearch.value.trim() + '"' : "");
+    skinList.innerHTML = list.slice(0, shown).map(function (r) {
       return '<div class="inv-item"><div class="inv-row-top"><span class="inv-name">' + esc2(r[0]) + "</span>" + skinBadges(r) + "</div></div>";
-    }).join("");
+    }).join("") + (list.length > shown ? '<p class="center mt"><button class="btn" id="skin-more">Show more (' + (list.length - shown).toLocaleString() + " remaining)</button></p>" : "");
+    var more = document.getElementById("skin-more");
+    if (more) more.addEventListener("click", function () { skinShown += 200; renderSkin(); });
   }
 
   function renderHome() {
@@ -488,7 +495,7 @@
     });
   }
 
-  skinSearch.addEventListener("input", renderSkin);
+  skinSearch.addEventListener("input", function () { skinShown = 200; renderSkin(); });
   homeSearch.addEventListener("input", renderHome);
 })();
 </script>
