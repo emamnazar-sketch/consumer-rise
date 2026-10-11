@@ -346,7 +346,6 @@
     if (modeParam === "skin" || modeParam === "home") scanMode = modeParam;
   } catch (e) {}
   var modeHint = document.getElementById("scan-mode-hint");
-  var allergenBox = document.getElementById("allergen-box");
   function setScanMode(m) {
     if (m !== "food" && m !== "skin" && m !== "home") m = "food";
     scanMode = m;
@@ -357,8 +356,14 @@
       btns[i].setAttribute("aria-pressed", String(on));
     }
     if (modeHint) modeHint.innerHTML = SCAN_MODE_HINTS[m];
-    /* Allergen alerts are a food feature only. */
-    if (allergenBox) allergenBox.hidden = (m !== "food");
+    /* Allergen alerts are a food feature only. Look up fresh each time in case
+       of stale HTML; belt-and-braces via style as well as the hidden attribute. */
+    var ab = document.getElementById("allergen-box");
+    if (ab) {
+      var hideAlg = (m !== "food");
+      ab.hidden = hideAlg;
+      ab.style.display = hideAlg ? "none" : "";
+    }
   }
   var modeCtl = document.getElementById("scan-mode");
   if (modeCtl) {
