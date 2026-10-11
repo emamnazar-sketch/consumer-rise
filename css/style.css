@@ -458,3 +458,20 @@ button.inv-row:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
 .quiz-step-tag{font-size:12px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
 .quiz-result-score{font-size:64px;font-weight:900;letter-spacing:-.03em;line-height:1;margin:6px 0 4px}
 .quiz-result-label{font-size:19px;font-weight:800;margin-bottom:6px}
+
+/* ---------- article enhancements: Two Labels ---------- */
+.article-hero-img{max-width:860px;margin:0 auto 36px;padding:0 20px}
+.article-hero-img img{width:100%;height:auto;border-radius:var(--radius);box-shadow:var(--shadow)}
+.article-hero-img figcaption,.mol-grid + .img-credit,.mol-single figcaption{font-size:13.5px;color:var(--ink-soft);margin-top:10px;line-height:1.5}
+.mol-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:28px 0 8px}
+.mol-grid figure{margin:0;text-align:center;background:var(--card);border:var(--line);border-radius:var(--radius);padding:14px 10px}
+.mol-grid img{width:100%;height:auto;max-width:150px;margin:0 auto}
+.mol-grid figcaption{font-size:13px;margin-top:8px}
+.mol-single{max-width:280px;margin:28px auto;text-align:center;background:var(--card);border:var(--line);border-radius:var(--radius);padding:18px}
+.mol-single img{width:100%;height:auto;max-width:200px}
+.mol-single figcaption{font-size:13px;margin-top:8px}
+@media(max-width:640px){.mol-grid{grid-template-columns:repeat(2,1fr)}}
+.share-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:36px 0 8px;padding:20px 0;border-top:var(--line);border-bottom:var(--line)}
+.share-label{font-weight:800;font-size:15px;margin-right:4px}
+.share-btn{display:inline-block;padding:9px 16px;border:var(--line);border-radius:999px;background:var(--card);color:var(--ink);font-weight:700;font-size:14px;text-decoration:none;cursor:pointer;font-family:inherit}
+.share-btn:hover{background:var(--ink);color:var(--card)}
