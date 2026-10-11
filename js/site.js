@@ -1328,3 +1328,61 @@
     syncThemeBtn();
   }
 })();
+
+/* ---- PWA install prompt: Android gets a one-tap install pill,
+   iOS gets an Add-to-Home-Screen hint. Dismissible, once per device. ---- */
+(function () {
+  var KEY = "cr-install-dismissed";
+  try { if (localStorage.getItem(KEY)) return; } catch (e) {}
+  /* Already running as the installed app — nothing to promote. */
+  if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) return;
+  if (window.navigator.standalone) return;
+
+  function dismiss() {
+    var el = document.getElementById("cr-install-pill");
+    if (el && el.parentNode) el.parentNode.removeChild(el);
+    try { localStorage.setItem(KEY, "1"); } catch (e) {}
+  }
+
+  function showPill(html, onAction) {
+    if (document.getElementById("cr-install-pill")) return;
+    var pill = document.createElement("div");
+    pill.id = "cr-install-pill";
+    pill.setAttribute("role", "dialog");
+    pill.setAttribute("aria-label", "Install the Consumer Rising app");
+    pill.style.cssText = "position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;" +
+      "background:#232A24;color:#F7F3EA;border-radius:14px;padding:12px 14px;" +
+      "display:flex;align-items:center;gap:12px;box-shadow:0 8px 30px rgba(0,0,0,.35);" +
+      "font-size:14.5px;line-height:1.4;max-width:520px;margin:0 auto;";
+    pill.innerHTML = '<span style="flex:1">' + html + "</span>" +
+      '<button type="button" id="cr-install-go" class="btn" style="white-space:nowrap">Install</button>' +
+      '<button type="button" id="cr-install-no" aria-label="Dismiss" style="background:none;border:none;color:#F7F3EA;font-size:20px;cursor:pointer;line-height:1">&times;</button>';
+    document.body.appendChild(pill);
+    document.getElementById("cr-install-no").addEventListener("click", dismiss);
+    document.getElementById("cr-install-go").addEventListener("click", function () {
+      if (onAction) onAction();
+    });
+  }
+
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent || "");
+  var deferred = null;
+
+  window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault();
+    deferred = e;
+    showPill("<b>Get the Consumer Rising app.</b><br>One tap — no app store needed.", function () {
+      if (!deferred) return;
+      deferred.prompt();
+      deferred.userChoice.then(function () { deferred = null; dismiss(); });
+    });
+  });
+
+  /* iOS has no install event — show the manual hint after a beat. */
+  if (isIOS) {
+    window.addEventListener("load", function () {
+      setTimeout(function () {
+        showPill("<b>Get the Consumer Rising app.</b><br>Tap <b>Share</b>, then <b>Add to Home Screen</b>.", dismiss);
+      }, 2500);
+    });
+  }
+})();

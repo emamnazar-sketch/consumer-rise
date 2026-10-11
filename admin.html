@@ -27,6 +27,13 @@
   #admin-login{max-width:460px;margin:60px auto}
   .err{color:#b3261e;font-weight:700;margin-top:10px}
 </style>
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#D93A2B">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Consumer Rising">
 </head>
 <body>
 <div class="ticker" aria-hidden="true"><span>Consumer Rising &nbsp;·&nbsp; Admin — private &nbsp;·&nbsp; Consumer Rising &nbsp;·&nbsp; Admin — private &nbsp;·&nbsp;&nbsp;</span></div>
@@ -180,6 +187,13 @@
       });
   });
 })();
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("/sw.js").catch(function () {});
+  });
+}
 </script>
 </body>
 </html>
