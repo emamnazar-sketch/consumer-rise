@@ -1,4 +1,4 @@
-/* Consumer Rising — Ingredient Index data (89 entries, 5 risk tiers).
+/* Consumer Rising — Ingredient Index data (100 entries, 5 risk tiers).
    Risk ratings are the site's editorial judgment. Keep language plain and
    non-alarmist; details live on the linked findings where they exist. */
 window.CR_INGREDIENTS = [
@@ -2695,6 +2695,316 @@ window.CR_INGREDIENTS = [
       { label: "EFSA 2021: re-evaluation of thaumatin (E 957) — no safety concern, no ADI needed", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8630604/" },
       { label: "FDA: GRAS Notice 920, thaumatin II flavor modifier (Nomad Bioscience)", url: "https://www.FDA.Gov/media/140368/download?attachment" }
     ]
-  }
+  },
+  {
+    name: "Stevia (steviol glycosides)",
+    id: "stevia",
+    aliases: ["Steviol glycosides", "Reb A", "Rebaudioside A", "Stevioside", "E960"],
+    e_number: "E960",
+    ins_number: 960,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Sweetener",
+    function: "Sweetener",
+    description: "The leaf-derived sweetener in diet drinks, yogurts, and tabletop packets — many times sweeter than sugar, with no calories.",
+    regulatory_status: {
+      us: "Purified steviol glycosides: FDA GRAS 'no questions'; whole-leaf and crude extracts: import alert, not permitted as sweeteners",
+      eu: "Authorized as E960a-d; EFSA's 2024 review kept the ADI at 4 mg/kg bw/day (steviol equivalents)"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "FDA has issued 'no questions' GRAS letters for purified steviol glycosides from stevia leaves — the agency treats them as safe under their intended uses.",
+      "But the leaf is not the extract: whole-leaf and crude stevia extracts sit under an FDA import alert and are not permitted as sweeteners. The packet and the plant are regulated very differently.",
+      "EFSA's 2024 review kept the acceptable daily intake at 4 mg per kg of body weight per day — but found toddlers at the highest consumption levels could exceed it if use levels rose.",
+      "Look for 'stevia extract,' 'reb A,' or 'steviol glycosides' on 'naturally sweetened' drinks and yogurts."
+    ],
+    link: null,
+    sources: [
+      { label: "FDA: high-intensity sweeteners — steviol glycosides GRAS, whole-leaf import alert", url: "https://www.fda.gov/food/food-additives-petitions/high-intensity-sweeteners" },
+      { label: "EFSA 2024: steviol glycosides opinion — ADI 4 mg/kg bw/day kept", url: "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2024.9045" }
+    ]
+  },
+  {
+    name: "Citric acid",
+    id: "citric-acid",
+    aliases: ["E330", "INS 330"],
+    e_number: "E330",
+    ins_number: 330,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Acidulant",
+    function: "Acidulant",
+    description: "The sour in citrus fruits — and in half the candy aisle. Also the acid keeping your canned tomatoes bright.",
+    regulatory_status: {
+      us: "GRAS; no use limits beyond good manufacturing practice (21 CFR 184.1033)",
+      eu: "E330, authorized quantum satis (no maximum level)"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "The FDA's regulation calls it 'a naturally occurring constituent of plant and animal tissues' — today mostly made by fermenting sugars with Aspergillus niger mold.",
+      "It is used in food 'with no limitations other than current good manufacturing practice' — the lightest regulatory touch there is.",
+      "The EU authorizes it as E330 with no maximum level: quantum satis, 'as much as needed.'",
+      "Look for 'citric acid' on sodas, sour candy, canned tomatoes, and jams — it's the tang."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 184.1033 — citric acid (GRAS affirmation)", url: "https://www.law.cornell.edu/cfr/text/21/184.1033" },
+      { label: "EU Regulation 1333/2008, Annex II — E330 citric acid", url: "https://www.legislation.gov.uk/eur/2008/1333/annexes/2020-03-25" }
+    ]
+  },
+  {
+    name: "Malic acid",
+    id: "malic-acid",
+    aliases: ["E296", "INS 296", "DL-malic acid"],
+    e_number: "E296",
+    ins_number: 296,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Acidulant",
+    function: "Acidulant",
+    description: "The sharp sour in green apples and sour candy — one of the most common food acids there is.",
+    regulatory_status: {
+      us: "GRAS affirmed; flavor enhancer and pH control agent (21 CFR 184.1069)",
+      eu: "E296, authorized quantum satis (no maximum level)"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "FDA affirms it as GRAS. The natural L-form occurs in various foods; the commercial DL-form is made by hydrating fumaric or maleic acid.",
+      "Its listed jobs: flavor enhancer, flavoring agent, and pH control agent — the regulation sets maximum levels per food type, up to 6.9% in hard candy.",
+      "The EU authorizes it as E296 with no maximum level (quantum satis).",
+      "Look for 'malic acid' on sour candy, fruit drinks, and gummies — usually right next to citric acid."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 184.1069 — malic acid (GRAS affirmation)", url: "https://www.law.cornell.edu/cfr/text/21/184.1069" },
+      { label: "EU Regulation 1333/2008, Annex II — E296 malic acid", url: "https://www.legislation.gov.uk/eur/2008/1333/annexes/2020-03-25" }
+    ]
+  },
+  {
+    name: "Lactic acid",
+    id: "lactic-acid",
+    aliases: ["E270", "INS 270"],
+    e_number: "E270",
+    ins_number: 270,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Acidulant",
+    function: "Acidulant",
+    description: "The tang in yogurt and sourdough — made by fermentation, and doing quiet preservation work in packaged foods.",
+    regulatory_status: {
+      us: "GRAS affirmed; antimicrobial, curing/pickling agent, pH control (21 CFR 184.1061)",
+      eu: "E270, authorized quantum satis (no maximum level)"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "It occurs naturally in several foods and is made commercially by fermenting carbohydrates such as glucose, sucrose, or lactose.",
+      "FDA affirms it as GRAS. Its listed jobs go beyond sourness: antimicrobial agent, curing and pickling agent, and pH control agent.",
+      "The EU authorizes it as E270 with no maximum level (quantum satis).",
+      "Look for 'lactic acid' on pickles, olives, sourdough bread, and fermented dairy."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 184.1061 — lactic acid (GRAS affirmation)", url: "https://www.law.cornell.edu/cfr/text/21/184.1061" },
+      { label: "EU Regulation 1333/2008, Annex II — E270 lactic acid", url: "https://www.legislation.gov.uk/eur/2008/1333/annexes/2020-03-25" }
+    ]
+  },
+  {
+    name: "Fumaric acid",
+    id: "fumaric-acid",
+    aliases: ["E297", "INS 297"],
+    e_number: "E297",
+    ins_number: 297,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Acidulant",
+    function: "Acidulant",
+    description: "A strong-tasting food acid used in small amounts — powdered drinks, candy, and tortillas.",
+    regulatory_status: {
+      us: "FDA: 'may be safely used in food' (21 CFR 172.350)",
+      eu: "E297, authorized in the EU"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "FDA's regulation says fumaric acid and its calcium, magnesium, potassium, and sodium salts 'may be safely used in food.'",
+      "Its iron salt, ferrous fumarate, is regulated separately as an iron source in foods for special dietary use.",
+      "The EU authorizes it as E297.",
+      "Look for 'fumaric acid' on powdered beverages, pie fillings, and tortillas."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 172.350 — fumaric acid and salts (safe use)", url: "https://www.law.cornell.edu/cfr/text/21/172.350" },
+      { label: "EU Regulation 1333/2008, Annex II — E297 fumaric acid", url: "https://www.legislation.gov.uk/eur/2008/1333/annexes/2020-03-25" }
+    ]
+  },
+  {
+    name: "Tartaric acid",
+    id: "tartaric-acid",
+    aliases: ["E334", "INS 334", "L(+)-tartaric acid"],
+    e_number: "E334",
+    ins_number: 334,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Acidulant",
+    function: "Acidulant",
+    description: "The acid from winemaking — a byproduct of wine manufacture that ended up in baking powder and candy.",
+    regulatory_status: {
+      us: "GRAS affirmed; firming agent, flavor enhancer, pH control (21 CFR 184.1099)",
+      eu: "E334, authorized quantum satis (no maximum level)"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "Food-grade tartaric acid 'is obtained as a byproduct of wine manufacture,' per the FDA regulation.",
+      "FDA affirms it as GRAS, listing it as a firming agent, flavor enhancer, and pH control agent.",
+      "The EU authorizes it as E334 (the L(+)- form) with no maximum level.",
+      "Look for 'tartaric acid' on baking powder, grape-flavored candy, and frostings."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 184.1099 — tartaric acid (GRAS affirmation)", url: "https://www.law.cornell.edu/cfr/text/21/184.1099" },
+      { label: "EU Regulation 1333/2008, Annex II — E334 tartaric acid", url: "https://www.legislation.gov.uk/eur/2008/1333/annexes/2020-03-25" }
+    ]
+  },
+  {
+    name: "Acetic acid",
+    id: "acetic-acid",
+    aliases: ["E260", "INS 260", "Ethanoic acid"],
+    e_number: "E260",
+    ins_number: 260,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Acidulant",
+    function: "Acidulant",
+    description: "The sharp acid in vinegar — also doing preservation work in pickles, sauces, and baked goods.",
+    regulatory_status: {
+      us: "GRAS affirmed; curing/pickling agent, pH control (21 CFR 184.1005)",
+      eu: "E260, authorized quantum satis (no maximum level)"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "It 'occurs naturally in plant and animal tissues' and is made by fermenting carbohydrates — or by industrial synthesis.",
+      "FDA lists it as a curing and pickling agent, flavor enhancer, and pH control agent, with maximum levels per food type (up to 9% in condiments and relishes).",
+      "The EU authorizes it as E260 with no maximum level (quantum satis).",
+      "Look for 'acetic acid' on pickles, ketchup, and sauces — or just check the vinegar."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 184.1005 — acetic acid (GRAS affirmation)", url: "https://www.law.cornell.edu/cfr/text/21/184.1005" },
+      { label: "EU Regulation 1333/2008, Annex II — E260 acetic acid", url: "https://www.legislation.gov.uk/eur/2008/1333/annexes/2020-03-25" }
+    ]
+  },
+  {
+    name: "Dextrose",
+    id: "dextrose",
+    aliases: ["D-glucose", "Corn sugar", "Glucose"],
+    e_number: null,
+    ins_number: null,
+    risk: "cutback",
+    risk_weight: 10,
+    category: "Sweetener",
+    function: "Sweetener",
+    description: "Another name for glucose — the sugar your blood carries. Made from corn starch, and everywhere sugar is.",
+    regulatory_status: {
+      us: "GRAS affirmed as 'corn sugar' (21 CFR 184.1857)",
+      eu: "No EU position reviewed for this entry"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "The FDA regulation defines it plainly: 'Corn sugar, commonly called D-glucose or dextrose' — made by fully hydrolyzing corn starch.",
+      "It is the same molecule as blood sugar: MedlinePlus defines the blood sugar test as measuring 'the amount of sugar (glucose)' in blood.",
+      "The regulation sets no use limits beyond good manufacturing practice — it is treated like sugar, because it is one.",
+      "Look for 'dextrose' on baked goods, cured meats, and medical drinks — and in 'no sucrose' products that still list it."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 184.1857 — corn sugar / dextrose (GRAS affirmation)", url: "https://www.law.cornell.edu/cfr/text/21/184.1857" },
+      { label: "MedlinePlus: blood sugar test — glucose", url: "https://medlineplus.gov/ency/article/003482.htm" }
+    ]
+  },
+  {
+    name: "Invert sugar",
+    id: "invert-sugar",
+    aliases: ["Inverted sugar", "Trimoline"],
+    e_number: null,
+    ins_number: null,
+    risk: "cutback",
+    risk_weight: 10,
+    category: "Sweetener",
+    function: "Sweetener",
+    description: "Table sugar, split in two — sucrose broken into glucose and fructose. The candy-maker's secret against graininess.",
+    regulatory_status: {
+      us: "GRAS affirmed; no use limits beyond good manufacturing practice (21 CFR 184.1859)",
+      eu: "No EU position reviewed for this entry"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "The FDA defines it as sucrose 'produced by the hydrolysis or partial hydrolysis of sucrose with safe and suitable acids or enzymes.'",
+      "Split sucrose resists crystallizing: invert sugar is a glucose-fructose mixture, and mixtures like it keep hard candy smooth instead of grainy.",
+      "Your body treats it like sugar — because it is sugar, just pre-split into its two halves.",
+      "Look for 'invert sugar' on candy, frostings, and baked goods — anywhere smoothness matters."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 184.1859 — invert sugar (GRAS affirmation)", url: "https://www.law.cornell.edu/cfr/text/21/184.1859" },
+      { label: "Discover Magazine: sugar chemistry of hard candies — invert sugar", url: "https://www.discovermagazine.com/sugar-chemistry-of-hard-candies-831" }
+    ]
+  },
+  {
+    name: "Isomalt",
+    id: "isomalt",
+    aliases: ["E953", "INS 953", "Palatinit"],
+    e_number: "E953",
+    ins_number: 953,
+    risk: "cutback",
+    risk_weight: 10,
+    category: "Sweetener",
+    function: "Sweetener",
+    description: "The sugar-free candy sweetener — about half the calories of sugar, tooth-friendly, and a laxative in large amounts.",
+    regulatory_status: {
+      us: "In common use in US sugar-free products; listed among sugar alcohols in US use",
+      eu: "Authorized as E953"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "A 2020 filing with the FDA lists isomalt among the sugar alcohols commonly found in US products — it is the structural sweetener in sugar-free hard candy.",
+      "The EU authorizes it as E953, a permitted sweetener.",
+      "Like all polyols, too much has a laxative effect — products must warn that 'excessive consumption may produce laxative effects.'",
+      "Look for 'isomalt' on sugar-free hard candy and throat lozenges."
+    ],
+    link: null,
+    sources: [
+      { label: "FDA docket: Sugar Association petition — isomalt among sugar alcohols in US products", url: "https://downloads.regulations.gov/FDA-2020-P-1478-0001/attachment_1.pdf" },
+      { label: "EU Sweeteners in Food Regulations 1997 — E953 isomalt", url: "https://www.legislation.gov.uk/uksi/1997/814/schedule/made" },
+      { label: "FoodNavigator: EFSA polyol opinions — laxative warnings", url: "https://www.FoodNavigator.com/Article/2011/04/13/EFSA-sweetens-industry-with-positive-sugar-replacement-health-claim-opinions/" }
+    ]
+  },
+  {
+    name: "Lactitol",
+    id: "lactitol",
+    aliases: ["E966", "INS 966"],
+    e_number: "E966",
+    ins_number: 966,
+    risk: "cutback",
+    risk_weight: 10,
+    category: "Sweetener",
+    function: "Sweetener",
+    description: "The sugar alcohol in sugar-free ice cream and chocolate — less sweet than sugar, lower in calories, and a laxative in excess.",
+    regulatory_status: {
+      us: "FDA names lactitol among sugar alcohols used as sugar substitutes",
+      eu: "Authorized as E966"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "FDA's own sweetener page names lactitol among the sugar alcohols used as sugar substitutes, noting they 'do not promote tooth decay or cause a sudden increase in blood glucose.'",
+      "The EU authorizes it as E966, a permitted sweetener.",
+      "Like all polyols, too much has a laxative effect — products must warn that 'excessive consumption may produce laxative effects.'",
+      "Look for 'lactitol' on sugar-free ice cream, chocolate, and baked goods."
+    ],
+    link: null,
+    sources: [
+      { label: "FDA: high-intensity sweeteners — lactitol among sugar alcohols", url: "https://www.fda.gov/food/food-additives-petitions/high-intensity-sweeteners" },
+      { label: "EU Sweeteners in Food Regulations 1997 — E966 lactitol", url: "https://www.legislation.gov.uk/uksi/1997/814/schedule/made" },
+      { label: "FoodNavigator: EFSA polyol opinions — laxative warnings", url: "https://www.FoodNavigator.com/Article/2011/04/13/EFSA-sweetens-industry-with-positive-sugar-replacement-health-claim-opinions/" }
+    ]
+  },
 
-  ];
+];
