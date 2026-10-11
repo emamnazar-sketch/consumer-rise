@@ -450,5 +450,462 @@ window.CR_PET_INGREDIENTS = [
       }
     ],
     "function": "Human-food sweetener; severe dog toxin"
+  },
+  {
+    "aliases": [
+      "melamine",
+      "cyanuric acid",
+      "melamine cyanurate",
+      "wheat gluten adulteration"
+    ],
+    "bullets": [
+      "On March 16, 2007, Menu Foods recalled 'cuts and gravy' pet foods after cats and dogs began dying of kidney failure; the recalls eventually swelled past 60 million containers from nearly 100 brands — the largest pet food recall in US history.",
+      "The cause was deliberate fraud: wheat gluten from Chinese suppliers had been spiked with melamine and cyanuric acid, industrial chemicals rich in nitrogen that fooled protein-content tests into reading the flour as high-protein gluten.",
+      "Neither chemical is highly dangerous alone, but together they were deadly: inside pets' bodies, melamine reacted with cyanuric acid to form durable crystals that clogged kidneys, causing acute renal failure in both cats and dogs.",
+      "The death toll is uncertain, but FDA consumer reports suggest approximately 1,950 cats and 2,200 dogs died; a veterinary survey confirmed kidney failure in 236 cats and 112 dogs by April 2007.",
+      "There were criminal consequences: in 2009, the owners of ChemNutra — the US company that imported the tainted gluten — pleaded guilty to their roles in distributing it, and a federal grand jury indicted three Chinese nationals.",
+      "The legacy is regulatory: the tragedy drove the pet food industry's supplier-testing programs and helped spur the Food Safety Modernization Act of 2011 and the FDA Amendments Act of 2007."
+    ],
+    "category": "Adulterant (2007 contamination crisis)",
+    "description": "Industrial chemicals fraudulently added to wheat gluten in 2007 to fake higher protein readings — together they formed kidney-destroying crystals that killed thousands of cats and dogs in the largest pet food recall in US history.",
+    "e_number": null,
+    "id": "melamine-pet",
+    "ins_number": null,
+    "last_reviewed": "2026-10-11",
+    "link": null,
+    "name": "Melamine & cyanuric acid (2007 adulteration) — pet food",
+    "regulatory_status": {
+      "eu": "Not a permitted feed substance; the 2007 crisis prompted EU scrutiny of imported protein ingredients.",
+      "us": "Never permitted in pet food — this was criminal adulteration, not a regulatory gray zone. FDA's Office of Criminal Investigations pursued the importers; ChemNutra's owners pleaded guilty in 2009. The FDA Amendments Act of 2007 mandated FDA develop pet-food labeling rules apart from AAFCO (still uncompleted)."
+    },
+    "risk": "avoid",
+    "risk_weight": 30,
+    "sources": [
+      {
+        "label": "Petfood Industry — Melamine recalls shaped pet food trends, safety programs (recall scope, death counts, guilty pleas)",
+        "url": "https://www.petfoodindustry.com/news-newsletters/pet-food-news/article/15463501/melamine-recalls-shaped-pet-food-trends-safety-programs"
+      },
+      {
+        "label": "NTP — Research Concept: Melamine/Cyanuric Acid (2008, adulteration mechanism, kidney crystals)",
+        "url": "https://ntp.niehs.nih.gov/ntp/noms/final_resconcept/melamine_cyanuric.pdf"
+      },
+      {
+        "label": "Journal of Medical Toxicology — Review of pet food recalls involving chemical contaminants 1996–2008 (Springer)",
+        "url": "http://link.springer.com/article/10.1007/s13181-010-0123-5"
+      }
+    ],
+    "function": "Adulterant (2007 contamination crisis)"
+  },
+  {
+    "aliases": [
+      "aflatoxin",
+      "aflatoxins",
+      "Aspergillus flavus",
+      "mycotoxin"
+    ],
+    "bullets": [
+      "On December 30, 2020, Midwestern Pet Foods recalled Sportmix dry pet food after at least 28 dogs died and 8 fell ill; by January 2021 the FDA was aware of more than 110 dead and 210 sick pets, and the recall grew to 1,000+ lots.",
+      "The killer was aflatoxin — poison made by the mold Aspergillus flavus growing on drought-stressed corn. Missouri agriculture labs found levels up to 558 parts per billion; the FDA treats pet food above 20 ppb as adulterated.",
+      "Aflatoxin is invisible: the FDA's alert stressed the toxins 'can be present even if there is no visible mold.' A Missouri veterinarian caught it only because dying kennel dogs showed liver-disease symptoms and he sent food for toxicology testing.",
+      "Dogs and cats show loss of appetite, listlessness, and vomiting; at high doses aflatoxin causes acute liver failure and death. It is also a known carcinogen with chronic exposure.",
+      "The company had no previous recalls in its nearly 100-year history; Midwestern later paid $6.375 million to settle a class action from owners whose pets were sickened or killed.",
+      "Mycotoxins survive kibble manufacturing: they resist the high heat and drying of extrusion, so once contaminated grain enters the plant, processing does not destroy the toxin."
+    ],
+    "category": "Mycotoxin contaminant",
+    "description": "Poisonous mold toxins that grow on corn and grains under drought or poor storage — invisible, heat-resistant, and responsible for the 2020–21 Sportmix recall that killed more than 110 dogs.",
+    "e_number": null,
+    "id": "aflatoxin-pet",
+    "ins_number": null,
+    "last_reviewed": "2026-10-11",
+    "link": null,
+    "name": "Aflatoxins — pet food contaminant",
+    "regulatory_status": {
+      "eu": "EU sets maximum aflatoxin levels for animal feed under Directive 2002/32/EC (20 ppb for complete feed, same threshold as the US).",
+      "us": "FDA considers dog and cat food above 20 ppb aflatoxin adulterated under the Food, Drug, and Cosmetic Act. FDA issued a corporate-wide warning letter to Midwestern Pet Foods in August 2021 after inspecting its Oklahoma plant."
+    },
+    "risk": "avoid",
+    "risk_weight": 30,
+    "sources": [
+      {
+        "label": "Petfood Industry — Aflatoxin pet food recall goes international; 110 deaths (recall timeline, FDA counts, 558 ppb findings)",
+        "url": "https://www.petfoodindustry.com/safety-quality/pet-food-recalls/article/15467532/aflatoxin-pet-food-recall-goes-international-110-deaths"
+      },
+      {
+        "label": "FDA — Alert: Certain Lots of Sportmix Pet Food Recalled for Potentially Fatal Levels of Aflatoxin (Dec 2020)",
+        "url": "https://www.fda.gov/animal-veterinary/outbreaks-and-advisories/fda-alert-certain-lots-sportmix-pet-food-recalled-potentially-fatal-levels-aflatoxin"
+      },
+      {
+        "label": "FDA — Warning Letter to Midwestern Pet Foods (Aug 9, 2021, inspection findings)",
+        "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/midwestern-pet-food-613845-08092021"
+      }
+    ],
+    "function": "Mycotoxin contaminant"
+  },
+  {
+    "aliases": [
+      "vitamin D toxicity",
+      "hypervitaminosis D",
+      "excess vitamin D",
+      "cholecalciferol excess"
+    ],
+    "bullets": [
+      "In January 2019, Hill's Pet Nutrition recalled canned dog foods after a dog showed vitamin D toxicity; by March the recall had expanded to 86 lots across 33 varieties, and again in May — all traced to a vitamin premix from a US supplier that contained far too much vitamin D.",
+      "Vitamin D is essential for dogs, but excess causes vomiting, loss of appetite, increased thirst and urination, drooling, weight loss — and at very high levels, kidney failure or death.",
+      "Hill's was not alone: in December 2018 the FDA flagged dry dog foods from a common contract manufacturer (Sunshine Mills) for the same problem, and in February 2023 Nestlé Purina recalled a prescription dry dog food after two confirmed toxicity cases.",
+      "FDA investigated and issued warning letters to both Sunshine Mills and Hill's in 2019 — a sign the agency treated supplier quality control, not the nutrient itself, as the failure.",
+      "The honest context: these were manufacturing errors in vitamin premixes, not evidence that normal vitamin D levels in pet food are dangerous. But the episodes show how a single supplier error can reach millions of cans."
+    ],
+    "category": "Nutrient excess (manufacturing error)",
+    "description": "Vitamin D is essential for dogs — but supplier errors have repeatedly put toxic levels into canned and dry dog food, triggering major recalls from Hill's, Sunshine Mills, and Purina.",
+    "e_number": null,
+    "id": "vitamin-d-excess-pet",
+    "ins_number": null,
+    "last_reviewed": "2026-10-11",
+    "link": null,
+    "name": "Excess vitamin D (recall history) — pet food",
+    "regulatory_status": {
+      "eu": "EU feed rules set maximum vitamin D3 levels for pet food; excess-vitamin-D recalls are a manufacturing-compliance matter.",
+      "us": "FDA issued 2019 alerts on Hill's (33 varieties, 86 lots) and Sunshine Mills dry foods, plus a 2023 Purina Pro Plan Veterinary Diets recall; warning letters went to Hill's and Sunshine Mills. No change to permitted vitamin D levels — enforcement targeted supplier quality control."
+    },
+    "risk": "caution",
+    "risk_weight": 20,
+    "sources": [
+      {
+        "label": "FDA — Alert: Potentially Toxic Levels of Vitamin D in 33 Varieties of Hill's Canned Dog Food (2019)",
+        "url": "https://www.fda.gov/AnimalVeterinary/NewsEvents/ucm634138.htm"
+      },
+      {
+        "label": "FDA — Vitamin D Toxicity in Dogs (Hill's, Sunshine Mills, Purina recall history; warning letters)",
+        "url": "https://www.fda.gov/animal-veterinary/animal-health-literacy/vitamin-d-toxicity-dogs"
+      }
+    ],
+    "function": "Nutrient excess (manufacturing error)"
+  },
+  {
+    "aliases": [
+      "grain-free DCM",
+      "diet-associated DCM",
+      "peas and lentils heart disease",
+      "pulses",
+      "legume-heavy diets"
+    ],
+    "bullets": [
+      "In July 2018, FDA's Center for Veterinary Medicine began investigating reports of dilated cardiomyopathy (DCM) — a weakening and enlargement of the heart — in dogs eating foods 'many labeled as grain-free' with high proportions of peas, lentils, other pulses, and potatoes among the first ingredients.",
+      "The signal was striking: in cases where dogs ate a single primary diet, 90% were eating grain-free food, and 93% of named products contained peas and/or lentils. Affected breeds included Golden Retrievers, Labradors, and others not genetically prone to DCM.",
+      "Taurine entered the picture because some affected dogs had low blood taurine — a documented cause of DCM — and several recovered with taurine supplementation plus diet change. But other affected dogs had normal taurine, so deficiency doesn't explain every case.",
+      "The evidence has evolved: in December 2022 the FDA ended routine updates, stating adverse-event numbers 'do not supply sufficient data to establish a causal relationship.' A 2023 peer-reviewed study found no causal link, and a 2026 Dog Aging Project analysis of nearly 50,000 dogs found grain-free status did not predict new cardiac diagnoses.",
+      "Honest bottom line: the FDA never proved grain-free or pulse-heavy diets cause DCM, and newer large studies are reassuring — but the investigation was real, the case cluster was real, and the mechanism (possibly involving taurine metabolism or fiber/oligosaccharides in peas) remains unresolved."
+    ],
+    "category": "Dietary pattern under investigation",
+    "description": "The FDA's 2018–2022 investigation into heart disease in dogs eating grain-free, pulse-heavy diets — a real case cluster with an still-unresolved mechanism, though newer large studies have not confirmed a causal link.",
+    "e_number": null,
+    "id": "grain-free-dcm-pet",
+    "ins_number": null,
+    "last_reviewed": "2026-10-11",
+    "link": null,
+    "name": "Grain-free / pulse-heavy diets & DCM — under investigation",
+    "regulatory_status": {
+      "eu": "No EU regulatory action; the investigation was US-led.",
+      "us": "FDA-CVM investigated 2018–2022 (1,100+ DCM reports); ended routine public updates in December 2022 without establishing causation. No recalls, no ingredient bans, no formula mandates resulted. FDA continues to encourage DCM case reporting."
+    },
+    "risk": "caution",
+    "risk_weight": 20,
+    "sources": [
+      {
+        "label": "Petfood Industry — Potatoes, peas, lentils correlated to dog heart disease (FDA case data)",
+        "url": "https://www.petfoodindustry.com/news-newsletters/pet-food-news/press-release/15464945/potatoes-peas-lentils-correlated-to-dog-heart-disease"
+      },
+      {
+        "label": "All The Best Pet Care — Legumes, DCM, and taurine deficiency (FDA timeline, BSM Partners 2023 study)",
+        "url": "https://www.allthebestpetcare.com/pet-nutrition/legumes-dilated-cardiomyopathy-dcm-and-taurine-deficiency/"
+      },
+      {
+        "label": "ScienMag — Grain-free dog foods cleared in major two-year Dog Aging Project study (2026)",
+        "url": "https://scienmag.com/grain-free-dog-foods-cleared-in-major-two-year-study-of-canine-heart-disease/"
+      }
+    ],
+    "function": "Dietary pattern under investigation"
+  },
+  {
+    "aliases": [
+      "grapes",
+      "raisins",
+      "sultanas",
+      "currants",
+      "grape toxicity"
+    ],
+    "bullets": [
+      "Grapes, raisins, sultanas, and currants can cause sudden kidney failure in dogs — the ASPCA's Animal Poison Control Center documented about 140 cases in a single year, with 50 developing symptoms and 7 dying.",
+      "The cruelty is unpredictability: toxicity is idiosyncratic. Some dogs are harmed by a few grapes while others show no reaction, and there is no established safe amount — every exposure should be treated as a potential emergency.",
+      "The mechanism was a mystery for years, but 2022–2024 research points to tartaric acid: dogs barely express the kidney transporter (OAT4) that clears it in humans, so it accumulates in kidney tubule cells and destroys them. Raisins concentrate roughly 4–5× more tartaric acid per gram than fresh grapes.",
+      "Signs start with vomiting within 24 hours, followed by lethargy, loss of appetite, and abdominal pain; kidney failure brings tremors, reduced urination, and potentially death. Washing, organic sourcing, or removing seeds does not make grapes safe.",
+      "Cats appear unaffected — grape toxicity is documented in dogs, with only anecdotal reports in cats or ferrets. If your dog eats any grape product, call your vet or poison control immediately; do not wait for symptoms."
+    ],
+    "category": "Human-food toxin (dogs)",
+    "description": "Grapes and raisins can trigger sudden, potentially fatal kidney failure in dogs — with no predictable safe dose. Research now points to tartaric acid as the culprit.",
+    "e_number": null,
+    "id": "grapes-raisins-pet",
+    "ins_number": null,
+    "last_reviewed": "2026-10-11",
+    "link": null,
+    "name": "Grapes & raisins — dog toxin",
+    "regulatory_status": {
+      "eu": "Not a pet-food ingredient; no regulatory status applicable.",
+      "us": "Not a pet-food ingredient. ASPCA Animal Poison Control lists grapes/raisins among people-foods to never feed dogs; no FDA action because this is an owner-awareness hazard, not a manufacturing issue."
+    },
+    "risk": "avoid",
+    "risk_weight": 30,
+    "sources": [
+      {
+        "label": "ASPCA — People Foods to Avoid Feeding Your Pets (grapes/raisins: kidney failure)",
+        "url": "https://www.aspca.org/pet-care/aspca-poison-control/people-foods-avoid-feeding-your-pets"
+      },
+      {
+        "label": "Wikipedia — Grape toxicity in dogs (APCC case data, tartaric acid mechanism)",
+        "url": "https://en.wikipedia.org/wiki/Grape_toxicity_in_dogs"
+      }
+    ],
+    "function": "Human-food toxin (dogs)"
+  },
+  {
+    "aliases": [
+      "theobromine",
+      "chocolate poisoning",
+      "cacao",
+      "cocoa"
+    ],
+    "bullets": [
+      "Chocolate's danger to dogs comes from methylxanthines — theobromine and caffeine — which dogs metabolize far more slowly than humans (theobromine's half-life in dogs is 17.5 hours vs. a few hours in people).",
+      "The Merck Veterinary Manual's dose ladder: mild signs (vomiting, diarrhea, restlessness) from about 20 mg/kg theobromine; heart effects at 40–50 mg/kg; seizures at 60 mg/kg and above; the oral lethal dose is roughly 100–200 mg/kg.",
+      "Darkness matters: baking chocolate and cocoa powder carry ~390–800 mg theobromine per ounce, dark chocolate ~130–150 mg/oz, milk chocolate ~44–58 mg/oz, white chocolate negligible. About an ounce of milk chocolate per pound of body weight is potentially lethal.",
+      "Death is usually from cardiac arrhythmias, overheating, or respiratory failure — and the high fat in chocolate can additionally trigger pancreatitis in susceptible dogs.",
+      "Reassuring context from the UK's Veterinary Poisons Information Service: across 1,000 followed-up canine cases, only 5 were fatal, and about half of reported cases never developed symptoms. Still, any known ingestion warrants a vet call with the type, amount, and the dog's weight."
+    ],
+    "category": "Human-food toxin (dogs)",
+    "description": "Theobromine and caffeine in chocolate overstimulate dogs' hearts and nervous systems — mild at a nibble of milk chocolate, potentially lethal at baking-chocolate doses.",
+    "e_number": null,
+    "id": "chocolate-pet",
+    "ins_number": null,
+    "last_reviewed": "2026-10-11",
+    "link": null,
+    "name": "Chocolate (theobromine) — dog toxin",
+    "regulatory_status": {
+      "eu": "Not a pet-food ingredient; no regulatory status applicable.",
+      "us": "Not a pet-food ingredient. ASPCA lists chocolate among people-foods to avoid; veterinary poison centers treat it as one of the most common dog-poisoning calls."
+    },
+    "risk": "avoid",
+    "risk_weight": 30,
+    "sources": [
+      {
+        "label": "Merck Veterinary Manual — Chocolate Toxicosis in Animals (dose thresholds, mechanism, treatment)",
+        "url": "https://www.msdvetmanual.com/toxicology/food-hazards/chocolate-toxicosis-in-animals?query=theobromine"
+      },
+      {
+        "label": "Veterinary Poisons Information Service — Revised treatment doses for chocolate (700+ case analysis)",
+        "url": "https://www.vpisglobal.com/2014/12/02/revised-treatment-doses-for-chocolate/"
+      }
+    ],
+    "function": "Human-food toxin (dogs)"
+  },
+  {
+    "aliases": [
+      "macadamia",
+      "macadamia nut toxicosis",
+      "Macadamia integrifolia"
+    ],
+    "bullets": [
+      "Macadamia nuts cause a distinctive dog-only syndrome: weakness (especially hind legs), vomiting, ataxia, tremors, joint pain, and fever — usually within 12 hours of eating them.",
+      "The ASPCA's poison center treated 29 cases over five years (published in Veterinary and Human Toxicology, 2000); an Australian study of 13 dogs found signs at 0.7–4.9 g/kg — as few as a handful of nuts for a medium dog.",
+      "The mechanism is genuinely unknown — hypotheses involve neurotransmitter or neuromuscular effects, but no toxic compound has been identified. Dogs are the only species reported affected.",
+      "The good news: prognosis is excellent. Most dogs recover fully within 24–48 hours with supportive care, and many mild cases resolve without treatment. There is no antidote; treatment is decontamination plus nursing care.",
+      "The high fat content adds a second risk: pancreatitis. Keep macadamia-containing cookies and candies away from dogs, and note that one nut in a large dog is far less concerning than a handful in a small one — call your vet with the amount and the dog's weight."
+    ],
+    "category": "Human-food toxin (dogs)",
+    "description": "Macadamia nuts trigger weakness, tremors, and vomiting in dogs — and only in dogs. The mechanism is unknown, but recovery is typically complete within two days.",
+    "e_number": null,
+    "id": "macadamia-pet",
+    "ins_number": null,
+    "last_reviewed": "2026-10-11",
+    "link": null,
+    "name": "Macadamia nuts — dog toxin",
+    "regulatory_status": {
+      "eu": "Not a pet-food ingredient; no regulatory status applicable.",
+      "us": "Not a pet-food ingredient. ASPCA lists macadamia nuts among people-foods to avoid feeding dogs."
+    },
+    "risk": "avoid",
+    "risk_weight": 30,
+    "sources": [
+      {
+        "label": "Bark & Whiskers — Dangers of feeding macadamia nuts to pets (APCC 29-case data, Australian study)",
+        "url": "https://www.barkandwhiskers.com/content/files/2026/03/why-you-shouldnt-feed-macadamia-nuts-to-your-pets.pdf"
+      },
+      {
+        "label": "ASPCA — People Foods to Avoid Feeding Your Pets (macadamia nuts listed)",
+        "url": "https://www.aspca.org/pet-care/aspca-poison-control/people-foods-avoid-feeding-your-pets"
+      }
+    ],
+    "function": "Human-food toxin (dogs)"
+  },
+  {
+    "aliases": [
+      "copper sulfate",
+      "copper chelate",
+      "copper proteinate",
+      "copper-associated hepatopathy",
+      "copper storage disease"
+    ],
+    "bullets": [
+      "Copper is essential for dogs — but too much accumulates in the liver, causing copper-associated hepatopathy (chronic hepatitis). A study of 546 dogs found liver copper above 1,000 µg/g in about 25% of Labrador Retrievers biopsied from the mid-1990s onward, with levels rising over time in all breeds.",
+      "The controversy: in 1997, AAFCO profiles began requiring highly bioavailable copper sulfate or chelates in premixes — despite no evidence of copper deficiency being a problem. Veterinary researchers (Twedt et al., JAVMA 2021) asked whether the guidelines should be reconsidered, noting the current minimum is ~1.7× the intake that copper-restricted diets safely provide.",
+      "Genetics complicate the picture: Bedlington Terriers, Labradors, Dalmatians, and Dobermans are predisposed to copper storage disease, but rising cases across all breeds suggest diet plays a role beyond genes.",
+      "Treatment exists — chelation with d-penicillamine plus lifetime copper-restricted diet — but it takes months, requires repeat monitoring, and restricted diets are mostly prescription-only.",
+      "Honest caveat: regulators have not changed the guidelines, stating a lack of evidence directly linking food copper levels to the disease trend. This is a genuine open scientific dispute, not a settled hazard."
+    ],
+    "category": "Trace mineral excess (genuine controversy)",
+    "description": "Copper is a required nutrient — but increasingly bioavailable forms in dog food, plus rising liver-copper levels across breeds, have veterinary researchers questioning whether current minimums are too high.",
+    "e_number": null,
+    "id": "copper-excess-pet",
+    "ins_number": null,
+    "last_reviewed": "2026-10-11",
+    "link": null,
+    "name": "Excess copper — pet food controversy",
+    "regulatory_status": {
+      "eu": "FEDIAF sets copper levels for pet food; no EU action on the excess-copper question was verified during research.",
+      "us": "AAFCO nutrient profiles set minimum copper levels (no maximum for adult maintenance); manufacturers must include copper but need not declare the amount. FDA/AAFCO have not revised guidelines despite the JAVMA 2021 challenge."
+    },
+    "risk": "caution",
+    "risk_weight": 20,
+    "sources": [
+      {
+        "label": "JAVMA 2021 — Is it time to reconsider current guidelines for copper content in commercial dog foods? (Twedt et al.)",
+        "url": "http://avmajournals.avma.org/view/journals/javma/258/4/javma.258.4.357.xml"
+      },
+      {
+        "label": "PMC — Hepatic copper concentrations in 546 dogs, 1982–2015 (rising trend, breed data)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6272033/"
+      }
+    ],
+    "function": "Trace mineral excess (genuine controversy)"
+  },
+  {
+    "aliases": [
+      "sodium pentobarbital",
+      "pentobarbital residue",
+      "euthanasia drug"
+    ],
+    "bullets": [
+      "Pentobarbital is the drug used to euthanize animals — and FDA surveys in 1998 and 2000 found its residues in many commercial dry dog foods, associated with rendered ingredients (meat and bone meal, beef and bone meal, animal fat, animal digest) listed high on the label.",
+      "The FDA's own data tables name brands: multiple Ol' Roy, Trailblazer, Dad's, and Weis products tested positive, with Survey #2 measuring up to 32 parts per billion. Products where rendered ingredients ranked 1st–3rd were far more likely to test positive (60%) than those ranking them 4th–7th (6%).",
+      "FDA concluded the low levels were 'unlikely' to harm dogs — but also stated plainly that no tolerance exists for any pentobarbital in animal feed, and that using material from euthanized animals is never allowed.",
+      "The source was never definitively proven: FDA found no dog or cat DNA in samples and speculated euthanized cattle or horses, while independent researchers disputed that conclusion. The honest position is that the contamination pathway remains unresolved.",
+      "It still happens: in 2017, Evanger's and Smucker's (Gravy Train) products were found contaminated with pentobarbital, triggering recalls — proof this is not just a 1990s story."
+    ],
+    "category": "Euthanasia-drug contaminant",
+    "description": "Residues of the animal euthanasia drug found by the FDA in many dry dog foods — linked to rendered ingredients, with zero legal tolerance and an still-unresolved contamination pathway.",
+    "e_number": null,
+    "id": "pentobarbital-pet",
+    "ins_number": null,
+    "last_reviewed": "2026-10-11",
+    "link": null,
+    "name": "Pentobarbital — pet food contaminant",
+    "regulatory_status": {
+      "eu": "Not a permitted feed substance; EU feed law prohibits material from euthanized animals.",
+      "us": "Zero tolerance: FDA states no pentobarbital is allowed in animal feed and euthanized-animal material is never permitted — though the agency judged the surveyed residue levels unlikely to harm dogs. 2017 Evanger's/Smucker's contaminations triggered recalls."
+    },
+    "risk": "avoid",
+    "risk_weight": 30,
+    "sources": [
+      {
+        "label": "FDA CVM — Dog Food Survey Results: Pentobarbital Residue (Survey #1 & #2 data tables)",
+        "url": "https://www.fda.gov/about-fda/cvm-foia-electronic-reading-room/dog-food-survey-results-survey-1-qualitative-analyses-pentobarbital-residue"
+      },
+      {
+        "label": "Petfood Industry — Pentobarbital residues in pet foods (Dr. Dzanis: rendering survival, zero tolerance)",
+        "url": "https://www.petfoodindustry.com/safety-quality/pet-food-safety/article/15464692/pentobarbital-residues-in-pet-foods"
+      }
+    ],
+    "function": "Euthanasia-drug contaminant"
+  },
+  {
+    "aliases": [
+      "TBHQ",
+      "tertiary butylhydroquinone",
+      "tert-butylhydroquinone",
+      "E319"
+    ],
+    "bullets": [
+      "TBHQ is a synthetic antioxidant in the same family as BHA and BHT — it delays rancidity in fats and greatly extends shelf life of pet foods and treats.",
+      "The FDA permits up to 0.02% of the oil content, but high doses are acutely toxic: 1–4 grams can cause nausea, vomiting, delirium, tinnitus, and collapse in humans.",
+      "Long-term high-dose feeding in laboratory animals produced stomach-tumor precursors and DNA damage — the findings that keep TBHQ on watch lists even though permitted levels are far lower.",
+      "A peer-reviewed review of TBHQ, BHA, and propyl gallate as food antioxidants documented cytotoxic and genotoxic effects at the cellular level, with TBHQ among the compounds studied.",
+      "Industry is moving away: ingredient suppliers report pet food makers increasingly replacing TBHQ (alongside BHA, BHT, and ethoxyquin) with mixed tocopherols and other label-friendly antioxidants — so TBHQ-free options are widely available."
+    ],
+    "category": "Synthetic antioxidant preservative",
+    "description": "A synthetic fat preservative related to BHA/BHT — permitted at low levels, but high doses are acutely toxic and long-term high-dose animal studies showed stomach-tumor precursors and DNA damage.",
+    "e_number": "E319",
+    "id": "tbhq-pet",
+    "ins_number": 319,
+    "last_reviewed": "2026-10-11",
+    "link": null,
+    "name": "TBHQ — pet food",
+    "regulatory_status": {
+      "eu": "E319 is an authorized EU food additive with set limits; no pet-food-specific EU action was verified during research.",
+      "us": "FDA permits TBHQ up to 0.02% of oil/fat content in foods. No FDA finding of harm at permitted levels; no re-review announced as of research date."
+    },
+    "risk": "caution",
+    "risk_weight": 20,
+    "sources": [
+      {
+        "label": "Petfood Industry — Preservative TBHQ may present hazards in petfood (dose data, animal findings)",
+        "url": "https://www.petfoodindustry.com/news-newsletters/pet-food-news/article/15454771/preservative-tbhq-may-present-hazards-in-petfood"
+      },
+      {
+        "label": "Wiley Food Science & Nutrition — Cytotoxic and genotoxic effects of TBHQ, BHA and propyl gallate (2024 review)",
+        "url": "https://onlinelibrary.wiley.com/doi/10.1002/fsn3.4373"
+      }
+    ],
+    "function": "Synthetic antioxidant preservative"
+  },
+  {
+    "aliases": [
+      "caffeine",
+      "coffee",
+      "energy drinks",
+      "alcohol",
+      "ethanol",
+      "methylxanthine"
+    ],
+    "bullets": [
+      "Caffeine is toxic to both dogs and cats: VCA Animal Hospitals notes that while a lick of coffee is unlikely to harm most pets, one or two caffeine pills can be fatal for small dogs and cats.",
+      "Signs mirror an overdose of stimulation — hyperactivity, restlessness, rapid heart rate, tremors, vomiting — and can start within hours and last for days; untreated large ingestions can damage the liver, heart, kidneys, and central nervous system.",
+      "Published toxic doses: agitation above ~15 mg/kg, serious cardiac effects above ~50 mg/kg, with a reported lethal dose around 140 mg/kg in dogs. Common sources beyond coffee include energy drinks, diet pills, pain-medication combinations, and guarana supplements.",
+      "Alcohol is the depressant mirror image: the ASPCA lists it among people-foods to avoid, causing vomiting, diarrhea, coordination loss, central nervous system depression, breathing difficulty, abnormal blood acidity, coma, and death.",
+      "Both are owner-awareness hazards rather than pet-food ingredients — they reach pets through spilled drinks, counter-surfing, and unattended cups. If ingestion happens, call your vet or poison control immediately; this is not veterinary advice."
+    ],
+    "category": "Human-drink toxins (pets)",
+    "description": "Caffeine overstimulates pets' hearts and nervous systems; alcohol depresses them — both can kill. Neither belongs in pet food; both reach pets through human drinks left in reach.",
+    "e_number": null,
+    "id": "caffeine-alcohol-pet",
+    "ins_number": null,
+    "last_reviewed": "2026-10-11",
+    "link": null,
+    "name": "Caffeine & alcohol — pet toxins",
+    "regulatory_status": {
+      "eu": "Not pet-food ingredients; no regulatory status applicable.",
+      "us": "Not pet-food ingredients. ASPCA lists alcohol among people-foods to avoid; veterinary poison centers treat caffeine ingestion as a common emergency call."
+    },
+    "risk": "avoid",
+    "risk_weight": 30,
+    "sources": [
+      {
+        "label": "VCA Canada — Caffeine Toxicity in Pets (sources, symptoms, fatal pill doses)",
+        "url": "https://vcacanada.com/know-your-pet/caffeine-toxicity-in-pets"
+      },
+      {
+        "label": "ASPCA — People Foods to Avoid Feeding Your Pets (alcohol: CNS depression, coma, death)",
+        "url": "https://www.aspca.org/pet-care/aspca-poison-control/people-foods-avoid-feeding-your-pets"
+      }
+    ],
+    "function": "Human-drink toxins (pets)"
   }
 ];
