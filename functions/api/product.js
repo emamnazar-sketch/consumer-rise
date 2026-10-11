@@ -41,6 +41,18 @@ export async function onRequest(context) {
   if (!barcode) return json({ ok: false, reason: "bad-barcode" }, 400);
   if (!env.DB) return json({ ok: false, reason: "no-db" }, 500);
 
+  /* Self-initialize: create the cache table on first run so no manual D1 work is needed. */
+  try {
+    await env.DB.prepare(
+      "CREATE TABLE IF NOT EXISTS product_cache (" +
+      "barcode TEXT PRIMARY KEY, db TEXT NOT NULL, name TEXT, brands TEXT, " +
+      "categories TEXT, ingredients_text TEXT, fetched_at INTEGER)"
+    ).run();
+    await env.DB.prepare(
+      "CREATE INDEX IF NOT EXISTS idx_product_cache_db ON product_cache (db)"
+    ).run();
+  } catch (e) { /* table may already exist; continue */ }
+
   const key = db + ":" + barcode;
 
   /* 1. Cache first. */

@@ -124,6 +124,19 @@
           <span style="color:var(--ink-soft);font-size:15px">Tap to use your camera or choose a photo</span>
           <input type="file" id="scan-file" accept="image/*" capture="environment">
         </label>
+        <p class="center" id="barcode-row" style="margin:16px 0 0">
+          <button type="button" class="btn btn-ink" id="scan-barcode">Scan a barcode instead</button>
+        </p>
+        <div id="barcode-view" hidden style="margin-top:16px">
+          <div style="position:relative;border-radius:12px;overflow:hidden;background:#111">
+            <video id="barcode-video" playsinline muted style="width:100%;display:block;aspect-ratio:4/3;object-fit:cover"></video>
+            <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;display:flex;align-items:center;justify-content:center">
+              <div style="width:72%;height:38%;border:3px solid rgba(255,255,255,.9);border-radius:12px;box-shadow:0 0 0 4000px rgba(0,0,0,.35)"></div>
+            </div>
+          </div>
+          <p class="center" style="margin:10px 0 0;font-size:14.5px;color:var(--ink-soft)">Point at the barcode — it reads automatically.</p>
+          <p class="center" style="margin:8px 0 0"><button type="button" class="btn" id="barcode-cancel">Cancel</button></p>
+        </div>
         <div id="scan-preview"></div>
         <p class="center mt"><button class="btn" id="scan-analyze" disabled>Decode this label</button></p>
         <div id="scan-result"></div>
@@ -183,6 +196,6 @@
 </footer>
 <script src="/js/config.js?v=5"></script>
 <script src="/js/ingredients-data.js?v=11"></script>
-<script src="/js/site.js?v=20"></script>
+<script src="/js/site.js?v=21"></script>
 </body>
 </html>

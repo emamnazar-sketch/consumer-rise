@@ -364,6 +364,12 @@
       ab.hidden = hideAlg;
       ab.style.display = hideAlg ? "none" : "";
     }
+    /* Barcode lookup needs a product database — none exists for household
+       products, so the barcode button hides in Home mode (photo label only). */
+    var bcRow = document.getElementById("barcode-row");
+    if (bcRow) bcRow.hidden = (m === "home");
+    /* Switching modes stops any active barcode camera. */
+    if (typeof stopBarcodeScan === "function") stopBarcodeScan();
   }
   var modeCtl = document.getElementById("scan-mode");
   if (modeCtl) {
@@ -668,24 +674,32 @@
     return '<p class="center" style="margin:10px 0 4px"><button class="btn" id="scan-share" type="button">Share this result</button></p>' +
       '<p class="center" style="font-size:13.5px;color:var(--ink-soft);margin:0 0 6px">' + tip + '<a href="/refer" style="font-weight:700">Refer friends, earn free tools →</a></p>';
   }
-  function wireShare(mode, data) {
+  function wireShare(mode, data, product) {
     var btn = document.getElementById("scan-share");
     if (!btn) return;
     btn.addEventListener("click", function () {
+      var viaBarcode = !!(product && product.barcode);
       var text;
       if (mode === "skin") {
         var eu = data.filter(function (x) { return x.eu; }).length;
-        text = "I scanned a cosmetics label with Consumer Rising: " + data.length + " ingredient" + (data.length === 1 ? "" : "s") + " matched" +
-          (eu ? " — " + eu + " banned in the EU." : ".") +
-          " Scan yours free: https://consumerrising.com/scanner?mode=skin";
+        text = viaBarcode
+          ? ("I scanned a cosmetics barcode" + (product.name ? " (" + product.name + ")" : "") + " with Consumer Rising: " + data.length + " ingredient" + (data.length === 1 ? "" : "s") + " matched" +
+            (eu ? " — " + eu + " banned in the EU." : ".") + " Scan yours free: https://consumerrising.com/scanner?mode=skin")
+          : ("I scanned a cosmetics label with Consumer Rising: " + data.length + " ingredient" + (data.length === 1 ? "" : "s") + " matched" +
+            (eu ? " — " + eu + " banned in the EU." : ".") +
+            " Scan yours free: https://consumerrising.com/scanner?mode=skin");
       } else if (mode === "home") {
         text = "I checked a household product with Consumer Rising: " + data.length + " chemical" + (data.length === 1 ? "" : "s") + " matched — read the facts yourself." +
           " Scan yours free: https://consumerrising.com/scanner?mode=home";
       } else {
         var names = data.hits.slice(0, 3).map(function (x) { return x.ing.name; });
-        text = "I scanned a food label with Consumer Rising: " + data.score + "/100." +
-          (names.length ? " Flagged: " + names.join(", ") + "." : " No flagged ingredients.") +
-          " Scan yours free: https://consumerrising.com/scanner";
+        text = viaBarcode
+          ? ("I scanned a barcode" + (product.name ? " (" + product.name + ")" : "") + " with Consumer Rising: " + data.score + "/100." +
+            (names.length ? " Flagged: " + names.join(", ") + "." : " No flagged ingredients.") +
+            " Scan yours free: https://consumerrising.com/scanner")
+          : ("I scanned a food label with Consumer Rising: " + data.score + "/100." +
+            (names.length ? " Flagged: " + names.join(", ") + "." : " No flagged ingredients.") +
+            " Scan yours free: https://consumerrising.com/scanner");
       }
       var done = function () {
         var old = btn.textContent;
@@ -725,8 +739,23 @@
     });
   }
 
-  function renderScanResults(hits, invHits, ocrText) {
+  /* ---- Barcode scans: product header + attribution (prepended/appended by renderers) ---- */
+  function barcodeProductHTML(product) {
+    if (!product) return "";
+    var h = '<div class="quiz-step-tag">Barcode scan</div>';
+    if (product.name) h += '<h3 style="font-weight:900;margin:0 0 4px">' + escHtml(product.name) + "</h3>";
+    if (product.brands) h += '<p style="color:var(--ink-soft);font-size:14.5px;margin:0 0 12px">' + escHtml(product.brands) + "</p>";
+    return h;
+  }
+  function barcodeAttributionHTML(product) {
+    if (!product || !product.source) return "";
+    return '<p style="font-size:13px;color:var(--ink-soft);margin-top:14px">Product data by ' + escHtml(product.source) +
+      " — ingredients matched against our index on your device.</p>";
+  }
+
+  function renderScanResults(hits, invHits, ocrText, product) {
     var h = '<div class="dossier scan-result" role="status">';
+    h += barcodeProductHTML(product);
     h += allergenAlertHTML(hits, invHits, ocrText);
     var shareScore = hits.length ? scanScore(hits) : 100;
     if (!hits.length) {
@@ -774,11 +803,12 @@
       }
       h += "</div>";
     }
-    h += ocrDetailsHTML(ocrText);
+    if (!product) h += ocrDetailsHTML(ocrText);
+    h += barcodeAttributionHTML(product);
     h += '<p class="center mt"><button class="btn btn-ink" id="scan-again">Scan another label</button></p>';
     h += '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:10px">Flagged results cover our 100-ingredient index. The inventory section below lists FDA-recorded names with no verdict attached. Results depend on photo quality. General information only — <a href="/disclaimer">not medical advice</a>.</p></div>';
     result.innerHTML = h;
-    wireShare("food", { score: shareScore, hits: hits });
+    wireShare("food", { score: shareScore, hits: hits }, product);
     wireScanAgain();
   }
 
@@ -791,8 +821,9 @@
     return b;
   }
 
-  function renderSkinResults(hits, ocrText) {
+  function renderSkinResults(hits, ocrText, product) {
     var h = '<div class="dossier scan-result" role="status">';
+    h += barcodeProductHTML(product);
     if (!hits.length) {
       h += '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">No cosmetic ingredients matched</h3>' +
         '<p style="color:var(--ink-soft)">We read your label and none of our 7,138 cosmetic-ingredient names showed up. ' +
@@ -819,11 +850,12 @@
       h += shareButtonHTML("skin");
     }
     h += '<p style="margin-top:14px"><a href="/skin-index" style="font-weight:800;font-size:14.5px">Browse the full Skin Index &rarr;</a></p>';
-    h += ocrDetailsHTML(ocrText);
+    if (!product) h += ocrDetailsHTML(ocrText);
+    h += barcodeAttributionHTML(product);
     h += '<p class="center mt"><button class="btn btn-ink" id="scan-again">Scan another label</button></p>';
     h += '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:10px">Ban flags reflect regulator action only — no Consumer Rising verdicts. Results depend on photo quality. General information only — <a href="/disclaimer">not medical advice</a>.</p></div>';
     result.innerHTML = h;
-    wireShare("skin", hits);
+    wireShare("skin", hits, product);
     wireScanAgain();
   }
 
@@ -930,6 +962,27 @@
     });
   }
 
+  /* Shared finish for photo AND barcode scans: post the result, render, then
+     show the post-scan gate for free scans. The API stores free scans under
+     "free-scan". Barcode scans count exactly like photo scans. */
+  function finishScan(email, summary, ids, renderFn) {
+    var isFreeScan = !getGateEmail();
+    function finish() {
+      if (isFreeScan) {
+        try { localStorage.setItem("cr_free_scan_done", "1"); } catch (e) {}
+      }
+      renderFn();
+      if (isFreeScan) showPostScanGate();
+    }
+    if (CFG.SCAN_ENDPOINT) {
+      postJSON(CFG.SCAN_ENDPOINT, { email: email, result_summary: summary, matches: ids })
+        .then(finish)
+        .catch(finish);
+    } else {
+      finish();
+    }
+  }
+
   if (analyzeBtn) {
     analyzeBtn.addEventListener("click", function () {
       var email = getGateEmail();
@@ -937,45 +990,25 @@
       if (!file) return;
       analyzeBtn.disabled = true;
 
-      /* Shared finish: post the result, render, then show the post-scan gate
-         for free scans. The API stores free scans under "free-scan". */
-      function finishScan(summary, ids, renderFn) {
-        var isFreeScan = !getGateEmail();
-        function finish() {
-          if (isFreeScan) {
-            try { localStorage.setItem("cr_free_scan_done", "1"); } catch (e) {}
-          }
-          renderFn();
-          if (isFreeScan) showPostScanGate();
-        }
-        if (CFG.SCAN_ENDPOINT) {
-          postJSON(CFG.SCAN_ENDPOINT, { email: email, result_summary: summary, matches: ids })
-            .then(finish)
-            .catch(finish);
-        } else {
-          finish();
-        }
-      }
-
       function recordResult(hits, invHits, ocrText) {
         var ids = hits.map(function (x) { return x.ing.id; });
         var summary = ids.length
           ? ("score " + scanScore(hits) + " \u00b7 matched: " + ids.join(", "))
           : "score 100 \u00b7 no flagged ingredients";
         if (invHits && invHits.length) summary += " \u00b7 inv:" + invHits.length;
-        finishScan(summary, ids, function () { renderScanResults(hits, invHits, ocrText); });
+        finishScan(email, summary, ids, function () { renderScanResults(hits, invHits, ocrText); });
       }
 
       function recordSkinResult(hits, ocrText) {
         var names = hits.map(function (x) { return x.name; });
         var summary = "mode skin \u00b7 matched: " + (names.length ? names.join(", ") : "none");
-        finishScan(summary, names, function () { renderSkinResults(hits, ocrText); });
+        finishScan(email, summary, names, function () { renderSkinResults(hits, ocrText); });
       }
 
       function recordHomeResult(hits, ocrText) {
         var ids = hits.map(function (x) { return x.entry.id; });
         var summary = "mode home \u00b7 matched: " + (ids.length ? ids.join(", ") : "none");
-        finishScan(summary, ids, function () { renderHomeResults(hits, ocrText); });
+        finishScan(email, summary, ids, function () { renderHomeResults(hits, ocrText); });
       }
 
       function doOCR() {
@@ -1020,6 +1053,187 @@
       doOCR();
     });
   }
+
+  /* ---- Barcode scan: camera -> ZXing -> /api/product -> existing matchers ----
+     Server-side lookup (never call Open Food Facts from the browser).
+     Food mode -> Open Food Facts, Skin mode -> Open Beauty Facts.
+     Home mode: barcode button is hidden (no household product database). */
+  var zxingLoading = null;
+  var barcodeReader = null;
+  var barcodeStream = null;
+  var barcodeActive = false;
+  var barcodeBtn = document.getElementById("scan-barcode");
+  var barcodeView = document.getElementById("barcode-view");
+  var barcodeVideo = document.getElementById("barcode-video");
+  var barcodeCancel = document.getElementById("barcode-cancel");
+
+  function loadZXing() {
+    if (window.ZXingBrowser && window.ZXingBrowser.BrowserMultiFormatReader) return Promise.resolve();
+    if (zxingLoading) return zxingLoading;
+    zxingLoading = new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = "https://cdn.jsdelivr.net/npm/@zxing/browser@0.1.5/umd/zxing-browser.min.js";
+      s.onload = function () { resolve(); };
+      s.onerror = function () { reject(new Error("zxing-cdn")); };
+      document.head.appendChild(s);
+    });
+    return zxingLoading;
+  }
+
+  function stopBarcodeScan() {
+    barcodeActive = false;
+    try { if (barcodeReader) barcodeReader.reset(); } catch (e) {}
+    barcodeReader = null;
+    if (barcodeStream) {
+      try { barcodeStream.getTracks().forEach(function (t) { t.stop(); }); } catch (e) {}
+      barcodeStream = null;
+    }
+    if (barcodeVideo) { try { barcodeVideo.srcObject = null; } catch (e) {} }
+    if (barcodeView) barcodeView.hidden = true;
+    if (barcodeBtn) barcodeBtn.disabled = false;
+  }
+
+  function barcodeCameraDenied() {
+    result.innerHTML = '<div class="dossier scan-result" role="status">' +
+      '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">Camera unavailable</h3>' +
+      '<p style="color:var(--ink-soft)">We couldn\'t access the camera — it may be blocked for this site. ' +
+      "You can allow camera access in your browser settings, or photograph the label instead:</p>" +
+      '<p class="center mt"><button class="btn btn-ink" id="barcode-photo-fallback">Photograph the label</button></p></div>';
+    var fb = document.getElementById("barcode-photo-fallback");
+    if (fb) fb.addEventListener("click", function () {
+      result.innerHTML = "";
+      if (fileInput) fileInput.click();
+    });
+  }
+
+  function barcodeNotFound(barcode) {
+    result.innerHTML = '<div class="dossier scan-result" role="status">' +
+      '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">Product not found</h3>' +
+      '<p style="color:var(--ink-soft)">We couldn\'t find barcode <strong>' + escHtml(barcode) + "</strong> in the product database. " +
+      "It may be a new or regional product. Photograph the ingredients label and we'll read it directly:</p>" +
+      '<p class="center mt"><button class="btn btn-ink" id="barcode-photo-fallback2">Photograph the label instead</button></p></div>';
+    var fb = document.getElementById("barcode-photo-fallback2");
+    if (fb) fb.addEventListener("click", function () {
+      result.innerHTML = "";
+      if (fileInput) fileInput.click();
+    });
+  }
+
+  function recordBarcodeResult(product) {
+    var email = getGateEmail();
+    var text = product.ingredients_text || "";
+    var prod = { barcode: product.barcode, name: product.name, brands: product.brands, source: product.source };
+    if (!normText(text)) {
+      /* Product found but no usable ingredients text — fall back to photo. */
+      result.innerHTML = '<div class="dossier scan-result" role="status">' +
+        '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">' + escHtml(product.name || "Product found") + "</h3>" +
+        '<p style="color:var(--ink-soft)">We found this product but its ingredient list isn\'t in the database yet. ' +
+        "Photograph the label and we'll read it directly:</p>" +
+        '<p class="center mt"><button class="btn btn-ink" id="barcode-photo-fallback3">Photograph the label instead</button></p></div>';
+      var fb = document.getElementById("barcode-photo-fallback3");
+      if (fb) fb.addEventListener("click", function () {
+        result.innerHTML = "";
+        if (fileInput) fileInput.click();
+      });
+      return;
+    }
+    if (scanMode === "skin") {
+      ensureCosmetics().then(function () {
+        var hits = matchCosmetics(text);
+        var names = hits.map(function (x) { return x.name; });
+        var summary = "barcode " + product.barcode + " \u00b7 " + (product.name || "") + " \u00b7 matched: " + (names.length ? names.join(", ") : "none");
+        finishScan(email, summary, names, function () { renderSkinResults(hits, text, prod); });
+      });
+      return;
+    }
+    /* Food mode (default). */
+    var hits = matchIngredients(text);
+    ensureInventory().then(function () {
+      var invHits = matchInventory(text, hits);
+      var ids = hits.map(function (x) { return x.ing.id; });
+      var summary = "barcode " + product.barcode + " \u00b7 " + (product.name || "") + " \u00b7 score " + scanScore(hits);
+      if (invHits && invHits.length) summary += " \u00b7 inv:" + invHits.length;
+      finishScan(email, summary, ids, function () { renderScanResults(hits, invHits, text, prod); });
+    });
+  }
+
+  function lookupBarcode(barcode) {
+    var db = scanMode === "skin" ? "beauty" : "food";
+    result.innerHTML = '<div class="form-ok" role="status"><span class="big">Looking up…</span>Checking the product database for barcode ' + escHtml(barcode) + ".</div>";
+    fetch("/api/product?barcode=" + encodeURIComponent(barcode) + "&db=" + db)
+      .then(function (r) { return r.json().then(function (j) { return { status: r.status, body: j }; }); })
+      .then(function (res) {
+        if (res.status === 404 || (res.body && res.body.ok === false && res.body.reason === "not_found")) {
+          barcodeNotFound(barcode);
+          return;
+        }
+        if (!res.body || !res.body.ok || !res.body.product) throw new Error("lookup");
+        recordBarcodeResult(res.body.product);
+      })
+      .catch(function () {
+        result.innerHTML = '<div class="dossier scan-result" role="status">' +
+          '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">Lookup failed</h3>' +
+          '<p style="color:var(--ink-soft)">We couldn\'t reach the product database. Check your connection and try again — or photograph the label directly:</p>' +
+          '<p class="center mt"><button class="btn btn-ink" id="barcode-photo-fallback4">Photograph the label instead</button></p></div>';
+        var fb = document.getElementById("barcode-photo-fallback4");
+        if (fb) fb.addEventListener("click", function () {
+          result.innerHTML = "";
+          if (fileInput) fileInput.click();
+        });
+      });
+  }
+
+  function startBarcodeScan() {
+    if (barcodeActive) return;
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      barcodeCameraDenied();
+      return;
+    }
+    if (barcodeBtn) barcodeBtn.disabled = true;
+    if (barcodeView) barcodeView.hidden = false;
+    result.innerHTML = '<div class="form-ok" role="status"><span class="big">Starting camera…</span>Point at the barcode.</div>';
+    loadZXing().then(function () {
+      var Z = window.ZXingBrowser;
+      var hints = new Map();
+      hints.set(Z.DecodeHintType.POSSIBLE_FORMATS, [
+        Z.BarcodeFormat.UPC_A, Z.BarcodeFormat.UPC_E,
+        Z.BarcodeFormat.EAN_13, Z.BarcodeFormat.EAN_8
+      ]);
+      barcodeReader = new Z.BrowserMultiFormatReader(hints, 400);
+      return navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
+    }).then(function (stream) {
+      barcodeStream = stream;
+      barcodeActive = true;
+      return barcodeReader.decodeFromStream(stream, barcodeVideo, function (res, err) {
+        if (!barcodeActive) return;
+        if (res && res.getText) {
+          var code = String(res.getText()).replace(/\D/g, "");
+          if (/^[0-9]{8,14}$/.test(code)) {
+            stopBarcodeScan();
+            lookupBarcode(code);
+          }
+        }
+        /* err is routine (no barcode in frame yet) — ignore. */
+      });
+    }).catch(function (err) {
+      stopBarcodeScan();
+      if (err && (err.name === "NotAllowedError" || err.name === "SecurityError")) {
+        barcodeCameraDenied();
+      } else if (err && err.message === "zxing-cdn") {
+        result.innerHTML = '<div class="dossier scan-result" role="status">' +
+          '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">Scanner failed to load</h3>' +
+          '<p style="color:var(--ink-soft)">The barcode reader couldn\'t download. Check your connection and try again — or photograph the label directly.</p></div>';
+      } else {
+        barcodeCameraDenied();
+      }
+    });
+  }
+
+  if (barcodeBtn) barcodeBtn.addEventListener("click", startBarcodeScan);
+  if (barcodeCancel) barcodeCancel.addEventListener("click", function () {
+    stopBarcodeScan();
+    result.innerHTML = "";
+  });
 
   /* ---- theme toggle ---- */
   var themeBtn = document.getElementById("theme-toggle");
