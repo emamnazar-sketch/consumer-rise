@@ -907,5 +907,212 @@ window.CR_PET_INGREDIENTS = [
       }
     ],
     "function": "Human-drink toxins (pets)"
-  }
+  },
+{
+  "aliases": [
+    "hops",
+    "humulus lupulus",
+    "beer hops",
+    "common hops",
+    "spent hops"
+  ],
+  "bullets": [
+    "Hops — the flowers used to brew beer — can trigger malignant hyperthermia in dogs: a runaway, life-threatening fever. Pet Poison Helpline lists panting, racing heart rate, vomiting, seizures, and death as the clinical picture, with rapid onset after ingestion.",
+    "The veterinary literature is small but stark: Duncan, Hare & Buck (JAVMA, 1997) described a malignant hyperthermia-like reaction in five dogs after hops ingestion, and a veterinary toxicology summary notes that even small amounts can trigger a reaction — including 'spent' hops already used in brewing.",
+    "Greyhounds were the first breed flagged, but Labrador Retrievers, Saint Bernards, Pointers, Dobermans, Border Collies, and others have since been reported — Pet Poison Helpline says any breed or mixed-breed dog may be affected, with predisposed breeds at higher risk.",
+    "The practical danger is home brewing: brewers often compost spent hops or spread them in the yard, where dogs find them. Veterinary guidance is to seal used hops in a container and dispose of them in the trash — never compost where a dog can reach.",
+    "Treatment is an emergency: aggressive cooling, IV fluids, and drugs such as dantrolene or cyproheptadine. The veterinary summary warns the outcome is often fatal without prompt, aggressive therapy — and notes rigor mortis setting in within minutes of death in some cases."
+  ],
+  "category": "Human-food toxin (dogs)",
+  "description": "The flowers used to brew beer can trigger malignant hyperthermia — a runaway, often fatal fever — in dogs. Fresh or 'spent' brewing hops are both dangerous.",
+  "e_number": null,
+  "id": "hops-pet",
+  "ins_number": null,
+  "last_reviewed": "2026-10-11",
+  "link": null,
+  "name": "Hops — dog toxin",
+  "regulatory_status": {
+    "eu": "Not a pet-food ingredient; no regulatory status applicable.",
+    "us": "Not a pet-food ingredient. Pet Poison Helpline lists hops as toxic to dogs; no FDA action because this is an owner-awareness hazard, not a manufacturing issue."
+  },
+  "risk": "avoid",
+  "risk_weight": 30,
+  "sources": [
+    {
+      "label": "Pet Poison Helpline — Brewing Hops Poisonous to Pets (Humulus lupulus: life-threatening high fever, breed predisposition)",
+      "url": "https://www.petpoisonhelpline.com/poison/hops/"
+    },
+    {
+      "label": "DVM toxicology summary — Hops ingestion (cites Duncan et al. 1997 JAVMA: malignant hyperthermia-like reaction in five dogs)",
+      "url": "https://assets.ctfassets.net/rt5zmd3ipxai/6fzeHNx8AHVgXH554r0WUa/ad8ea9078ebee58762221086c703f1e1/Hops-Ingestion-DYK-12-09.pdf"
+    }
+  ],
+  "function": "Human-food toxin (dogs)"
+},
+{
+  "aliases": [
+    "yeast dough",
+    "bread dough",
+    "raw dough",
+    "unbaked dough",
+    "pizza dough",
+    "dough"
+  ],
+  "bullets": [
+    "Raw yeast dough causes two separate emergencies in dogs. First, it keeps rising in the warm, moist stomach — expanding to many times its original size, causing pain, retching, and bloat, and sometimes breathing problems or stomach rupture. Second, the fermenting yeast releases alcohol, so the dog is simultaneously at risk of alcohol poisoning.",
+    "The ASPCA's poison control guidance states it plainly: yeast dough 'can rise and cause gas to accumulate in your pet's digestive system... the stomach to bloat, and potentially twist, becoming a life-threatening emergency,' and the yeast 'produces alcohol as a by-product in the stomach environment.'",
+    "A practicing veterinarian's case column documents a dog that stole bread dough off a counter and nearly died — noting that 'some dogs die after eating raw bread dough,' with alcohol poisoning signs (poor coordination, disorientation, coma) layered on top of the bloat.",
+    "Baked bread is not the hazard — heat kills the yeast. The danger is specifically raw or rising dough: bread, pizza, and roll dough left on counters or in trash.",
+    "If a dog eats raw dough, veterinarians advise emergency care, not watchful waiting: cooling the stomach contents (ice chips) can slow yeast activity, but bloat and alcohol toxicity can both progress fast. General information only — not veterinary advice; call your vet or poison control immediately."
+  ],
+  "category": "Human-food toxin (dogs)",
+  "description": "Unbaked yeast dough keeps rising inside a dog's stomach — causing bloat that can twist the stomach — while fermenting yeast simultaneously produces alcohol. Either mechanism alone can be fatal.",
+  "e_number": null,
+  "id": "yeast-dough-pet",
+  "ins_number": null,
+  "last_reviewed": "2026-10-11",
+  "link": null,
+  "name": "Unbaked yeast dough — dog toxin",
+  "regulatory_status": {
+    "eu": "Not a pet-food ingredient; no regulatory status applicable.",
+    "us": "Not a pet-food ingredient. ASPCA Animal Poison Control lists yeast dough among people-foods to never feed pets; no FDA action because this is an owner-awareness hazard, not a manufacturing issue."
+  },
+  "risk": "avoid",
+  "risk_weight": 30,
+  "sources": [
+    {
+      "label": "ASPCA — People Foods to Avoid Feeding Your Pets (yeast dough: bloat/twist emergency + alcohol by-product)",
+      "url": "https://www.aspca.org/pet-care/aspca-poison-control/people-foods-avoid-feeding-your-pets"
+    },
+    {
+      "label": "Ask the Vet (IBJ) — Keep bread dough away from dog (dough expansion, stomach rupture, alcohol poisoning; dogs have died)",
+      "url": "https://www.ibj.com/articles/ask-the-vet-keep-bread-dough-away-from-dog"
+    }
+  ],
+  "function": "Human-food toxin (dogs)"
+},
+{
+  "aliases": [
+    "liver",
+    "beef liver",
+    "chicken liver",
+    "cod liver oil",
+    "vitamin A",
+    "hypervitaminosis A",
+    "retinol"
+  ],
+  "bullets": [
+    "Vitamin A is fat-soluble, so it accumulates: chronic excess from liver-heavy homemade diets or cod liver oil produces hypervitaminosis A. The MSD Veterinary Manual documents toxicosis after consumption of large amounts of cod liver oil and animal livers, with toxic intakes starting around 10 times the dietary requirement.",
+    "Cats are the classic victims — they require preformed vitamin A and cannot convert plant carotenes. A published DVM case report describes an 8-year-old cat fed exclusively on raw beef liver and giblets for three months: it developed tetraparalysis, fusion of the cervical and thoracic vertebrae (C1–T7), and severe hepatic fibrosis.",
+    "The skeletal signature is distinctive: new bone growth around joints and vertebrae, fusing the neck and forelimbs — affected cats adopt a rigid, 'kangaroo-like' sitting posture and eventually cannot reach their food bowl.",
+    "Acute signs per the MSD manual include malaise, anorexia, peeling skin, weakness, tremors, seizures, paralysis, and death — generally resolving when excess vitamin A is withdrawn, though fused bone does not un-fuse.",
+    "This is a pattern-of-feeding hazard, not a single-meal toxin: commercial pet foods are formulated to safe vitamin A levels. The risk sits with homemade liver-heavy diets and indiscriminate cod liver oil supplementation. General information only — not veterinary advice; talk to your vet before supplementing."
+  ],
+  "category": "Nutritional excess (homemade diets)",
+  "description": "Liver is extraordinarily rich in vitamin A, which accumulates in the body. Cats fed liver-heavy homemade diets for months develop fused vertebrae, crippling bone growth, and liver damage.",
+  "e_number": null,
+  "id": "vitamin-a-liver-pet",
+  "ins_number": null,
+  "last_reviewed": "2026-10-11",
+  "link": null,
+  "name": "Excess liver / vitamin A toxicity — pet food",
+  "regulatory_status": {
+    "eu": "Complete pet foods are formulated within FEDIAF/EU safe vitamin A limits; the hazard is owner-formulated homemade diets, which fall outside feed regulation.",
+    "us": "AAFCO nutrient profiles cap vitamin A in complete pet foods; the hazard is owner-formulated liver-heavy homemade diets, which fall outside feed regulation. No FDA action because this is a feeding-practice issue, not a manufacturing one."
+  },
+  "risk": "caution",
+  "risk_weight": 20,
+  "sources": [
+    {
+      "label": "MSD Veterinary Manual — Vitamin A Toxicosis in Animals (cod liver oil/liver documentation, 10–1,000x requirement threshold, clinical signs)",
+      "url": "https://www.msdvetmanual.com/toxicology/toxicoses-from-human-vitamins-minerals-and-dietary-supplements/toxicoses-in-animals-from-human-multivitamins-and-supplements"
+    },
+    {
+      "label": "Clinician's Brief / Troyer DVM — Hypervitaminosis A & chronic hepatic injury (cat fed raw beef liver 3 months: tetraparalysis, C1–T7 fusion, hepatic fibrosis)",
+      "url": "http://assets.ctfassets.net/4dmg3l1sxd6g/5IGdX88u8gFxsITojemHl5/943e242aacaa2d545ccf4e52d3b92265/cap_hypervitaminosis--hyperthyroidism_0-19151-article.pdf"
+    }
+  ],
+  "function": "Nutritional excess (homemade diets)"
+},
+{
+  "aliases": [
+    "nutmeg",
+    "myristicin",
+    "myristica fragrans",
+    "ground nutmeg"
+  ],
+  "bullets": [
+    "Nutmeg contains myristicin, a compound that is hallucinogenic in dogs and can raise heart rate and blood pressure — straining the heart. Veterinary-reviewed guidance lists vomiting, diarrhea, disorientation, hallucinations, tremors, seizures, and high body temperature as the toxicity signs.",
+    "Dose matters, and the honest picture is mixed: one emergency veterinarian puts a toxic dose at as little as 1 teaspoon of ground nutmeg or three whole nuts, while Pet Poison Helpline notes a dog would have to consume a very large amount to show symptoms. Small amounts typically cause only stomach upset.",
+    "The realistic danger is the spice jar, not the pie slice: most recipes contain under a teaspoon of nutmeg spread across a whole dessert, but a dog that raids the spice rack can ingest a genuinely toxic dose. Nutmeg essential oil and diffusers count too.",
+    "Signs are dose-dependent: a nibble brings digestive upset; a large dose brings the neurological and cardiovascular signs. If a dog gets into ground nutmeg or whole nuts and shows disorientation, tremors, or a racing heart, it is an emergency vet visit.",
+    "Keep the whole spice rack out of reach — and note that holiday baking concentrates several dog hazards at once (nutmeg plus chocolate, xylitol, and high-fat doughs). General information only — not veterinary advice."
+  ],
+  "category": "Human-food toxin (dogs)",
+  "description": "Nutmeg's myristicin is hallucinogenic in dogs and can drive up heart rate and blood pressure. A nibble upsets the stomach; a spice-jar raid can be genuinely dangerous.",
+  "e_number": null,
+  "id": "nutmeg-pet",
+  "ins_number": null,
+  "last_reviewed": "2026-10-11",
+  "link": null,
+  "name": "Nutmeg (myristicin) — dog toxin",
+  "regulatory_status": {
+    "eu": "Not a pet-food ingredient; no regulatory status applicable.",
+    "us": "Not a pet-food ingredient. Listed among people-foods hazardous to dogs by veterinary sources; no FDA action because this is an owner-awareness hazard, not a manufacturing issue."
+  },
+  "risk": "caution",
+  "risk_weight": 20,
+  "sources": [
+    {
+      "label": "Chewy (vet-reviewed) — Can Dogs Have Nutmeg? (myristicin: hallucinogenic, HR/BP effects; dose honesty via Pet Poison Helpline)",
+      "url": "https://www.chewy.com/education/dog/food-and-nutrition/can-dogs-have-nutmeg"
+    },
+    {
+      "label": "Dogtopia (reviewed by Senior Director of Health & Safety) — Fall spices: nutmeg myristicin poisoning signs by dose",
+      "url": "https://www.dogtopia.com/blog/dog-dos-and-donts-fall-themed-food/"
+    }
+  ],
+  "function": "Human-food toxin (dogs)"
+},
+{
+  "aliases": [
+    "tuna",
+    "canned tuna",
+    "albacore",
+    "chunk light tuna",
+    "tuna-based cat food"
+  ],
+  "bullets": [
+    "An all-tuna diet is nutritionally incomplete for cats in several documented ways: tuna is low in vitamin E (risking steatitis — painful, sometimes fatal inflammation of body fat), low in vitamin K (risking internal bleeding), low in B vitamins and calcium, and high in magnesium (linked to bladder problems). One practicing veterinarian's column calls the all-tuna diet 'nutritionally incomplete and unbalanced.'",
+    "Steatitis — 'yellow fat disease' — is the signature tuna-linked condition: veterinary nutrition references describe it in cats fed diets high in unsaturated fatty acids with insufficient vitamin E, with canned red tuna specifically incriminated. The cat becomes feverish, depressed, and in pain when touched.",
+    "Mercury is the quieter concern: a Tufts veterinary nutritionist notes no confirmed poisoning reports in cats from commercial tuna cat food, but a cat eating tuna as its main diet ingests far more mercury per body weight than even a heavy tuna-eating human — and mercury signs (loss of coordination, tremors) mimic thiamine deficiency, so cases may go undiagnosed.",
+    "Not all tuna is equal: albacore comes from a larger species with roughly three times the mercury of chunk-light. Tufts advises occasional chunk-light treats at most — no more than 10% of daily calories — and notes cats fed canned tuna daily also show increased risk of oral squamous cell carcinoma.",
+    "The practical line: an occasional tuna treat is widely considered fine; tuna as the diet is where the documented problems (steatitis, deficiencies, mercury load) accumulate. General information only — not veterinary advice."
+  ],
+  "category": "Nutritional excess (cats)",
+  "description": "Tuna as a treat is fine; tuna as a diet is not. All-tuna feeding in cats is linked to painful yellow fat disease, vitamin deficiencies, and a heavy mercury load.",
+  "e_number": null,
+  "id": "tuna-cats-pet",
+  "ins_number": null,
+  "last_reviewed": "2026-10-11",
+  "link": null,
+  "name": "Tuna-heavy diets — cat hazard",
+  "regulatory_status": {
+    "eu": "Complete pet foods must meet FEDIAF nutritional guidelines; the hazard is owner-fed all-tuna diets, which fall outside feed regulation.",
+    "us": "AAFCO nutrient profiles require complete cat foods to carry adequate vitamin E, K, and B vitamins; the hazard is owner-fed all-tuna diets, which fall outside feed regulation. No FDA action because this is a feeding-practice issue."
+  },
+  "risk": "caution",
+  "risk_weight": 20,
+  "sources": [
+    {
+      "label": "Tufts University — Mercury in canned tuna for cats (no confirmed poisoning reports; chunk-light vs albacore; 10% calorie guidance)",
+      "url": "https://now.tufts.edu/2014/01/27/concerns-about-mercury-poisoning-it-safe-give-canned-tuna-cats-treat"
+    },
+    {
+      "label": "Ask the Vet (IBJ) — Feed commercial cat food, not just tuna (steatitis, vitamin K/E deficiency, mercury, magnesium, oral SCC risk)",
+      "url": "https://www.ibj.com/articles/ask-the-vet-feed-commercial-cat-food-not-just-tuna"
+    }
+  ],
+  "function": "Nutritional excess (cats)"
+}
 ];
