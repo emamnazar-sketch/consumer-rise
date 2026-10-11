@@ -587,7 +587,7 @@
     var shareScore = hits.length ? scanScore(hits) : 100;
     if (!hits.length) {
       h += '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">No flagged ingredients detected</h3>' +
-        '<p style="color:var(--ink-soft)">We read your label and none of our 79 flagged ingredients showed up. ' +
+        '<p style="color:var(--ink-soft)">We read your label and none of our 89 flagged ingredients showed up. ' +
         'That is good news as far as our database goes — it is not a verdict that the product is healthy overall.</p>' +
         shareButtonHTML();
     } else {
@@ -633,7 +633,7 @@
     h += '<details style="margin-top:14px"><summary style="cursor:pointer;font-weight:700;font-size:14.5px">What we read from your photo</summary>' +
       '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:8px;white-space:pre-wrap">' + escHtml((ocrText || "").slice(0, 1200) || "(no text detected)") + "</p></details>";
     h += '<p class="center mt"><button class="btn btn-ink" id="scan-again">Scan another label</button></p>';
-    h += '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:10px">Flagged results cover our 79-ingredient index. The inventory section below lists FDA-recorded names with no verdict attached. Results depend on photo quality. General information only — <a href="/disclaimer">not medical advice</a>.</p></div>';
+    h += '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:10px">Flagged results cover our 89-ingredient index. The inventory section below lists FDA-recorded names with no verdict attached. Results depend on photo quality. General information only — <a href="/disclaimer">not medical advice</a>.</p></div>';
     result.innerHTML = h;
     wireShare(shareScore, hits);
     var again = document.getElementById("scan-again");

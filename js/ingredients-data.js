@@ -1,4 +1,4 @@
-/* Consumer Rising — Ingredient Index data (79 entries, 5 risk tiers).
+/* Consumer Rising — Ingredient Index data (89 entries, 5 risk tiers).
    Risk ratings are the site's editorial judgment. Keep language plain and
    non-alarmist; details live on the linked findings where they exist. */
 window.CR_INGREDIENTS = [
@@ -2415,5 +2415,286 @@ window.CR_INGREDIENTS = [
         url: "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2017.4788"
       }
     ]
+  },
+  {
+    name: "Celery powder / celery juice",
+    id: "celery-powder",
+    aliases: ["Celery juice", "Celery juice powder", "Celery extract", "Celery powder (as curing agent)"],
+    e_number: null,
+    ins_number: null,
+    risk: "certain",
+    risk_weight: 15,
+    category: "Preservative",
+    function: "Preservative",
+    description: "The 'natural' way to cure bacon, ham, and hot dogs. Celery is fermented or dried into a powder or juice that is naturally rich in nitrite — which then does the exact same curing job as conventional curing salt.",
+    regulatory_status: {
+      us: "Permitted in processed meats; USDA requires 'uncured' labeling when nitrite comes from celery (9 CFR 424.21(c))",
+      eu: "No EU position reviewed for this entry"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "Nitrite is nitrite no matter where it comes from: celery-derived nitrite keeps meat pink, blocks botulism, and gives the 'cured' flavor just like sodium nitrite does.",
+      "Consumer Reports found 'uncured' meats can contain nitrite levels similar to conventionally cured meats — the chemistry is the same, only the source differs.",
+      "USDA rules require these products to be labeled 'uncured' even though they are cured with celery nitrite, which can mislead shoppers into thinking no nitrite was used.",
+      "Look for 'celery powder,' 'celery juice,' or 'celery juice powder' — often with 'no nitrates or nitrites added*' and fine print saying '*except those naturally occurring in celery.'"
+    ],
+    link: null,
+    sources: [
+      { label: "Consumer Reports: 'uncured' meats can match cured meats on nitrite levels", url: "https://www.consumerreports.org/health/food-additives/should-you-be-concerned-about-nitrites-a1085753986/" },
+      { label: "Washington Post (via CSRA Science): 'nitrite is nitrite, no matter where it comes from'; USDA 'uncured' labeling rules", url: "https://csra-science.org/when-natural-meats-arent/" }
+    ]
+  },
+  {
+    name: "Buffered vinegar",
+    id: "buffered-vinegar",
+    aliases: ["Vinegar powder", "Buffered vinegar powder", "Dry vinegar"],
+    e_number: null,
+    ins_number: null,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Preservative",
+    function: "Preservative",
+    description: "Vinegar with its sharp acidity softened by buffering salts. It slows the bacteria that spoil deli meats and prepared foods — and it can be declared on labels as simply as 'vinegar.'",
+    regulatory_status: {
+      us: "Vinegar is GRAS; widely used as a clean-label antimicrobial in USDA-inspected meats",
+      eu: "No EU position reviewed for this entry"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "Food Business News reports vinegar is appearing frequently as a natural preservative in processed meat and poultry — buffering it to about pH 6 keeps a neutral taste.",
+      "In a University of Wisconsin study, 2.5% buffered vinegar delayed Listeria growth for two extra weeks in ham and deli turkey compared with the control.",
+      "USDA-ARS research (indexed by science.gov) has also tested buffered vinegar products against Clostridium perfringens in ground turkey.",
+      "Look for 'vinegar,' 'buffered vinegar,' or 'vinegar powder' — it is the same kitchen vinegar, just doing preservation work behind a friendly name."
+    ],
+    link: null,
+    sources: [
+      { label: "Food Business News: vinegar as a preservative; 2.5% buffered vinegar delayed Listeria 2 weeks", url: "https://www.foodbusinessnews.net/articles/4509-vinegar-as-a-preservative" },
+      { label: "science.gov: USDA-ARS studies on buffered vinegar vs. Clostridium perfringens", url: "https://www.science.gov/topicpages/v/vinegar+lemon+juice" }
+    ]
+  },
+  {
+    name: "Cultured dextrose",
+    id: "cultured-dextrose",
+    aliases: ["Cultured sugar", "Cultured corn sugar", "Fermented dextrose"],
+    e_number: null,
+    ins_number: null,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Preservative",
+    function: "Preservative",
+    description: "Sugar fermented with friendly bacteria, then dried into a powder. The fermentation creates natural acids that slow spoilage — sold to shoppers as a clean-label preservative.",
+    regulatory_status: {
+      us: "FDA GRAS Notice 128 (no questions) for antimicrobial use in foods at up to 2%",
+      eu: "No EU position reviewed for this entry"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "FDA issued a no-questions letter on GRAS Notice 128 for dextrose cultured with Propionibacterium freudenreichii subsp. shermanii, for antimicrobial use at up to 2% in foods.",
+      "It works like a mild ferment: the organic acids produced during fermentation slow the bacteria that cause spoilage.",
+      "In a University of Wisconsin study, a 3% cultured sugar-vinegar blend delayed Listeria growth for four extra weeks in ham and turkey.",
+      "Look for 'cultured dextrose,' 'cultured corn sugar,' or 'cultured sugar' — suppliers sell these ferments to be labeled exactly that simply."
+    ],
+    link: null,
+    sources: [
+      { label: "PMC: cultured dextrose GRAS (FDA GRAS Notice 128, no-questions)", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC5102751/" },
+      { label: "Food Business News: cultured sugar-vinegar blend delayed Listeria 4 weeks; label-friendly 'cultured corn sugar'", url: "https://www.foodbusinessnews.net/articles/4509-vinegar-as-a-preservative" }
+    ]
+  },
+  {
+    name: "Rosemary extract",
+    id: "rosemary-extract",
+    aliases: ["Rosemary oleoresin", "E392", "Extract of rosemary"],
+    e_number: "E392",
+    ins_number: 392,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Preservative",
+    function: "Preservative",
+    description: "A concentrated extract of the kitchen herb, rich in antioxidant compounds like carnosic acid. It keeps fats and meats from going rancid — a natural stand-in for synthetic antioxidants.",
+    regulatory_status: {
+      us: "Long used as a spice and flavoring; antioxidant use under self-affirmed GRAS",
+      eu: "Authorized as antioxidant E392"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "EFSA has authorized rosemary extracts as food additive E392; the antioxidant activity is attributed to carnosic acid and rosmarinic acid.",
+      "FDA has listed many essential oils as GRAS for foods and beverages, and rosemary is an established flavoring in the US.",
+      "In the US it is allowed as a flavoring even when labeled for preservation; its use as an antioxidant preservative goes through self-affirmed GRAS.",
+      "Look for 'rosemary extract' — it is doing antioxidant work even when the front of the package just says 'no artificial preservatives.'"
+    ],
+    link: null,
+    sources: [
+      { label: "MDPI Foods: rosemary extract/antioxidant — EFSA authorized E392, FDA GRAS essential oils", url: "https://www.mdpi.com/2304-8158/10/12/3143" },
+      { label: "FSANZ: rosemary extract — E392, US flavor use, self-affirmed GRAS for antioxidant use (A1260)", url: "https://www.foodstandards.gov.au/code/applications/documents/A1260%20Executive%20Summary_SDIR_Rev2.pdf" }
+    ]
+  },
+  {
+    name: "Mixed tocopherols",
+    id: "mixed-tocopherols",
+    aliases: ["Tocopherols", "Vitamin E (as preservative)", "Tocopherol concentrate"],
+    e_number: null,
+    ins_number: null,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Preservative",
+    function: "Preservative",
+    description: "The vitamin E compounds (alpha, beta, gamma, and delta tocopherol) pulled from vegetable oils. They keep fats and oils from going rancid — nature's version of BHT and BHA.",
+    regulatory_status: {
+      us: "GRAS when used per good manufacturing practice (21 CFR 182.3890)",
+      eu: "No EU position reviewed for this entry"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "FDA lists tocopherols as GRAS when used according to good manufacturing practice (21 CFR 182.3890).",
+      "They are the same vitamin E compounds naturally found in vegetable oils — mixing all four forms gives broader protection against oxidation.",
+      "Food makers use them as the 'natural' alternative to synthetic antioxidants like BHT and BHA in cereals, snacks, and cooking oils.",
+      "Look for 'mixed tocopherols' — it means vitamin E is being used to keep fats fresh, not to add nutrition."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 182.3890: tocopherols GRAS (Cornell LII)", url: "https://www.law.cornell.edu/cfr/text/21/182.3890" },
+      { label: "Meds Safety: mixed tocopherols as natural preservative, GRAS, alternative to BHT/BHA", url: "https://medssafety.com/mixed-tocopherols-uses-benefits-how-to-use-side-effects-sources/" }
+    ]
+  },
+  {
+    name: "Polydextrose",
+    id: "polydextrose",
+    aliases: ["E1200", "Litesse"],
+    e_number: null,
+    ins_number: null,
+    risk: "cutback",
+    risk_weight: 10,
+    category: "Fiber",
+    function: "Fiber / bulking agent",
+    description: "A lab-built fiber made mostly from glucose. It adds bulk and fiber to 'reduced sugar' and 'light' foods — but your gut may notice it before your taste buds do.",
+    regulatory_status: {
+      us: "Approved food additive since 1981 (21 CFR 172.841); laxative-effect warning required above 15 g per serving",
+      eu: "No EU position reviewed for this entry"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "FDA has approved it as a food additive since 1981 for use as a bulking agent, formulation aid, humectant, and texturizer (21 CFR 172.841).",
+      "Federal rules require a label warning when a serving exceeds 15 grams: 'Sensitive individuals may experience a laxative effect.'",
+      "In a randomized trial, 12 grams a day increased bowel movements in constipated adults — a reminder that this 'fiber' acts like one.",
+      "Look for 'polydextrose' in sugar-free ice cream, baked goods, and 'light' products — and go easy if your stomach is sensitive."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 172.841: polydextrose approved food additive (Cornell LII)", url: "https://www.law.cornell.edu/cfr/text/21/172.841" },
+      { label: "MDPI Nutrients: polydextrose trial — 12 g/day increased bowel movements, no serious adverse events", url: "https://www.mdpi.com/2072-6643/11/2/439" }
+    ]
+  },
+  {
+    name: "Tagatose",
+    id: "tagatose",
+    aliases: ["D-tagatose", "Pseudofructose"],
+    e_number: null,
+    ins_number: null,
+    risk: "cutback",
+    risk_weight: 10,
+    category: "Sweetener",
+    function: "Sweetener",
+    description: "A rare sugar found in tiny amounts in dairy and fruit. It tastes about 90% as sweet as sugar with roughly a third of the calories — a newcomer still earning its track record.",
+    regulatory_status: {
+      us: "GRAS; FDA reviewed GRAS Notice 977 for D-tagatose as sweetener, flavor enhancer, and texturizer",
+      eu: "No EU position reviewed for this entry"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "IFT's food-technology review notes tagatose has about 90% of sugar's sweetness with only around 30% of the extractable calories.",
+      "FDA's GRAS Notice 977 covers D-tagatose made by enzymatic processes for use as a sweetener, flavor enhancer, humectant, and texturizer.",
+      "IFT notes there is still debate about its exact calorie content — and as a rare sugar, it lacks sugar's long track record of everyday heavy use.",
+      "Look for 'tagatose' or 'D-tagatose' on 'reduced sugar' labels — it is the rare sugar doing the sweetening."
+    ],
+    link: null,
+    sources: [
+      { label: "IFT: tagatose — ~90% sweetness, ~30% calories of sucrose, FDA GRAS", url: "https://www.ift.org/food-technology-magazine/7-ingredients-rare-sugars-sustainable-sweet" },
+      { label: "FDA: GRAS Notice 977, D-tagatose (notifier document)", url: "https://www.FDA.Gov/media/155246/download?attachment" }
+    ]
+  },
+  {
+    name: "Trehalose",
+    id: "trehalose",
+    aliases: ["Mycose", "Tremalose"],
+    e_number: null,
+    ins_number: null,
+    risk: "cutback",
+    risk_weight: 10,
+    category: "Sweetener",
+    function: "Sweetener / stabilizer",
+    description: "A sugar made of two glucose molecules, found naturally in mushrooms, honey, and shrimp. It is half as sweet as sugar with the same calories — used as much for texture and stability as for sweetness.",
+    regulatory_status: {
+      us: "GRAS (FDA no-questions letter on GRN 45, 2000); used as sweetener and stabilizer",
+      eu: "No EU position reviewed for this entry"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "FDA had no questions about trehalose's GRAS status back in 2000 (GRN 45); a later 2020 notice was withdrawn by the notifier before FDA finished its review.",
+      "IFT describes it as a disaccharide of two glucose molecules — half as sweet as sucrose but with the same caloric content.",
+      "Because it carries sugar's full calories at half the sweetness, it is not a free pass — 'made with trehalose' is not the same as low-calorie.",
+      "Look for 'trehalose' in nutrition bars, frozen foods, and dried products — it is there for texture and stability as much as sweetness."
+    ],
+    link: null,
+    sources: [
+      { label: "FDA: GRN 912 agency letter — confirms GRN 45 (2000) no-questions on trehalose", url: "https://www.FDA.Gov/media/153916/download?attachment" },
+      { label: "IFT: trehalose — disaccharide, half as sweet as sucrose, same caloric content", url: "https://www.ift.org/food-technology-magazine/7-ingredients-rare-sugars-sustainable-sweet" }
+    ]
+  },
+  {
+    name: "Sodium erythorbate",
+    id: "sodium-erythorbate",
+    aliases: ["Erythorbic acid", "Isoascorbic acid", "Sodium isoascorbate"],
+    e_number: null,
+    ins_number: null,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Preservative",
+    function: "Curing accelerator",
+    description: "A cousin of vitamin C used in cured meats. It speeds up the pink curing color — and more importantly, helps block the formation of nitrosamines.",
+    regulatory_status: {
+      us: "Approved for cured meats under USDA rules (9 CFR 424.21); 550 ppm ascorbate/erythorbate required in bacon",
+      eu: "No EU position reviewed for this entry"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "USDA rules list sodium erythorbate 'to accelerate color' in cured pork and beef, and require the equivalent of 550 ppm of sodium ascorbate or erythorbate in bacon.",
+      "EFSA's 2023 review notes USDA has required ascorbates and erythorbates in cured meats since the early 1980s specifically to curb nitrosamine formation.",
+      "Nitrosamines are the concerning compounds that can form when nitrite meets protein at high heat — erythorbate is one of the main safeguards against them.",
+      "Look for 'sodium erythorbate' next to the nitrite on bacon and ham labels — its presence means the product includes the standard safeguard against nitrosamines."
+    ],
+    link: null,
+    sources: [
+      { label: "USDA 9 CFR 424.21: sodium erythorbate to accelerate color; 550 ppm in bacon (govinfo.gov)", url: "https://www.govinfo.gov/content/pkg/CFR-2020-title9-vol2/pdf/CFR-2020-title9-vol2-sec424-21.pdf" },
+      { label: "EFSA 2023: ascorbates/erythorbates required by USDA since early 1980s to mitigate nitrosamines", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10043641/" }
+    ]
+  },
+  {
+    name: "Thaumatin",
+    id: "thaumatin",
+    aliases: ["Thaumatin II", "Katemfe fruit extract", "E957"],
+    e_number: "E957",
+    ins_number: 957,
+    risk: "caution",
+    risk_weight: 20,
+    category: "Sweetener",
+    function: "Sweetener",
+    description: "An intensely sweet protein from a West African fruit. In the US it is mostly used as a flavor modifier rather than a sweetener — a quirk of how the rules were written, not of the science.",
+    regulatory_status: {
+      us: "FEMA GRAS as flavor modifier; FDA GRAS notices reviewed for recombinant thaumatin as sweetener (GRN 738, 910, 920)",
+      eu: "Authorized as sweetener E957; EFSA's 2021 re-evaluation found no safety concern"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "Thaumatin is a natural plant protein (thaumatin I and II) from the katemfe fruit, Thaumatococcus daniellii, used as a high-intensity sweetener.",
+      "EFSA's 2021 re-evaluation found no safety concern at current EU use levels and saw no need for a numerical ADI — but could not draw a conclusion on oral allergenicity from the available human data.",
+      "The US picture is split: thaumatin holds FEMA GRAS status as a flavor modifier, while newer plant-made versions went through FDA GRAS notices as sweeteners (GRN 738, 910, 920).",
+      "Look for 'thaumatin' on flavored drinks and tabletop sweeteners — in the US it is usually there to modify flavor rather than to sweeten outright."
+    ],
+    link: null,
+    sources: [
+      { label: "EFSA 2021: re-evaluation of thaumatin (E 957) — no safety concern, no ADI needed", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8630604/" },
+      { label: "FDA: GRAS Notice 920, thaumatin II flavor modifier (Nomad Bioscience)", url: "https://www.FDA.Gov/media/140368/download?attachment" }
+    ]
   }
+
   ];
