@@ -454,3 +454,7 @@ button.inv-row:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
 .inv-status{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;
   border:1px solid var(--ink-soft);color:var(--ink-soft);border-radius:99px;padding:4px 12px}
 .inv-loading{padding:30px;text-align:center;color:var(--ink-soft);font-weight:700}
+/* Quiz/result shared styles (also used by scanner results) */
+.quiz-step-tag{font-size:12px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+.quiz-result-score{font-size:64px;font-weight:900;letter-spacing:-.03em;line-height:1;margin:6px 0 4px}
+.quiz-result-label{font-size:19px;font-weight:800;margin-bottom:6px}

@@ -693,12 +693,15 @@
           " Scan yours free: https://consumerrising.com/scanner?mode=home";
       } else {
         var names = data.hits.slice(0, 3).map(function (x) { return x.ing.name; });
+        var altBit = (lastAlternatives && lastAlternatives.length)
+          ? (" Better alternative: " + lastAlternatives[0].name + " (" + lastAlternatives[0].score + "/100).")
+          : "";
         text = viaBarcode
           ? ("I scanned a barcode" + (product.name ? " (" + product.name + ")" : "") + " with Consumer Rising: " + data.score + "/100." +
-            (names.length ? " Flagged: " + names.join(", ") + "." : " No flagged ingredients.") +
+            (names.length ? " Flagged: " + names.join(", ") + "." : " No flagged ingredients.") + altBit +
             " Scan yours free: https://consumerrising.com/scanner")
           : ("I scanned a food label with Consumer Rising: " + data.score + "/100." +
-            (names.length ? " Flagged: " + names.join(", ") + "." : " No flagged ingredients.") +
+            (names.length ? " Flagged: " + names.join(", ") + "." : " No flagged ingredients.") + altBit +
             " Scan yours free: https://consumerrising.com/scanner");
       }
       var done = function () {
@@ -784,6 +787,8 @@
       });
       h += "</div>";
     }
+    /* Better alternatives (barcode scans, Food mode only) — populated async. */
+    h += '<div id="alt-box"></div>';
     if (invHits && invHits.length) {
       var shown = invHits.slice(0, 12);
       h += '<div style="margin-top:22px"><div class="quiz-step-tag">Also on this label</div>' +
@@ -810,6 +815,48 @@
     result.innerHTML = h;
     wireShare("food", { score: shareScore, hits: hits }, product);
     wireScanAgain();
+    loadAlternatives(product);
+  }
+
+  /* ---- Better alternatives: neutral, no purchase language.
+     "Here's what scores better — you'll find it." ---- */
+  var lastAlternatives = [];
+  function loadAlternatives(product) {
+    lastAlternatives = [];
+    var box = document.getElementById("alt-box");
+    if (!box || !product || !product.barcode) return;
+    box.innerHTML = '<p style="font-size:14px;color:var(--ink-soft);margin-top:18px">Looking for better options in this category…</p>';
+    fetch("/api/alternatives?barcode=" + encodeURIComponent(product.barcode) + "&db=food")
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || !d.ok || !d.alternatives || !d.alternatives.length) {
+          var b2 = document.getElementById("alt-box");
+          if (b2) b2.innerHTML = "";
+          return;
+        }
+        lastAlternatives = d.alternatives;
+        var html = '<div style="margin-top:22px"><div class="quiz-step-tag">Better alternatives</div>' +
+          '<p style="font-size:14.5px;color:var(--ink-soft)">These scored higher in the same category. No sponsorships, no paid placement — just the numbers. You will find them where you shop.</p>' +
+          '<div style="display:flex;flex-direction:column;gap:10px;margin:12px 0">';
+        d.alternatives.forEach(function (a) {
+          var why = (a.whyBetter && a.whyBetter.length)
+            ? "No " + a.whyBetter.map(function (w) { return escHtml(w); }).join(", no ")
+            : "Fewer flagged ingredients";
+          html += '<div style="background:var(--paper);border:var(--line);border-radius:var(--radius);padding:14px 16px">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:4px">' +
+            "<strong>" + escHtml(a.name || "Unnamed product") + "</strong>" +
+            '<span class="quiz-result-score" style="font-size:26px">' + a.score + '<span style="font-size:15px">/100</span></span></div>' +
+            (a.brands ? '<p style="font-size:13.5px;color:var(--ink-soft);margin:0 0 6px">' + escHtml(a.brands) + "</p>" : "") +
+            '<p style="font-size:14.5px;color:var(--ink-soft);margin:0">' + why + ".</p></div>";
+        });
+        html += "</div></div>";
+        var b3 = document.getElementById("alt-box");
+        if (b3) b3.innerHTML = html;
+      })
+      .catch(function () {
+        var b4 = document.getElementById("alt-box");
+        if (b4) b4.innerHTML = "";
+      });
   }
 
   /* ---- Skin mode results: neutral inventory matches, regulator flags only ---- */
