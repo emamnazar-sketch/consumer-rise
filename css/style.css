@@ -270,7 +270,7 @@ a:hover{color:var(--red-text)}
 .scan-step p{font-size:16.5px;color:var(--ink-soft);line-height:1.65}
 .gate-card{max-width:560px;margin:0 auto}
 .upload-zone{
-  border:2px dashed var(--line-c);border-radius:var(--radius);background:var(--card);padding:44px 24px;text-align:center;cursor:pointer;
+  display:block;border:2px dashed var(--line-c);border-radius:var(--radius);background:var(--card);padding:44px 24px;text-align:center;cursor:pointer;
 }
 .upload-zone:hover{background:var(--paper-2)}
 .upload-zone input{display:none}
