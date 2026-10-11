@@ -44,7 +44,7 @@
     <div class="wrap">
       <span class="kicker">The dossier</span>
       <h1>Ingredient Index</h1>
-      <p class="lead">100 ingredients with full verdicts. 10 pet food ingredients — they're family too. 3,924 recognized from FDA's inventory. Know everything.</p>
+      <p class="lead">100 ingredients with full verdicts. 10 pet food ingredients with full verdicts — they're family too. 719 more pet ingredients and 3,924 from FDA's inventory. Know everything.</p>
     </div>
   </section>
 
@@ -53,6 +53,7 @@
       <div class="inv-tabs" role="tablist" aria-label="Ingredient database">
         <button class="inv-tab active" id="tab-index" role="tab" aria-selected="true" aria-controls="pane-index">Food Ingredient Index (100)</button>
         <button class="inv-tab" id="tab-pet" role="tab" aria-selected="false" aria-controls="pane-pet">Pet Food Ingredients (10)</button>
+        <button class="inv-tab" id="tab-petinv" role="tab" aria-selected="false" aria-controls="pane-petinv">Pet Ingredient List (719)</button>
         <button class="inv-tab" id="tab-inv" role="tab" aria-selected="false" aria-controls="pane-inv">FDA Ingredient List (3,924)</button>
         <button class="inv-tab" id="tab-skin" role="tab" aria-selected="false" aria-controls="pane-skin">Skin Index (7,138)</button>
         <button class="inv-tab" id="tab-home" role="tab" aria-selected="false" aria-controls="pane-home">Home Index (36)</button>
@@ -116,6 +117,20 @@
       <p class="ing-count" id="pet-count" role="status"></p>
       <div class="ing-grid" id="pet-grid"></div>
       <div class="disclaimer">Risk ratings reflect Consumer Rising's editorial judgment based on published research and regulator actions (FDA Center for Veterinary Medicine, AAFCO, EFSA). General information only — not veterinary advice. Talk to your vet about your pet's diet. <a href="/disclaimer">Full disclaimer</a>.</div>
+      </div>
+      <div id="pane-petinv" role="tabpanel" aria-labelledby="tab-petinv" hidden>
+        <p class="gras-hook">Every ingredient found on real pet food labels. No ratings, no verdicts — just what's out there.</p>
+        <div class="filters" role="search">
+          <div class="filter-row">
+            <div class="filter-group">
+              <label for="petinv-search">Search 719 pet food ingredients</label>
+              <input type="search" id="petinv-search" placeholder="Try &quot;taurine&quot;, &quot;rosemary&quot;, &quot;flaxseed&quot;…" autocomplete="off">
+            </div>
+          </div>
+        </div>
+        <p class="ing-count" id="petinv-count" role="status"></p>
+        <div class="inv-list" id="petinv-list"></div>
+        <div class="disclaimer">The Pet Ingredient List is a neutral inventory of ingredient names from Open Pet Food Facts product labels — no safety ratings, no verdicts. An ingredient appearing here means it was found on pet food labels, nothing more. General information only — <a href="/disclaimer">not veterinary advice</a>.</div>
       </div>
       <div id="pane-inv" role="tabpanel" aria-labelledby="tab-inv" hidden>
         <p class="gras-hook">Around a thousand of these entered through GRAS self-determination — companies declaring them safe themselves, never reviewed by the FDA.</p>
@@ -368,12 +383,61 @@
     prender();
   })();
 
+  /* ---- Pet Ingredient List tab: lazy-loaded neutral inventory, no verdicts ---- */
+  var petInvSearch = document.getElementById("petinv-search");
+  var petInvList = document.getElementById("petinv-list");
+  var petInvCount = document.getElementById("petinv-count");
+  var petInvData = null, petInvLoading = null, petInvReady = false;
+
+  function ensurePetInventory() {
+    if (window.CR_PET_INVENTORY) return Promise.resolve(window.CR_PET_INVENTORY);
+    if (petInvLoading) return petInvLoading;
+    petInvLoading = new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = "/js/pet-inventory-data.js?v=1";
+      s.onload = function () { resolve(window.CR_PET_INVENTORY || { items: [] }); };
+      s.onerror = function () { reject(new Error("petinv-load")); };
+      document.head.appendChild(s);
+    });
+    return petInvLoading;
+  }
+
+  function renderPetInv() {
+    if (!petInvData) return;
+    var q = petInvSearch.value.trim().toLowerCase();
+    var items = petInvData.items || [];
+    var list = q ? items.filter(function (r) {
+      return (r[0] + " " + r[1]).toLowerCase().indexOf(q) !== -1;
+    }) : items;
+    petInvCount.textContent = "Showing " + Math.min(list.length, 100) + " of " +
+      list.length.toLocaleString() + " ingredients" + (q ? ' matching "' + petInvSearch.value.trim() + '"' : "");
+    petInvList.innerHTML = list.slice(0, 100).map(function (r) {
+      return '<div class="inv-item"><div class="inv-row" style="cursor:default">' +
+        '<span class="inv-row-top"><span class="inv-name">' + esc2(r[0]) + "</span>" +
+        '<span class="inv-status">on ' + Number(r[2]).toLocaleString() + ' labels</span>' +
+        "</span></div></div>";
+    }).join("");
+  }
+
+  function openPetInvTab() {
+    petInvList.innerHTML = '<div class="inv-loading">Loading the pet ingredient list…</div>';
+    ensurePetInventory().then(function (d) {
+      petInvData = d; petInvReady = true;
+      renderPetInv();
+    }).catch(function () {
+      petInvList.innerHTML = '<div class="inv-loading">Could not load the list. Check your connection and try again.</div>';
+    });
+  }
+  petInvSearch.addEventListener("input", renderPetInv);
+
   /* ---- Full Inventory tab (Tier 2): lazy-loaded, neutral, no verdicts ---- */
   var tabIndex = document.getElementById("tab-index");
   var tabPet = document.getElementById("tab-pet");
+  var tabPetInv = document.getElementById("tab-petinv");
   var tabInv = document.getElementById("tab-inv");
   var paneIndex = document.getElementById("pane-index");
   var panePet = document.getElementById("pane-pet");
+  var panePetInv = document.getElementById("pane-petinv");
   var paneInv = document.getElementById("pane-inv");
   var tabSkin = document.getElementById("tab-skin");
   var tabHome = document.getElementById("tab-home");
@@ -458,19 +522,21 @@
   }
 
   function selectTab(which) {
-    var map = { index: [tabIndex, paneIndex], pet: [tabPet, panePet], inv: [tabInv, paneInv], skin: [tabSkin, paneSkin], home: [tabHome, paneHome] };
+    var map = { index: [tabIndex, paneIndex], pet: [tabPet, panePet], petinv: [tabPetInv, panePetInv], inv: [tabInv, paneInv], skin: [tabSkin, paneSkin], home: [tabHome, paneHome] };
     Object.keys(map).forEach(function (k) {
       var on = (k === which);
       map[k][0].classList.toggle("active", on);
       map[k][0].setAttribute("aria-selected", String(on));
       map[k][1].hidden = !on;
     });
+    if (which === "petinv" && !petInvReady) openPetInvTab();
     if (which === "inv" && !invReady) openInvTab();
     if (which === "skin" && !skinReady) openSkinTab();
     if (which === "home" && !homeReady) openHomeTab();
   }
   tabIndex.addEventListener("click", function () { selectTab("index"); });
   tabPet.addEventListener("click", function () { selectTab("pet"); });
+  tabPetInv.addEventListener("click", function () { selectTab("petinv"); });
   tabInv.addEventListener("click", function () { selectTab("inv"); });
   tabSkin.addEventListener("click", function () { selectTab("skin"); });
   tabHome.addEventListener("click", function () { selectTab("home"); });
