@@ -1,7 +1,10 @@
-/* POST /api/subscribe — body {email, source}
+/* POST /api/subscribe — body {email, source, ref?}
    Writes to D1 (subscribers table), then best-effort forwards to Beehiiv
    when BEEHIIV_API_KEY + BEEHIIV_PUBLICATION_ID env vars are configured.
    Beehiiv failures never fail the signup — D1 stays the source of truth.
+   Optional "ref": a referral code from ?ref= — credited in the referrals
+   table (never for self-referrals; one row per code+email, enforced by
+   UNIQUE constraint).
    Responses: {ok:true} | {ok:true, already:true} | {ok:false, reason} */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -71,6 +74,23 @@ export async function onRequest(context) {
     return json({ ok: false, reason: "invalid-email" }, 400);
   }
   const source = String((body && body.source) || "").slice(0, 120);
+  const ref = String((body && body.ref) || "").trim().toLowerCase().slice(0, 16);
+
+  /* Best-effort referral credit. Never fails the signup. */
+  async function creditReferral() {
+    if (!ref) return;
+    try {
+      const owner = await env.DB.prepare(
+        "SELECT email FROM referral_codes WHERE code = ?"
+      ).bind(ref).first();
+      if (!owner || !owner.email || owner.email === email) return; /* unknown code or self-referral */
+      await env.DB.prepare(
+        "INSERT OR IGNORE INTO referrals (id, code, referred_email, created_at) VALUES (?, ?, ?, ?)"
+      ).bind(crypto.randomUUID(), ref, email, new Date().toISOString()).run();
+    } catch (e) {
+      console.log("referral credit failed:", String((e && e.message) || e));
+    }
+  }
 
   try {
     const existing = await env.DB.prepare(
@@ -79,6 +99,7 @@ export async function onRequest(context) {
     if (existing) {
       // Already in D1 — still forward in case Beehiiv missed them earlier.
       await forwardToBeehiiv(env, email, source);
+      await creditReferral();
       return json({ ok: true, already: true });
     }
 
@@ -86,6 +107,7 @@ export async function onRequest(context) {
       "INSERT INTO subscribers (id, email, source, created_at) VALUES (?, ?, ?, ?)"
     ).bind(crypto.randomUUID(), email, source || null, new Date().toISOString()).run();
     await forwardToBeehiiv(env, email, source);
+    await creditReferral();
     return json({ ok: true });
   } catch (e) {
     return json({ ok: false, reason: "error" }, 500);

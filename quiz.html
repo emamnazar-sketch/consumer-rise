@@ -55,6 +55,7 @@
       <a href="/ingredients">Ingredients</a>
       <a href="/scanner">Scanner</a>
       <a href="/resources">Resources</a>
+      <a href="/refer">Refer &amp; Earn</a>
       <a href="/about">About</a>
       <a href="/faq">FAQ</a>
       <a href="/contact">Contact</a>
@@ -103,6 +104,7 @@
         <li><a href="/ingredients">Ingredient Index</a></li>
         <li><a href="/scanner">Label Scanner</a></li>
         <li><a href="/resources">Resources</a></li>
+        <li><a href="/refer">Refer &amp; Earn</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -123,7 +125,7 @@
   </div>
 </footer>
 <script src="/js/config.js?v=5"></script>
-<script src="/js/site.js?v=11"></script>
+<script src="/js/site.js?v=12"></script>
 <script>
 (function(){
   "use strict";
@@ -307,7 +309,8 @@
              + "<p>Something went wrong reaching our server, so we kept your email in this browser — you won't lose your spot. Please try subscribing again later to make sure you're on the list.</p>";
         }
         h += '<p><a class="btn" href="/downloads/label-decoder.pdf" download>Download your Label Decoder</a></p>'
-           + '<p><a class="btn btn-ink" href="/ingredients">Browse the Ingredient Index meanwhile</a></p></div>';
+           + '<p><a class="btn btn-ink" href="/ingredients">Browse the Ingredient Index meanwhile</a></p>'
+           + '<p class="quiz-fine">Know someone whose cart needs this? <a href="/refer" style="font-weight:700">Refer friends, earn free tools</a>.</p></div>';
         box.innerHTML = h;
         bar.style.width = "100%";
       };
@@ -320,10 +323,12 @@
       } catch (e2) {}
       try {
         var endpoint = (window.CR_CONFIG && window.CR_CONFIG.NEWSLETTER_ENDPOINT) || "/api/subscribe";
+        var qbody = { email: email, source: "/quiz.html" };
+        try { var qr = localStorage.getItem("cr_ref"); if (qr) qbody.ref = qr; } catch (e3) {}
         fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: email, source: "/quiz.html" })
+          body: JSON.stringify(qbody)
         }).then(function(r){ return r.json(); }).then(function(res){ showDone(res && res.ok); }).catch(function(){ showDone(false); });
       } catch (e) { showDone(false); }
     });

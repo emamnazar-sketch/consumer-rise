@@ -31,3 +31,19 @@ CREATE TABLE IF NOT EXISTS scans (
 );
 CREATE INDEX IF NOT EXISTS idx_scans_email ON scans(email);
 CREATE INDEX IF NOT EXISTS idx_scans_created ON scans(created_at);
+
+-- Referral program (D1-native, no third-party dashboard needed).
+CREATE TABLE IF NOT EXISTS referral_codes (
+  code TEXT PRIMARY KEY,
+  email TEXT UNIQUE NOT NULL,
+  created_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_referral_codes_email ON referral_codes(email);
+CREATE TABLE IF NOT EXISTS referrals (
+  id TEXT PRIMARY KEY,
+  code TEXT NOT NULL,
+  referred_email TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  UNIQUE(code, referred_email)
+);
+CREATE INDEX IF NOT EXISTS idx_referrals_code ON referrals(code);

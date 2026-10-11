@@ -75,6 +75,23 @@
   window.crGetSubscribedEmail = getSubscribedEmail;
   window.crSetSubscribedEmail = setSubscribedEmail;
 
+  /* ---- referral touch: ?ref=CODE saved on first visit, credited on signup.
+     First touch wins — a later link never overwrites the original referrer. */
+  function getReferralTouch() {
+    try { return localStorage.getItem("cr_ref") || ""; } catch (err) { return ""; }
+  }
+  try {
+    var __refm = /[?&]ref=([A-Za-z0-9]{4,16})/.exec(location.search || "");
+    if (__refm && !localStorage.getItem("cr_ref")) {
+      localStorage.setItem("cr_ref", __refm[1].toLowerCase());
+    }
+  } catch (err) {}
+  function withRef(obj) {
+    var r = getReferralTouch();
+    if (r) obj.ref = r;
+    return obj;
+  }
+
   /* ---- newsletter forms (shared): home, quiz, footer ---- */
   document.querySelectorAll("form.newsletter-form").forEach(function (form) {
     /* Already subscribed anywhere? Don't ask again — say so quietly. */
@@ -118,7 +135,7 @@
         done();
       };
       if (CFG.NEWSLETTER_ENDPOINT) {
-        postJSON(CFG.NEWSLETTER_ENDPOINT, { email: email, source: location.pathname })
+        postJSON(CFG.NEWSLETTER_ENDPOINT, withRef({ email: email, source: location.pathname }))
           .then(function (res) {
             if (res && res.ok) { done(); }
             else if (res && res.reason === "invalid-email") {
@@ -279,7 +296,7 @@
       /* Join the newsletter too (source "scanner"), then unlock — even if the
          API is down, the visitor still gets into the tool. */
       if (CFG.NEWSLETTER_ENDPOINT) {
-        postJSON(CFG.NEWSLETTER_ENDPOINT, { email: email, source: "/scanner.html" })
+        postJSON(CFG.NEWSLETTER_ENDPOINT, withRef({ email: email, source: "/scanner.html" }))
           .then(function () { unlockScanner(email); })
           .catch(function () { unlockScanner(email); });
       } else {
@@ -529,7 +546,8 @@
       '<p style="font-size:13.5px;color:var(--ink-soft);margin:8px 0 0">A helper, not a medical device. Always read the label yourself \u2014 especially for severe allergies.</p></div>';
   }
   function shareButtonHTML() {
-    return '<p class="center" style="margin:10px 0 4px"><button class="btn" id="scan-share" type="button">Share this result</button></p>';
+    return '<p class="center" style="margin:10px 0 4px"><button class="btn" id="scan-share" type="button">Share this result</button></p>' +
+      '<p class="center" style="font-size:13.5px;color:var(--ink-soft);margin:0 0 6px">Tip: screenshot your score, then send it to one friend directly — it works 10x better than posting. <a href="/refer" style="font-weight:700">Refer friends, earn free tools →</a></p>';
   }
   function wireShare(score, hits) {
     var btn = document.getElementById("scan-share");
