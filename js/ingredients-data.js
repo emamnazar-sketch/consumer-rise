@@ -1,4 +1,4 @@
-/* Consumer Rising — Ingredient Index data (63 entries, 5 risk tiers).
+/* Consumer Rising — Ingredient Index data (71 entries, 5 risk tiers).
    Risk ratings are the site's editorial judgment. Keep language plain and
    non-alarmist; details live on the linked findings where they exist. */
 window.CR_INGREDIENTS = [
@@ -1890,5 +1890,213 @@ window.CR_INGREDIENTS = [
       { label: "EFSA: Neotame as a sweetener and flavour enhancer (2007)", url: "https://www.efsa.europa.eu/en/efsajournal/pub/581" },
       { label: "CSPI Chemical Cuisine: Neotame", url: "https://www.cspi.org/chemical-cuisine/neotame" }
     ]
-  }
-];
+  },
+  {
+    name: "Advantame",
+    id: "advantame",
+    aliases: ["E969", "INS 969"],
+    e_number: "E969",
+    ins_number: 969,
+    risk: "caution",
+    risk_weight: 20,
+    category: "Sweetener",
+    function: "Sweetener",
+    description: "Aspartame's chemical cousin — 20,000 to 37,000 times sweeter than sugar, FDA-approved in 2014. A speck sweetens a whole batch, and it's barely a decade into its real-world track record.",
+    regulatory_status: { us: "FDA-approved food additive (21 CFR 172.803), 2014", eu: "Authorized as E969 after EFSA's 2013 review (ADI 0–5 mg/kg bw/day)" },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "FDA approved advantame on May 21, 2014 as a sweetener and flavor enhancer in foods generally, except meat and poultry — and rejected an objection arguing it should be judged by aspartame's record, noting the two are metabolized differently. (Federal Register; 21 CFR 172.803)",
+      "It is 20,000 to 37,000 times sweeter than sucrose, derived from aspartame and vanillin, with a clean sweet taste close to aspartame. (International Sweeteners Association)",
+      "EFSA and JECFA both reviewed it in 2013, found no genotoxicity or carcinogenicity concern, and set an ADI of 0–5 mg per kg of body weight per day; estimated intakes sit well below it. (ISA fact sheet)",
+      "Regulators on both sides of the Atlantic say it's safe — but commercial use is only about a decade old, so its long-term track record is short. (Federal Register; ISA)",
+      "Look for 'advantame' in diet drinks, chewing gum, tabletop sweeteners, and flavored dairy."
+    ],
+    link: null,
+    sources: [
+      { label: "Federal Register: Advantame final rule, objections answered (Dec 2014)", url: "https://www.federalregister.gov/documents/full_text/html/2014/12/24/2014-30144.html" },
+      { label: "21 CFR 172.803 — Advantame (approval, conditions of use)", url: "https://www.govinfo.gov/content/pkg/CFR-2017-title21-vol3/pdf/CFR-2017-title21-vol3-sec172-803.pdf" },
+      { label: "International Sweeteners Association: Advantame fact sheet (sweetness, EFSA/JECFA review, ADI)", url: "https://www.sweeteners.org/wp-content/uploads/2020/09/advantame-fact-sheet_feb17.pdf" }
+    ]
+  },
+  {
+    name: "Brazzein",
+    id: "brazzein",
+    aliases: ["Brazzein-53", "Mellia brazzein", "Oubli fruit protein"],
+    e_number: null,
+    ins_number: null,
+    risk: "caution",
+    risk_weight: 20,
+    category: "Sweetener",
+    function: "Sweetener",
+    description: "A sweet protein from the West African oubli fruit, now brewed by engineered yeast. Zero-calorie and hundreds of times sweeter than sugar — and brand new to the food supply.",
+    regulatory_status: { us: "FDA GRAS 'no questions' letters (GRN 1142, 2024; further notices since)", eu: "No EU food authorization found in this review" },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "Brazzein is the sweet-tasting protein in the fruit of Pentadiplandra brazzeana, the West African oubli plant; commercial versions are made by precision fermentation with engineered yeast. (ConfectioneryNews; FDA GRN 1142)",
+      "FDA issued 'no questions' GRAS letters — GRN 1142 (Oobli, March 2024) and further notices since — for its use as a general-purpose sweetener in foods. (FDA GRN 1142)",
+      "The GRAS review covered allergenicity and genotoxicity testing and found no safety concerns for the intended use — but commercial use is only just beginning, so real-world exposure history is minimal. (FDA GRN 1142)",
+      "Watchdog CSPI lists brazzein as 'Caution' — its stance on novel sweeteners with short track records. (CSPI Chemical Cuisine)",
+      "Look for 'brazzein' in reduced-sugar confectionery, chocolate, and drinks as it rolls out."
+    ],
+    link: null,
+    sources: [
+      { label: "FDA GRAS Notice 1142 response letter — brazzein preparation (Mar 2024)", url: "https://www.fda.gov/media/177329/download" },
+      { label: "ConfectioneryNews: Brazzein GRAS approval for sugar reduction (May 2025)", url: "https://WWW.CONFECTIONERYNEWS.COM/Article/2025/05/02/brazzein-sweetener-receives-fda-approval-as-sugar-reduction-demand-rises-in-confectionery/" },
+      { label: "CSPI Chemical Cuisine: food additive safety ratings (brazzein listed as Caution)", url: "https://www.cspi.org/page/chemical-cuisine-food-additive-safety-ratings" }
+    ]
+  },
+  {
+    name: "Gums (guar, xanthan, locust bean…)",
+    id: "gums",
+    aliases: ["Guar gum", "Xanthan gum", "Locust bean gum", "Carob bean gum", "Gellan gum", "Gum arabic", "Acacia gum", "E410", "E412", "E414", "E415"],
+    e_number: null,
+    ins_number: null,
+    risk: "certain",
+    risk_weight: 15,
+    category: "Thickener",
+    function: "Thickener",
+    description: "The thickeners that make ice cream creamy, salad dressing pourable, and oat milk smooth — plant-seed and fermentation-derived fibers used across the supermarket.",
+    regulatory_status: { us: "FDA food additives / GRAS (e.g. xanthan gum, 21 CFR 172.695)", eu: "Authorized (E410, E412, E414, E415); EFSA found no safety concern for the general population" },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "Xanthan gum is made by fermenting sugar with the bacterium Xanthomonas campestris; guar and locust bean gums come from seeds. FDA permits xanthan gum as a thickener, stabilizer, and emulsifier. (21 CFR 172.695)",
+      "EFSA's 2017 re-evaluation of xanthan gum found no safety concern for the general population and no need for a numerical ADI — though some people reported abdominal discomfort. (EFSA)",
+      "Gums are fibers your body barely digests; in sensitive stomachs, large amounts can mean gas and bloating — which is why they sit in 'certain people should avoid' rather than 'avoid.' (EFSA)",
+      "Look for 'xanthan gum,' 'guar gum,' 'locust bean gum,' or 'gellan gum' in ice cream, dressings, sauces, gluten-free baking, and plant milks."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 172.695 — Xanthan gum (identity, conditions of use)", url: "https://www.law.cornell.edu/cfr/text/21/172.695" },
+      { label: "EFSA: Re-evaluation of xanthan gum (E 415) as a food additive (2017)", url: "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2017.4909" }
+    ]
+  },
+  {
+    name: "Yeast extract (autolyzed)",
+    id: "yeast-extract",
+    aliases: ["Autolyzed yeast extract", "Bakers yeast extract", "Yeast extract"],
+    e_number: null,
+    ins_number: null,
+    risk: "certain",
+    risk_weight: 15,
+    category: "Flavor enhancer",
+    function: "Flavor enhancer",
+    description: "The savory backbone of soups, chips, and frozen meals — yeast broken down to release its glutamate-rich insides. Not MSG itself, but it plays the same role on your tongue.",
+    regulatory_status: { us: "FDA GRAS as a flavoring agent, up to 5% in food (21 CFR 184.1983)", eu: "Treated as a food ingredient, not a food additive" },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "Bakers yeast extract is made by rupturing yeast cells and concentrating the savory solubles; FDA affirms it as GRAS for use as a flavoring agent at up to 5% in food. (21 CFR 184.1983)",
+      "Per FDA, yeast extracts 'do not contain MSG itself' but contain free glutamate that functions as a flavor enhancer like MSG — so products using them cannot claim 'No MSG' on the label. (FoodNavigator, quoting FDA)",
+      "Yeast extract is typically around 5% glutamic acid — far less concentrated than MSG itself, and less than parmesan cheese contains. The 'hidden MSG' framing overstates it. (FoodNavigator)",
+      "People who notice sensitivity to glutamate-rich foods may want to watch it; everyone else is eating an ingredient regulators consider safe. (FDA via FoodNavigator)",
+      "Look for 'yeast extract' or 'autolyzed yeast extract' in soups, chips, sauces, gravies, and frozen meals."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 184.1983 — Bakers yeast extract (GRAS affirmation)", url: "https://www.law.cornell.edu/cfr/text/21/184.1983" },
+      { label: "FoodNavigator: yeast extract, autolysis, and FDA's MSG position (2018)", url: "https://www.foodnavigator.com/Article/2018/09/05/CLEAN-LABEL-IN-FOCUS-Savory-Taste-Alliance-seeks-to-demystify-autolyzed-yeast-extract/" }
+    ]
+  },
+  {
+    name: "Liquid smoke",
+    id: "liquid-smoke",
+    aliases: ["Pyroligneous acid", "Smoke flavoring", "Smoke flavouring", "Natural smoke flavor"],
+    e_number: null,
+    ins_number: null,
+    risk: "caution",
+    risk_weight: 20,
+    category: "Flavoring",
+    function: "Flavoring",
+    description: "Real wood smoke, captured as a liquid — the shortcut to BBQ flavor in sauces, chips, and bacon bits. The EU just banned several versions over DNA-damage concerns.",
+    regulatory_status: { us: "Permitted flavoring substance (21 CFR 172.515)", eu: "EU banned 8 smoke flavourings in 2024 after EFSA genotoxicity review" },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "Liquid smoke is made by burning wood, condensing the smoke, and filtering out ash and tar; the result flavors food without a smoker. (FoodNavigator)",
+      "The concern is PAHs — polycyclic aromatic hydrocarbons, known carcinogens formed when wood burns — plus unidentified compounds in these complex mixtures. (Springer review)",
+      "In 2024 the EU banned eight smoke flavourings after EFSA concluded genotoxicity concerns were confirmed or could not be ruled out for all of them; phase-out runs 2–5 years. (FoodNavigator)",
+      "The US still permits liquid smoke as a flavoring — the sharpest US/EU split in this index after the dough conditioners. (21 CFR 172.515)",
+      "Look for 'natural smoke flavor,' 'liquid smoke,' or 'smoke flavoring' in BBQ sauces, chips, jerky, and bacon bits."
+    ],
+    link: null,
+    sources: [
+      { label: "Springer: Liquid Smoke as a Food Additive — critical review (PAHs, genotoxicity, regulation)", url: "https://link.springer.com/article/10.1007/s11947-026-04339-5" },
+      { label: "FoodNavigator: EU bans eight smoke flavourings after EFSA review (2024)", url: "https://WWW.FOODNAVIGATOR.COM/Article/2024/06/07/eu-cracks-down-on-eight-popular-smoky-flavorings/" },
+      { label: "21 CFR 172.515 — Flavoring substances and adjuvants (US status)", url: "https://www.law.cornell.edu/cfr/text/21/172.515" }
+    ]
+  },
+  {
+    name: "Natamycin",
+    id: "natamycin",
+    aliases: ["Pimaricin", "E235", "INS 235"],
+    e_number: "E235",
+    ins_number: 235,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Preservative",
+    function: "Preservative",
+    description: "The reason your shredded cheese never goes green — a natural antifungal made by soil bacteria, applied to cheese surfaces to stop mold.",
+    regulatory_status: { us: "FDA-approved antimycotic on cheese, max 20 ppm (21 CFR 172.155)", eu: "Authorized as E235; EFSA 2009 found no safety concern for the approved uses" },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "Natamycin is a polyene macrolide made by Streptomyces bacteria; it kills molds and yeasts but not bacteria. (21 CFR 172.155)",
+      "FDA allows it as a surface treatment on cheese at up to 20 parts per million in the finished product — it stays on the surface, not mixed through. (21 CFR 172.155)",
+      "Germany's Federal Institute for Risk Assessment says keep its food use narrow: natamycin is also a human antifungal medicine, and wider food use could encourage resistant pathogens. EFSA judged the resistance risk negligible at the approved uses. (BfR 2012)",
+      "Look for 'natamycin' on shredded cheese, sliced cheese, and some yogurts."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 172.155 — Natamycin (approval, 20 ppm cheese limit)", url: "https://www.govinfo.gov/content/pkg/CFR-2023-title21-vol3/pdf/CFR-2023-title21-vol3-sec172-155.pdf" },
+      { label: "BfR Opinion 003/2012: natamycin's food uses should not be extended (resistance rationale)", url: "http://m.bf3r.de/cm/349/the-area-of-application-of-natamycin-as-a-food-additive-should-not-be-extended.pdf" }
+    ]
+  },
+  {
+    name: "Nisin",
+    id: "nisin",
+    aliases: ["Nisin A", "Nisaplin", "E234", "INS 234"],
+    e_number: "E234",
+    ins_number: 234,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Preservative",
+    function: "Preservative",
+    description: "A natural bacteria-killer made by fermenting milk cultures — the reason processed cheese and canned foods stay safe. One of the 'good' preservatives.",
+    regulatory_status: { us: "FDA GRAS (21 CFR 184.1538), up to 250 ppm in finished foods", eu: "Authorized as E234; EFSA set ADI at 1 mg/kg bw/day (2017)" },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "Nisin is a group of peptides made by fermenting strains of Streptococcus lactis; it attacks harmful bacteria including Listeria. (21 CFR 184.1538)",
+      "FDA affirmed it as GRAS in 1988 as an antimicrobial, at up to 250 parts per million in finished foods such as pasteurized cheese spreads. (21 CFR 184.1538)",
+      "EFSA's 2017 review found no adverse effects at the highest tested dose (225 mg/kg bw/day in rats) and raised the acceptable daily intake to 1 mg per kg of body weight per day. (EFSA)",
+      "Look for 'nisin' in processed cheese spreads, canned foods, and dips."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 184.1538 — Nisin preparation (GRAS affirmation, 250 ppm limit)", url: "https://www.govinfo.gov/content/pkg/CFR-2025-title21-vol3/pdf/CFR-2025-title21-vol3-sec184-1538.pdf" },
+      { label: "EFSA: Safety of nisin (E 234) — 2017 opinion (NOAEL, ADI 1 mg/kg bw/day)", url: "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2017.5063" }
+    ]
+  },
+  {
+    name: "SAIB (sucrose acetate isobutyrate)",
+    id: "saib",
+    aliases: ["Sucrose acetate isobutyrate", "SAIB"],
+    e_number: null,
+    ins_number: null,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Stabilizer",
+    function: "Stabilizer",
+    description: "The ingredient that replaced BVO in your citrus soda — a stabilizer that keeps flavor oils mixed into the drink instead of floating to the top.",
+    regulatory_status: { us: "FDA-approved stabilizer of flavoring-oil emulsions in drinks, max 300 mg/kg (21 CFR 172.833)", eu: "EU authorization not verified in this review" },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "SAIB keeps citrus flavor oils suspended in sodas so the drink doesn't separate on the shelf; FDA caps it at 300 mg per kg of finished beverage. (21 CFR 172.833)",
+      "When the FDA moved to revoke BVO's authorization, it named SAIB as one of the viable, already-approved alternatives — noting many sodas had already switched. (FDA BVO proposed rule)",
+      "Coca-Cola announced in 2014 it was replacing BVO with SAIB and/or glycerol ester of rosin across its formulas. (Food Processing)",
+      "Look for 'sucrose acetate isobutyrate' or 'SAIB' in citrus sodas and flavored drinks."
+    ],
+    link: null,
+    sources: [
+      { label: "21 CFR 172.833 — Sucrose acetate isobutyrate (approval, 300 mg/kg beverage limit)", url: "https://www.govinfo.gov/content/pkg/CFR-2025-title21-vol3/pdf/CFR-2025-title21-vol3-sec172-833.pdf" },
+      { label: "FDA: Proposed rule to revoke BVO authorization (SAIB named as viable alternative)", url: "https://www.fda.gov/media/173500/download" },
+      { label: "Food Processing: Coca-Cola transitioning from BVO to SAIB (2014)", url: "https://www.foodprocessing.com/product-development/rd/news/11329722/ingredients-news-coca-cola-co-transitioning-ingredients-from-bvo-to-saib" }
+    ]
+  },
+  ];
