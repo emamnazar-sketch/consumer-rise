@@ -1957,7 +1957,7 @@ window.CR_INGREDIENTS = [
     ins_number: null,
     risk: "certain",
     risk_weight: 15,
-    category: "Flavor enhancer",
+    category: "Flavor Enhancer",
     function: "Flavor enhancer",
     description: "The savory backbone of soups, chips, and frozen meals — yeast broken down to release its glutamate-rich insides. Not MSG itself, but it plays the same role on your tongue.",
     regulatory_status: { us: "FDA GRAS as a flavoring agent, up to 5% in food (21 CFR 184.1983)", eu: "Treated as a food ingredient, not a food additive" },
@@ -2293,7 +2293,7 @@ window.CR_INGREDIENTS = [
     ins_number: null,
     risk: "certain",
     risk_weight: 15,
-    category: "Flavor enhancer",
+    category: "Flavor Enhancer",
     function: "Flavor enhancer",
     description: "The savory depth in soups, chips, and frozen dinners — plant protein broken down to release glutamate. Not MSG itself, but it plays the same role on your tongue.",
     regulatory_status: {
