@@ -53,6 +53,8 @@
       <div class="inv-tabs" role="tablist" aria-label="Ingredient database">
         <button class="inv-tab active" id="tab-index" role="tab" aria-selected="true" aria-controls="pane-index">Ingredient Index (100)</button>
         <button class="inv-tab" id="tab-inv" role="tab" aria-selected="false" aria-controls="pane-inv">Full Inventory (3,924)</button>
+        <button class="inv-tab" id="tab-skin" role="tab" aria-selected="false" aria-controls="pane-skin">Skin Index (7,138)</button>
+        <button class="inv-tab" id="tab-home" role="tab" aria-selected="false" aria-controls="pane-home">Home Index (17)</button>
       </div>
       <div id="pane-index" role="tabpanel" aria-labelledby="tab-index">
       <div class="filters" role="search">
@@ -97,6 +99,34 @@
         <p class="ing-count" id="inv-count" role="status"></p>
         <div class="inv-list" id="inv-list"></div>
         <div class="disclaimer">The Full Inventory is a transparency list drawn from the FDA's &ldquo;Substances Added to Food&rdquo; records — names, technical effects, and regulatory paperwork status only. It contains no health claims and no verdicts: a substance being listed here means it appears in FDA's records, nothing more. General information only — <a href="/disclaimer">not medical advice</a>.</div>
+      </div>
+      <div id="pane-skin" role="tabpanel" aria-labelledby="tab-skin" hidden>
+        <p class="gras-hook">The FDA bans about 10 cosmetic ingredients. The EU bans 1,658. Search what&rsquo;s on your skin.</p>
+        <div class="filters" role="search">
+          <div class="filter-row">
+            <div class="filter-group">
+              <label for="skin-search">Search 7,138 cosmetic ingredients</label>
+              <input type="search" id="skin-search" placeholder="Try &quot;paraben&quot;, &quot;formaldehyde&quot;, &quot;fragrance&quot;&hellip;" autocomplete="off">
+            </div>
+          </div>
+        </div>
+        <p class="ing-count" id="skin-count" role="status"></p>
+        <div class="inv-list" id="skin-list"></div>
+        <div class="disclaimer">The Skin Index is a neutral inventory of cosmetic-ingredient names from Open Beauty Facts product labels &mdash; no safety ratings, no verdicts. Ban flags reflect regulator action only. <a href="/skin-index">Full Skin Index page &rarr;</a></div>
+      </div>
+      <div id="pane-home" role="tabpanel" aria-labelledby="tab-home" hidden>
+        <p class="gras-hook">We don&rsquo;t rate your cleaning products. We reveal them. What stays in your home is up to you.</p>
+        <div class="filters" role="search">
+          <div class="filter-row">
+            <div class="filter-group">
+              <label for="home-search">Search 17 household chemicals</label>
+              <input type="search" id="home-search" placeholder="Try &quot;formaldehyde&quot;, &quot;bleach&quot;, &quot;fragrance&quot;&hellip;" autocomplete="off">
+            </div>
+          </div>
+        </div>
+        <p class="ing-count" id="home-count" role="status"></p>
+        <div class="inv-list" id="home-list"></div>
+        <div class="disclaimer">The Home Index presents facts and studies only &mdash; no ratings, no &ldquo;avoid&rdquo; lists. Every claim links to its source. <a href="/home-index">Full Home Index page &rarr;</a></div>
       </div>
     </div>
   </section>
@@ -241,6 +271,10 @@
   var tabInv = document.getElementById("tab-inv");
   var paneIndex = document.getElementById("pane-index");
   var paneInv = document.getElementById("pane-inv");
+  var tabSkin = document.getElementById("tab-skin");
+  var tabHome = document.getElementById("tab-home");
+  var paneSkin = document.getElementById("pane-skin");
+  var paneHome = document.getElementById("pane-home");
   var invSearch = document.getElementById("inv-search");
   var invList = document.getElementById("inv-list");
   var invCount = document.getElementById("inv-count");
@@ -320,18 +354,142 @@
   }
 
   function selectTab(which) {
-    var isInv = which === "inv";
-    tabIndex.classList.toggle("active", !isInv);
-    tabInv.classList.toggle("active", isInv);
-    tabIndex.setAttribute("aria-selected", String(!isInv));
-    tabInv.setAttribute("aria-selected", String(isInv));
-    paneIndex.hidden = isInv;
-    paneInv.hidden = !isInv;
-    if (isInv && !invReady) openInvTab();
+    var map = { index: [tabIndex, paneIndex], inv: [tabInv, paneInv], skin: [tabSkin, paneSkin], home: [tabHome, paneHome] };
+    Object.keys(map).forEach(function (k) {
+      var on = (k === which);
+      map[k][0].classList.toggle("active", on);
+      map[k][0].setAttribute("aria-selected", String(on));
+      map[k][1].hidden = !on;
+    });
+    if (which === "inv" && !invReady) openInvTab();
+    if (which === "skin" && !skinReady) openSkinTab();
+    if (which === "home" && !homeReady) openHomeTab();
   }
   tabIndex.addEventListener("click", function () { selectTab("index"); });
   tabInv.addEventListener("click", function () { selectTab("inv"); });
+  tabSkin.addEventListener("click", function () { selectTab("skin"); });
+  tabHome.addEventListener("click", function () { selectTab("home"); });
   invSearch.addEventListener("input", renderInv);
+
+  /* ---- Skin Index tab: lazy-loaded cosmetic inventory, ban flags only ---- */
+  var skinSearch = document.getElementById("skin-search");
+  var skinList = document.getElementById("skin-list");
+  var skinCount = document.getElementById("skin-count");
+  var homeSearch = document.getElementById("home-search");
+  var homeList = document.getElementById("home-list");
+  var homeCount = document.getElementById("home-count");
+  var skinData = null, skinLoading = null, skinReady = false;
+  var homeData = null, homeLoading = null, homeReady = false;
+
+  function ensureSkin() {
+    if (window.CR_COSMETICS) return Promise.resolve(window.CR_COSMETICS);
+    if (skinLoading) return skinLoading;
+    skinLoading = new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = "/js/cosmetic-data.js?v=1";
+      s.onload = function () { resolve(window.CR_COSMETICS || { items: [] }); };
+      s.onerror = function () { reject(new Error("skin-load")); };
+      document.head.appendChild(s);
+    });
+    return skinLoading;
+  }
+
+  function ensureHome() {
+    if (window.CR_HOME) return Promise.resolve(window.CR_HOME);
+    if (homeLoading) return homeLoading;
+    homeLoading = new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = "/js/home-data.js?v=1";
+      s.onload = function () { resolve(window.CR_HOME || { items: [] }); };
+      s.onerror = function () { reject(new Error("home-load")); };
+      document.head.appendChild(s);
+    });
+    return homeLoading;
+  }
+
+  function skinBadges(r) {
+    var b = "";
+    if (r[2]) b += '<span class="risk risk-avoid">Banned in the EU</span>';
+    if (r[3]) b += '<span class="risk risk-caution">US restricted</span>';
+    if (r[4]) b += '<span class="risk risk-caution">Banned in CA</span>';
+    return b;
+  }
+
+  function renderSkin() {
+    if (!skinData) return;
+    var q = skinSearch.value.trim().toLowerCase();
+    var items = skinData.items || [];
+    var list = q ? items.filter(function (r) {
+      return r[0].toLowerCase().indexOf(q) !== -1;
+    }) : items.filter(function (r) { return r[2] || r[3] || r[4]; });
+    skinCount.textContent = "Showing " + Math.min(list.length, 100) + " of " +
+      list.length.toLocaleString() + " ingredients" + (q ? ' matching "' + skinSearch.value.trim() + '"' : " (flagged first — search to browse all)");
+    skinList.innerHTML = list.slice(0, 100).map(function (r) {
+      return '<div class="inv-item"><div class="inv-row-top"><span class="inv-name">' + esc2(r[0]) + "</span>" + skinBadges(r) + "</div></div>";
+    }).join("");
+  }
+
+  function renderHome() {
+    if (!homeData) return;
+    var q = homeSearch.value.trim().toLowerCase();
+    var items = homeData.items || [];
+    var list = q ? items.filter(function (e) {
+      return (e.name + " " + (e.aliases || []).join(" ") + " " + (e.found_in || []).join(" ")).toLowerCase().indexOf(q) !== -1;
+    }) : items;
+    homeCount.textContent = "Showing " + list.length + " of " + items.length + " chemicals" + (q ? ' matching "' + homeSearch.value.trim() + '"' : "");
+    homeList.innerHTML = list.map(function (e, i) {
+      var detailId = "home-detail-" + i;
+      var facts = (e.facts || []).map(function (f) {
+        return "<li>" + esc2(f.text) + ' <a href="' + f.source.url.replace(/"/g, "") + '" target="_blank" rel="noopener">[' + esc2(f.source.label) + "]</a></li>";
+      }).join("");
+      return '<div class="inv-item">' +
+        '<button class="inv-row" aria-expanded="false" aria-controls="' + detailId + '">' +
+        '<span class="inv-row-top"><span class="inv-name">' + esc2(e.name) + "</span>" +
+        '<span class="inv-toggle" aria-hidden="true">+</span></span>' +
+        '<span class="inv-effect">' + esc2(e.what_it_is || "") + "</span></button>" +
+        '<div class="inv-detail" id="' + detailId + '" hidden>' +
+        "<p><strong>Found in:</strong> " + esc2((e.found_in || []).join(", ") || "—") + "</p>" +
+        "<ul>" + facts + "</ul>" +
+        "<p><strong>US:</strong> " + esc2(e.us_status || "—") + " &nbsp;·&nbsp; <strong>EU:</strong> " + esc2(e.eu_status || "—") + " &nbsp;·&nbsp; <strong>CA:</strong> " + esc2(e.ca_status || "—") + "</p>" +
+        "</div></div>";
+    }).join("");
+    var btns = homeList.querySelectorAll(".inv-row");
+    for (var b = 0; b < btns.length; b++) {
+      (function (btn) {
+        btn.addEventListener("click", function () {
+          var isOpen = btn.getAttribute("aria-expanded") === "true";
+          var panel = document.getElementById(btn.getAttribute("aria-controls"));
+          btn.setAttribute("aria-expanded", String(!isOpen));
+          if (panel) panel.hidden = isOpen;
+          var tg = btn.querySelector(".inv-toggle");
+          if (tg) tg.textContent = isOpen ? "+" : "–";
+        });
+      })(btns[b]);
+    }
+  }
+
+  function openSkinTab() {
+    skinList.innerHTML = '<div class="inv-loading">Loading the Skin Index…</div>';
+    ensureSkin().then(function (d) {
+      skinData = d; skinReady = true;
+      renderSkin();
+    }).catch(function () {
+      skinList.innerHTML = '<div class="inv-loading">Could not load the Skin Index. Check your connection and try again.</div>';
+    });
+  }
+
+  function openHomeTab() {
+    homeList.innerHTML = '<div class="inv-loading">Loading the Home Index…</div>';
+    ensureHome().then(function (d) {
+      homeData = d; homeReady = true;
+      renderHome();
+    }).catch(function () {
+      homeList.innerHTML = '<div class="inv-loading">Could not load the Home Index. Check your connection and try again.</div>';
+    });
+  }
+
+  skinSearch.addEventListener("input", renderSkin);
+  homeSearch.addEventListener("input", renderHome);
 })();
 </script>
 </body>
