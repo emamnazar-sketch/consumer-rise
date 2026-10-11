@@ -168,7 +168,7 @@ a:hover{color:var(--red-text)}
 .newsletter-form .btn{box-shadow:none;border-radius:0 12px 12px 0}
 .newsletter-note{font-size:14.5px;color:var(--ink-soft);margin-top:10px;font-weight:600}
 .form-ok{
-  border:var(--line);background:var(--card);box-shadow:var(--shadow);border-radius:var(--radius);
+  border:var(--line);background:var(--card);color:var(--ink);box-shadow:var(--shadow);border-radius:var(--radius);
   padding:18px 22px;font-weight:700;max-width:520px;
 }
 .form-ok .big{font-size:20px;font-weight:800;text-transform:uppercase;display:block;margin-bottom:4px}
