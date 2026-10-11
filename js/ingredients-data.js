@@ -1,4 +1,4 @@
-/* Consumer Rising — Ingredient Index data (71 entries, 5 risk tiers).
+/* Consumer Rising — Ingredient Index data (79 entries, 5 risk tiers).
    Risk ratings are the site's editorial judgment. Keep language plain and
    non-alarmist; details live on the linked findings where they exist. */
 window.CR_INGREDIENTS = [
@@ -2099,4 +2099,321 @@ window.CR_INGREDIENTS = [
       { label: "Food Processing: Coca-Cola transitioning from BVO to SAIB (2014)", url: "https://www.foodprocessing.com/product-development/rd/news/11329722/ingredients-news-coca-cola-co-transitioning-ingredients-from-bvo-to-saib" }
     ]
   },
+  {
+    name: "Annatto",
+    id: "annatto",
+    aliases: [
+      "Annatto",
+      "Annatto extract",
+      "Bixin",
+      "Norbixin",
+      "E160b"
+    ],
+    e_number: "E160b",
+    ins_number: 160,
+    risk: "certain",
+    risk_weight: 15,
+    category: "Color (natural)",
+    function: "Color",
+    description: "The yellow-orange in cheddar, butter, and snack crackers — made from the seeds of the achiote tree. Natural, but with a reaction history worth knowing about.",
+    regulatory_status: {
+      us: "Permanently listed color additive; foods generally (21 CFR 73.30)",
+      eu: "Authorized as E160b; EFSA's 2016 re-evaluation set ADIs but could not assess some extracts for lack of data"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "The FDA lists annatto extract as a permanently listed color additive for foods generally (21 CFR 73.30).",
+      "Mayo Clinic notes that anaphylaxis — rare but life-threatening — has been reported after exposure to annatto.",
+      "EFSA's 2016 re-evaluation set ADIs of 6 mg/kg/day (bixin) and 0.3 mg/kg/day (norbixin), but said the safety of some currently authorized extracts could not be assessed for lack of data.",
+      "Look for 'annatto', 'annatto extract', or 'E160b' — it gives cheddar, butter, and crackers their orange."
+    ],
+    link: null,
+    sources: [
+      {
+        label: "FDA: Regulatory Status of Color Additives database (annatto, 21 CFR 73.30)",
+        url: "https://hfpappexternal.fda.gov/scripts/fdcc/index.cfm?set=ColorAdditives&sort=Sort_Unique_ID&order=ASC&showAll=true&type=column&search=Use-current%C2%A4VARCHAR%C2%A4foods"
+      },
+      {
+        label: "Mayo Clinic: Are natural food dyes safer than synthetic food dyes?",
+        url: "https://mcpress.mayoclinic.org/nutrition-fitness/are-natural-food-dyes-safer-than-synthetic-food-dyes/"
+      },
+      {
+        label: "DairyReporter: EFSA casts doubt on safety of some annatto food colours (2016)",
+        url: "https://www.dairyreporter.com/Article/2016/08/25/EFSA-casts-doubt-on-safety-of-some-annatto-food-colours/"
+      }
+    ]
+  },
+    {
+    name: "Beta-carotene (as color)",
+    id: "beta-carotene-color",
+    aliases: [
+      "Beta-carotene",
+      "Beta carotene",
+      "E160a",
+      "Carotenes"
+    ],
+    e_number: "E160a",
+    ins_number: 160,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Color (natural)",
+    function: "Color",
+    description: "The orange in margarine and cheese — the same pigment that makes carrots orange. Used as a color, not a nutrient, at the tiny levels in food.",
+    regulatory_status: {
+      us: "Permanently listed color additive (natural and synthetic); foods generally (21 CFR 73.95)",
+      eu: "Authorized as E160a under EU food additive law (Reg. 1333/2008; specs in Reg. 231/2012)"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "The FDA lists beta-carotene (natural and synthetic) as a permanently listed color additive for foods generally (21 CFR 73.95).",
+      "The EU authorizes carotenes as E160a, with purity specifications laid down in Regulation 231/2012.",
+      "It is one of the longest-used food colors in the world — and unlike synthetic dyes, needs no batch certification in the US.",
+      "Look for 'beta-carotene', 'beta carotene', or 'E160a' — the orange in margarine, cheese, and butter blends."
+    ],
+    link: null,
+    sources: [
+      {
+        label: "FDA: Regulatory Status of Color Additives database (beta-carotene, 21 CFR 73.95)",
+        url: "https://hfpappexternal.fda.gov/scripts/fdcc/index.cfm?set=ColorAdditives&sort=Sort_Unique_ID&order=ASC&showAll=true&type=column&search=Use-current%C2%A4VARCHAR%C2%A4foods"
+      },
+      {
+        label: "EU: Regulation 231/2012 laying down specifications for food additives (incl. colors)",
+        url: "https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:02012R0231-20240212"
+      }
+    ]
+  },
+    {
+    name: "Turmeric (as color)",
+    id: "turmeric-color",
+    aliases: [
+      "Turmeric",
+      "Turmeric oleoresin",
+      "Curcumin",
+      "E100"
+    ],
+    e_number: "E100",
+    ins_number: 100,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Color (natural)",
+    function: "Color",
+    description: "The yellow in mustard, pickles, and butter — ground from the rhizome of Curcuma longa. One of the oldest food colors in human use.",
+    regulatory_status: {
+      us: "Permanently listed color additive; foods generally (21 CFR 73.600)",
+      eu: "Authorized as E100 (curcumin) under EU food additive law (Reg. 1333/2008; specs in Reg. 231/2012)"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "FDA regulation 21 CFR 73.600: turmeric 'may be safely used for the coloring of foods generally.'",
+      "The EU authorizes its coloring principle curcumin as E100, with specifications in Regulation 231/2012.",
+      "It is the ground rhizome of Curcuma longa — the same spice in curry, used here purely for color.",
+      "Look for 'turmeric', 'turmeric oleoresin', or 'E100' — the yellow in mustards, pickles, and butter."
+    ],
+    link: null,
+    sources: [
+      {
+        label: "21 CFR 73.600: Turmeric (govinfo.gov)",
+        url: "https://www.govinfo.gov/content/pkg/CFR-2012-title21-vol1/pdf/CFR-2012-title21-vol1-sec73-600.pdf"
+      },
+      {
+        label: "EU: Regulation 231/2012 laying down specifications for food additives (incl. E100 curcumin)",
+        url: "https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:02012R0231-20240212"
+      }
+    ]
+  },
+    {
+    name: "Beet juice / beet red",
+    id: "beet-red",
+    aliases: [
+      "Beet juice",
+      "Beet powder",
+      "Beetroot red",
+      "Betanin",
+      "E162",
+      "Vegetable juice"
+    ],
+    e_number: "E162",
+    ins_number: 162,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Color (natural)",
+    function: "Color",
+    description: "The red in strawberry yogurt and veggie burgers that isn't a berry at all — it's beet. Betanin, the same pigment in the beet on your plate.",
+    regulatory_status: {
+      us: "Permanently listed (beet juice as vegetable juice 73.260; beet powder 73.40); foods generally",
+      eu: "Authorized as E162 (beetroot red, betanin) under EU food additive law"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "The FDA lists beet juice (as vegetable juice), beet powder, and beetroot red as permanently listed color additives for foods generally.",
+      "The EU authorizes beetroot red (E162); its specs define betanin obtained from red beet (Beta vulgaris) roots.",
+      "It is simply concentrated beet — juice, powder, or extract — with no synthetic chemistry involved.",
+      "Look for 'beet juice', 'beet powder', 'beetroot red', or 'E162' — the red in yogurts, veggie burgers, and strawberry-flavored foods."
+    ],
+    link: null,
+    sources: [
+      {
+        label: "FDA: Regulatory Status of Color Additives database (beet juice/powder, 21 CFR 73.260/73.40)",
+        url: "https://hfpappexternal.fda.gov/scripts/fdcc/index.cfm?set=ColorAdditives&sort=Sort_Unique_ID&order=ASC&showAll=true&type=column&search=Use-current%C2%A4VARCHAR%C2%A4foods"
+      },
+      {
+        label: "EU: Regulation 231/2012 laying down specifications for food additives (incl. E162 beetroot red)",
+        url: "https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:02012R0231-20240212"
+      }
+    ]
+  },
+    {
+    name: "Spirulina extract",
+    id: "spirulina-extract",
+    aliases: [
+      "Spirulina extract",
+      "Phycocyanin",
+      "Blue spirulina"
+    ],
+    e_number: null,
+    ins_number: null,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Color (natural)",
+    function: "Color",
+    description: "The natural blue — extracted from blue-green algae. It took a Mars candy petition to get it approved, and it now colors everything from ice cream to cereal.",
+    regulatory_status: {
+      us: "Listed color additive since 2013 (21 CFR 73.530); uses expanded across food categories since",
+      eu: "No separate E-number listing found in this review"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "FDA listed spirulina extract as a color additive in August 2013 (78 FR 49120), after a petition from Mars Inc. for candy and gum.",
+      "Its blue comes from phycocyanins — the same pigments the algae uses for photosynthesis.",
+      "Use has expanded steadily since: ice cream, yogurt, cereals, beverages, and frostings.",
+      "Look for 'spirulina extract' — the blue or green in 'naturally colored' candy and yogurt."
+    ],
+    link: null,
+    sources: [
+      {
+        label: "21 CFR 73.530: Spirulina extract (law.cornell.edu)",
+        url: "https://www.law.cornell.edu/cfr/text/21/73.530"
+      },
+      {
+        label: "FoodNavigator: FDA expands spirulina blue coloring to ice cream, yogurt, cereals (2014)",
+        url: "https://www.foodnavigator.com/Article/2014/04/10/FDA-says-firms-can-use-natural-blue-food-color-spirulina-in-applications-beyond-gum-candy/"
+      }
+    ]
+  },
+    {
+    name: "HVP (hydrolyzed vegetable protein)",
+    id: "hvp",
+    aliases: [
+      "Hydrolyzed vegetable protein",
+      "HVP",
+      "Hydrolyzed soy protein",
+      "Hydrolyzed corn protein",
+      "Hydrolyzed wheat protein"
+    ],
+    e_number: null,
+    ins_number: null,
+    risk: "certain",
+    risk_weight: 15,
+    category: "Flavor enhancer",
+    function: "Flavor enhancer",
+    description: "The savory depth in soups, chips, and frozen dinners — plant protein broken down to release glutamate. Not MSG itself, but it plays the same role on your tongue.",
+    regulatory_status: {
+      us: "Must be labeled by protein source (21 CFR 102.22); 'hydrolyzed vegetable protein' alone is not an acceptable name",
+      eu: "No separate EU additive listing found in this review"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "A 1991 peer-reviewed review in Headache found HVP typically contains 10–30% MSG.",
+      "FDA rules (21 CFR 102.22) say 'hydrolyzed vegetable protein' alone is not an acceptable label name — the source must be named, e.g. 'hydrolyzed soy protein.'",
+      "Per FDA labeling codes, HVP on an ingredient list can refer to MSG — it does not have to say the letters.",
+      "Look for 'hydrolyzed soy/corn/wheat protein' — in soups, chips, bouillon, and frozen meals."
+    ],
+    link: null,
+    sources: [
+      {
+        label: "PubMed 2030071: MSG and hydrolyzed vegetable protein induced headache (1991 review)",
+        url: "https://pubmed.ncbi.nlm.nih.gov/2030071/"
+      },
+      {
+        label: "21 CFR 102.22: Protein hydrolysates naming rules (govinfo.gov)",
+        url: "https://www.govinfo.gov/content/pkg/CFR-2010-title21-vol2/pdf/CFR-2010-title21-vol2-sec102-22.pdf"
+      }
+    ]
+  },
+    {
+    name: "PGPR",
+    id: "pgpr",
+    aliases: [
+      "PGPR",
+      "Polyglycerol polyricinoleate",
+      "E476"
+    ],
+    e_number: "E476",
+    ins_number: 476,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Emulsifier",
+    function: "Emulsifier",
+    description: "The reason mass-market chocolate flows smoothly into molds — an emulsifier from castor-bean fatty acids that lets makers use less cocoa butter. Hershey's added it in 2006, removed it in 2015, then brought it back.",
+    regulatory_status: {
+      us: "FDA GRAS for human consumption",
+      eu: "Authorized as E476; EFSA's 2017 re-evaluation raised the ADI to 25 mg/kg/day"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "The FDA deems PGPR generally recognized as safe; JECFA set an acceptable daily intake of 7.5 mg/kg body weight per day.",
+      "EFSA's 2017 re-evaluation raised the ADI to 25 mg/kg/day after a new chronic toxicity and carcinogenicity study.",
+      "Hershey's introduced PGPR in 2006, removed it in 2015 amid clean-label pressure, then reincorporated it.",
+      "Look for 'PGPR' or 'polyglycerol polyricinoleate' — in chocolate bars, coatings, and compound chocolate."
+    ],
+    link: null,
+    sources: [
+      {
+        label: "Wikipedia: Polyglycerol polyricinoleate (FDA GRAS, JECFA ADI, EFSA 2017 re-evaluation)",
+        url: "https://en.wikipedia.org/wiki/Polyglycerol_polyricinoleate"
+      },
+      {
+        label: "Tasting Table: What is the 'PGPR' in chocolate? (Hershey's history)",
+        url: "http://www.tastingtable.com/1664762/what-is-pgpr-in-chocolate/"
+      }
+    ]
+  },
+    {
+    name: "Sorbitan monostearate",
+    id: "sorbitan-monostearate",
+    aliases: [
+      "Sorbitan monostearate",
+      "E491",
+      "Span 60"
+    ],
+    e_number: "E491",
+    ins_number: 491,
+    risk: "lower",
+    risk_weight: 5,
+    category: "Emulsifier",
+    function: "Emulsifier",
+    description: "The emulsifier in whipped toppings, cake icing, and chocolate — keeps fat and water mixed and helps yeast rehydrate. One of the most studied emulsifiers on the shelf.",
+    regulatory_status: {
+      us: "Permitted food additive with per-use limits (21 CFR 172.842)",
+      eu: "Authorized as E491; EFSA's 2017 re-evaluation set a group ADI of 10 mg/kg/day (as sorbitan)"
+    },
+    last_reviewed: "2026-10-11",
+    bullets: [
+      "FDA regulation 21 CFR 172.842 permits it in whipped toppings, cake icings, chocolate, and yeast, with limits for each use.",
+      "EFSA's 2017 re-evaluation found no genotoxicity concern and set a group ADI of 10 mg sorbitan/kg/day.",
+      "In long-term mouse studies the no-effect level was 2,600 mg/kg/day, with no sign of carcinogenicity.",
+      "Look for 'sorbitan monostearate' or 'E491' — in whipped toppings, icings, and chocolate coatings."
+    ],
+    link: null,
+    sources: [
+      {
+        label: "21 CFR 172.842: Sorbitan monostearate (govinfo.gov)",
+        url: "https://www.govinfo.gov/content/pkg/CFR-2003-title21-vol3/pdf/CFR-2003-title21-vol3-sec172-842.pdf"
+      },
+      {
+        label: "EFSA 2017: Re-evaluation of sorbitan monostearate (E 491) et al. as food additives",
+        url: "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2017.4788"
+      }
+    ]
+  }
   ];
