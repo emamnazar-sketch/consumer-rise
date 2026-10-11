@@ -19,6 +19,8 @@
   --green-tint:#DCEBDD;
   --blue:#2E6E8C;           /* links + info: the trust anchor */
   --blue-tint:#D8E7EE;
+  --olive-text:#6E6A1F;      /* text-safe olive */
+  --olive-tint:#EFE8C4;
   --line:1px solid var(--line-c);
   --shadow:0 8px 28px rgba(27,23,18,.10);
   --radius:14px;
@@ -45,6 +47,8 @@
   --green-tint:#233B28;
   --blue:#8FB9C7;
   --blue-tint:#243C44;
+  --olive-text:#D3CC7A;
+  --olive-tint:#3A3520;
   --shadow:0 8px 28px rgba(0,0,0,.35);
   color-scheme:dark;
 }
@@ -220,9 +224,11 @@ a:hover{color:var(--red-text)}
 /* ---------- risk badges ---------- */
 .risk{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:13px;letter-spacing:.02em;
   padding:6px 14px;border-radius:999px;white-space:nowrap}
-.risk-high{background:var(--red-tint);color:var(--red-text)}
-.risk-medium{background:var(--amber-tint);color:var(--amber-text)}
-.risk-low{background:var(--green-tint);color:var(--green-text)}
+.risk-avoid{background:var(--red-tint);color:var(--red-text)}
+.risk-caution{background:var(--amber-tint);color:var(--amber-text)}
+.risk-certain{background:var(--blue-tint);color:var(--blue)}
+.risk-cutback{background:var(--olive-tint);color:var(--olive-text)}
+.risk-lower{background:var(--green-tint);color:var(--green-text)}
 
 /* ---------- ingredients ---------- */
 .filters{background:var(--card);border:var(--line);box-shadow:var(--shadow);border-radius:var(--radius);padding:22px;margin-bottom:30px}

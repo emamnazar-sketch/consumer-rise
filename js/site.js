@@ -455,7 +455,7 @@
     return Math.max(5, 100 - w);
   }
   function riskBadge(risk) {
-    var labels = { high: "\u2715 Higher concern", medium: "\u26A0 Worth knowing", low: "\u2713 Lower concern" };
+    var labels = { avoid: "\u2715 Avoid", caution: "\u26A0 Caution", certain: "\u25D0 Certain people should avoid", cutback: "\u25D1 Cut back", lower: "\u2713 Lower concern" };
     return '<span class="risk risk-' + risk + '">' + (labels[risk] || risk) + "</span>";
   }
   function escHtml(s) {
@@ -587,7 +587,7 @@
     var shareScore = hits.length ? scanScore(hits) : 100;
     if (!hits.length) {
       h += '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">No flagged ingredients detected</h3>' +
-        '<p style="color:var(--ink-soft)">We read your label and none of our 50 flagged ingredients showed up. ' +
+        '<p style="color:var(--ink-soft)">We read your label and none of our 53 flagged ingredients showed up. ' +
         'That is good news as far as our database goes — it is not a verdict that the product is healthy overall.</p>' +
         shareButtonHTML();
     } else {
@@ -605,6 +605,7 @@
         h += '<div style="background:var(--paper);border:var(--line);border-radius:var(--radius);padding:14px 16px">' +
           '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px">' +
           "<strong>" + escHtml(d.name) + "</strong>" + riskBadge(d.risk) + "</div>" +
+          (d.function ? '<p style="font-size:13px;color:var(--ink-soft);margin:0 0 6px">Function: ' + escHtml(d.function) + '</p>' : "") +
           '<p style="font-size:15px;color:var(--ink-soft);margin:0 0 8px">' + escHtml(d.description.split(".")[0]) + ".</p>" +
           '<a href="/ingredients.html#ing-' + escHtml(d.id) + '" style="font-weight:800;font-size:14.5px">Read the full dossier →</a></div>';
       });
@@ -632,7 +633,7 @@
     h += '<details style="margin-top:14px"><summary style="cursor:pointer;font-weight:700;font-size:14.5px">What we read from your photo</summary>' +
       '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:8px;white-space:pre-wrap">' + escHtml((ocrText || "").slice(0, 1200) || "(no text detected)") + "</p></details>";
     h += '<p class="center mt"><button class="btn btn-ink" id="scan-again">Scan another label</button></p>';
-    h += '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:10px">Flagged results cover our 50-ingredient index. The inventory section below lists FDA-recorded names with no verdict attached. Results depend on photo quality. General information only — <a href="/disclaimer">not medical advice</a>.</p></div>';
+    h += '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:10px">Flagged results cover our 53-ingredient index. The inventory section below lists FDA-recorded names with no verdict attached. Results depend on photo quality. General information only — <a href="/disclaimer">not medical advice</a>.</p></div>';
     result.innerHTML = h;
     wireShare(shareScore, hits);
     var again = document.getElementById("scan-again");

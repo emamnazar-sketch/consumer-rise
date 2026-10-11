@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ingredient Index — Consumer Rising | 50 Ingredients + Full Inventory</title>
-<meta name="description" content="Search the Consumer Rising Ingredient Index: 50 debated food ingredients rated High, Medium, or Low risk, plus 3,924 more from FDA's inventory — with E-numbers, aliases, and plain-word explanations.">
+<title>Ingredient Index — Consumer Rising | 53 Ingredients + Full Inventory</title>
+<meta name="description" content="Search the Consumer Rising Ingredient Index: 53 debated food ingredients rated across 5 risk tiers, plus 3,924 more from FDA's inventory — with E-numbers, aliases, and plain-word explanations.">
 <meta property="og:title" content="Ingredient Index — Consumer Rising">
-<meta property="og:description" content="Fifty debated ingredients with full verdicts, plus 3,924 more from FDA's inventory — with plain-word explanations and label aliases.">
+<meta property="og:description" content="Fifty-three debated ingredients with full verdicts, plus 3,924 more from FDA's inventory — with plain-word explanations and label aliases.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
 <script>try{var __t=localStorage.getItem("cr-theme");if(__t){document.documentElement.setAttribute("data-theme",__t)}else if(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches){document.documentElement.setAttribute("data-theme","dark")}}catch(e){}</script>
-<link rel="stylesheet" href="/css/style.css?v=8">
+<link rel="stylesheet" href="/css/style.css?v=9">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23D93A2B'/%3E%3Ctext x='32' y='44' font-family='Arial Black,Arial' font-size='30' font-weight='900' fill='white' text-anchor='middle'%3ECR%3C/text%3E%3C/svg%3E">
 </head>
 <body>
@@ -44,7 +44,7 @@
     <div class="wrap">
       <span class="kicker">The dossier</span>
       <h1>Ingredient Index</h1>
-      <p class="lead">50 ingredients with full verdicts. 3,924 recognized from FDA's inventory. Know everything.</p>
+      <p class="lead">53 ingredients with full verdicts. 3,924 recognized from FDA's inventory. Know everything.</p>
     </div>
   </section>
 
@@ -71,9 +71,11 @@
             <label>Risk level</label>
             <div class="risk-btns" role="group" aria-label="Risk level filter">
               <button class="risk-btn" data-risk="" aria-pressed="true">All</button>
-              <button class="risk-btn" data-risk="high" aria-pressed="false">Higher concern</button>
-              <button class="risk-btn" data-risk="medium" aria-pressed="false">Worth knowing</button>
-              <button class="risk-btn" data-risk="low" aria-pressed="false">Lower concern</button>
+              <button class="risk-btn" data-risk="avoid" aria-pressed="false">Avoid</button>
+              <button class="risk-btn" data-risk="caution" aria-pressed="false">Caution</button>
+              <button class="risk-btn" data-risk="certain" aria-pressed="false">Certain people</button>
+              <button class="risk-btn" data-risk="cutback" aria-pressed="false">Cut back</button>
+              <button class="risk-btn" data-risk="lower" aria-pressed="false">Lower concern</button>
             </div>
           </div>
         </div>
@@ -160,7 +162,7 @@
 </footer>
 <script src="/js/config.js?v=5"></script>
 <script src="/js/ingredients-data.js?v=6"></script>
-<script src="/js/site.js?v=12"></script>
+<script src="/js/site.js?v=13"></script>
 <script>
 (function () {
   var data = window.CR_INGREDIENTS || [];
@@ -202,14 +204,14 @@
       return;
     }
     grid.innerHTML = list.map(function (d) {
-      var labels = { high: "\u2715 Higher concern", medium: "\u26A0 Worth knowing", low: "\u2713 Lower concern" };
+      var labels = { avoid: "\u2715 Avoid", caution: "\u26A0 Caution", certain: "\u25D0 Certain people should avoid", cutback: "\u25D1 Cut back", lower: "\u2713 Lower concern" };
       var bullets = d.bullets.map(function (b) { return "<li>" + esc(b) + "</li>"; }).join("");
       var link = d.link ? '<p style="margin-top:12px"><a href="' + d.link + '" style="font-weight:800">Read the full finding →</a></p>' : "";
       var sources = d.sources ? '<p class="ing-sources"><b>Sources:</b> ' + d.sources.map(function (s) { return '<a href="' + s.url + '" target="_blank" rel="noopener">' + esc(s.label) + '</a>'; }).join(' · ') + '</p>' : "";
       return (
         '<article class="ing-card" id="ing-' + d.id + '">' +
           '<div class="ing-card-head"><div><h3>' + esc(d.name) + '</h3>' +
-          '<p class="ing-cat">' + esc(d.category) + '</p></div>' +
+          '<p class="ing-cat">' + esc(d.function || d.category) + '</p></div>' +
           '<span class="risk risk-' + d.risk + '">' + labels[d.risk] + '</span></div>' +
           '<div class="ing-card-body">' +
             '<p class="ing-aliases"><b>Also called:</b> ' + esc(d.aliases.join(", ")) + '</p>' +
