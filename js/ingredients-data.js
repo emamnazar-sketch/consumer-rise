@@ -672,6 +672,10 @@ window.CR_INGREDIENTS = [
       {
         label: "EFSA: re-evaluation of caramel colours (E 150 a,b,c,d) (2011)",
         url: "https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2011.2004"
+      },
+      {
+        label: "PLOS ONE: caramel color III/IV, 4-MEI, NTP findings, Prop 65 listing",
+        url: "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0118138&type=printable"
       }
     ]
   },
@@ -1682,32 +1686,7 @@ window.CR_INGREDIENTS = [
       { label: "CSPI: Chemical Cuisine — potassium iodate ('Avoid')", url: "https://www.cspi.org/page/chemical-cuisine-food-additive-safety-ratings" }
     ]
   },
-  {
-    name: "Caramel Coloring (Class III & IV)",
-    id: "caramel-coloring",
-    aliases: ["Caramel color", "Ammonia caramel", "Sulphite ammonia caramel", "E150c", "E150d"],
-    e_number: "E150c/E150d",
-    ins_number: null,
-    risk: "avoid",
-    risk_weight: 30,
-    category: "Color",
-    function: "Color",
-    description: "The brown in cola, soy sauce, and gravy. But Classes III and IV aren't made like homemade caramel — they're cooked with ammonia compounds, which creates a byproduct called 4-MEI.",
-    regulatory_status: { us: "FDA-permitted color additive; 4-MEI listed under California Prop 65", eu: "Permitted (E150c, E150d)" },
-    last_reviewed: "2026-10-11",
-    bullets: [
-      "Classes III and IV are made by heating sugars with ammonia compounds, forming 4-methylimidazole (4-MEI) as a byproduct. (PLOS ONE, 2015)",
-      "The National Toxicology Program found 'clear evidence' that 4-MEI caused lung tumors in mice; IARC classifies it as possibly carcinogenic to humans (Group 2B). (PLOS ONE, 2015)",
-      "California listed 4-MEI under Prop 65 in 2011; afterward, major cola makers lowered 4-MEI levels in US sodas. (PLOS ONE, 2015)",
-      "Look for 'caramel color' or 'caramel coloring' — labels don't have to say which of the four classes it is."
-    ],
-    link: null,
-    sources: [
-      { label: "PLOS ONE: Caramel color III/IV, 4-MEI, NTP findings, Prop 65 listing", url: "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0118138&type=printable" },
-      { label: "OEHHA: 4-Methylimidazole (4-MEI) fact sheet", url: "https://oehha.ca.gov/proposition-65/4-methylimidazole-4-mei-fact-sheet" }
-    ]
-  },
-  {
+    {
     name: "Transglutaminase (\"Meat Glue\")",
     id: "transglutaminase",
     aliases: ["Meat glue", "TG enzyme", "Microbial transglutaminase", "mTG"],
