@@ -1164,17 +1164,56 @@
     if (barcodeBtn) barcodeBtn.disabled = false;
   }
 
-  function barcodeCameraDenied() {
-    result.innerHTML = '<div class="dossier scan-result" role="status">' +
-      '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">Camera unavailable</h3>' +
-      '<p style="color:var(--ink-soft)">We couldn\'t access the camera — it may be blocked for this site. ' +
-      "You can allow camera access in your browser settings, or photograph the label instead:</p>" +
-      '<p class="center mt"><button class="btn btn-ink" id="barcode-photo-fallback">Photograph the label</button></p></div>';
-    var fb = document.getElementById("barcode-photo-fallback");
+  /* On mobile the result panel can render below the fold, which reads as
+     "nothing happened" — bring it into view after every barcode render. */
+  function showResult() {
+    try { result.scrollIntoView({ block: "center", behavior: "smooth" }); } catch (e) {}
+  }
+
+  function bindPhotoFallback(id) {
+    var fb = document.getElementById(id);
     if (fb) fb.addEventListener("click", function () {
       result.innerHTML = "";
       if (fileInput) fileInput.click();
     });
+  }
+
+  /* Barcode error panel with the two camera-free fallbacks: photograph the
+     label, or type the barcode number (manual entry under the scan button). */
+  function barcodeErrorPanel(heading, bodyHtml) {
+    result.innerHTML = '<div class="dossier scan-result" role="status">' +
+      '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">' + heading + "</h3>" +
+      bodyHtml +
+      '<p class="center mt"><button class="btn btn-ink" id="barcode-photo-fallback">Photograph the label</button></p>' +
+      '<p class="center" style="margin-top:10px;font-size:14.5px;color:var(--ink-soft)">or type the barcode number below the scan button.</p></div>';
+    bindPhotoFallback("barcode-photo-fallback");
+    showResult();
+  }
+
+  function barcodeBlocked() {
+    barcodeErrorPanel("Camera is blocked",
+      '<p style="color:var(--ink-soft)">Your browser blocked the camera for this site. ' +
+      "On iPhone: tap the \u2018aA\u2019 button in the address bar \u2192 Website Settings \u2192 Camera \u2192 Allow. Then tap Scan again.</p>");
+  }
+
+  function barcodeNoCamera() {
+    barcodeErrorPanel("No camera found",
+      '<p style="color:var(--ink-soft)">This device did not report a camera we can use.</p>');
+  }
+
+  function barcodeProblem(err) {
+    var detail = "unknown error";
+    if (err) detail = (err.name || "Error") + (err.message ? " \u2014 " + err.message : "");
+    barcodeErrorPanel("Scanner hit a problem",
+      '<p style="color:var(--ink-soft)">Something went wrong while starting the scanner.</p>' +
+      '<p style="color:var(--ink-soft);font-size:13.5px">Problem detail: ' + escHtml(detail) + "</p>");
+  }
+
+  function barcodeLoadFailed() {
+    result.innerHTML = '<div class="dossier scan-result" role="status">' +
+      '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">Scanner failed to load</h3>' +
+      '<p style="color:var(--ink-soft)">The barcode reader couldn\'t download. Check your connection and try again — or photograph the label directly.</p></div>';
+    showResult();
   }
 
   function barcodeNotFound(barcode) {
@@ -1188,6 +1227,7 @@
       result.innerHTML = "";
       if (fileInput) fileInput.click();
     });
+    showResult();
   }
 
   function recordBarcodeResult(product) {
@@ -1206,6 +1246,7 @@
         result.innerHTML = "";
         if (fileInput) fileInput.click();
       });
+      showResult();
       return;
     }
     if (scanMode === "skin") {
@@ -1231,6 +1272,7 @@
   function lookupBarcode(barcode) {
     var db = scanMode === "skin" ? "beauty" : "food";
     result.innerHTML = '<div class="form-ok" role="status"><span class="big">Looking up…</span>Checking the product database for barcode ' + escHtml(barcode) + ".</div>";
+    showResult();
     fetch("/api/product?barcode=" + encodeURIComponent(barcode) + "&db=" + db)
       .then(function (r) { return r.json().then(function (j) { return { status: r.status, body: j }; }); })
       .then(function (res) {
@@ -1251,27 +1293,31 @@
           result.innerHTML = "";
           if (fileInput) fileInput.click();
         });
+        showResult();
       });
   }
 
   function startBarcodeScan() {
     if (barcodeActive) return;
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      barcodeCameraDenied();
+      barcodeProblem({ name: "Unsupported", message: "this browser does not provide camera access" });
       return;
     }
     if (barcodeBtn) barcodeBtn.disabled = true;
     if (barcodeView) barcodeView.hidden = false;
-    result.innerHTML = '<div class="form-ok" role="status"><span class="big">Starting camera…</span>Point at the barcode.</div>';
+    result.innerHTML = '<div class="form-ok" role="status"><span class="big">Starting camera…</span>Hold the barcode in the frame.</div>';
+    showResult();
     loadZXing().then(function () {
       var Z = window.ZXingBrowser;
-      var hints = new Map();
-      hints.set(Z.DecodeHintType.POSSIBLE_FORMATS, [
-        Z.BarcodeFormat.UPC_A, Z.BarcodeFormat.UPC_E,
-        Z.BarcodeFormat.EAN_13, Z.BarcodeFormat.EAN_8
-      ]);
-      barcodeReader = new Z.BrowserMultiFormatReader(hints, 400);
-      return navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
+      barcodeReader = new Z.BrowserMultiFormatReader(new Map(), { delayBetweenScanAttempts: 250, tryPlayVideoTimeout: 10000 });
+      try {
+        barcodeReader.possibleFormats = [
+          Z.BarcodeFormat.UPC_A, Z.BarcodeFormat.UPC_E,
+          Z.BarcodeFormat.EAN_13, Z.BarcodeFormat.EAN_8,
+          Z.BarcodeFormat.CODE_128
+        ];
+      } catch (e) {}
+      return navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment", width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
     }).then(function (stream) {
       barcodeStream = stream;
       barcodeActive = true;
@@ -1288,14 +1334,14 @@
       });
     }).catch(function (err) {
       stopBarcodeScan();
-      if (err && (err.name === "NotAllowedError" || err.name === "SecurityError")) {
-        barcodeCameraDenied();
-      } else if (err && err.message === "zxing-cdn") {
-        result.innerHTML = '<div class="dossier scan-result" role="status">' +
-          '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">Scanner failed to load</h3>' +
-          '<p style="color:var(--ink-soft)">The barcode reader couldn\'t download. Check your connection and try again — or photograph the label directly.</p></div>';
+      if (err && err.message === "zxing-cdn") {
+        barcodeLoadFailed();
+      } else if (err && (err.name === "NotAllowedError" || err.name === "SecurityError")) {
+        barcodeBlocked();
+      } else if (err && (err.name === "NotFoundError" || err.name === "OverconstrainedError")) {
+        barcodeNoCamera();
       } else {
-        barcodeCameraDenied();
+        barcodeProblem(err);
       }
     });
   }
@@ -1304,6 +1350,35 @@
   if (barcodeCancel) barcodeCancel.addEventListener("click", function () {
     stopBarcodeScan();
     result.innerHTML = "";
+  });
+
+  /* ---- Manual barcode entry: no camera needed, same lookup path ---- */
+  var barcodeManualToggle = document.getElementById("barcode-manual-toggle");
+  var barcodeManual = document.getElementById("barcode-manual");
+  var barcodeManualInput = document.getElementById("barcode-manual-input");
+  var barcodeManualBtn = document.getElementById("barcode-manual-btn");
+  if (barcodeManualToggle && barcodeManual) {
+    barcodeManualToggle.addEventListener("click", function () {
+      barcodeManual.hidden = !barcodeManual.hidden;
+      if (!barcodeManual.hidden && barcodeManualInput) barcodeManualInput.focus();
+    });
+  }
+  function submitManualBarcode() {
+    if (!barcodeManualInput) return;
+    var code = String(barcodeManualInput.value || "").replace(/\D/g, "");
+    if (!/^[0-9]{8,14}$/.test(code)) {
+      result.innerHTML = '<div class="dossier scan-result" role="status">' +
+        '<h3 style="font-weight:900;text-transform:uppercase;margin-bottom:10px">Check the number</h3>' +
+        '<p style="color:var(--ink-soft)">That does not look like a full barcode — barcodes have 8 to 14 digits, and that was ' + code.length + ". Check the digits printed under the bars and try again.</p></div>";
+      showResult();
+      return;
+    }
+    stopBarcodeScan();
+    lookupBarcode(code);
+  }
+  if (barcodeManualBtn) barcodeManualBtn.addEventListener("click", submitManualBarcode);
+  if (barcodeManualInput) barcodeManualInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); submitManualBarcode(); }
   });
 
   /* ---- theme toggle ---- */

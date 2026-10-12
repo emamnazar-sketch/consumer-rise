@@ -132,9 +132,19 @@
           <span style="color:var(--ink-soft);font-size:15px">Tap to use your camera or choose a photo</span>
           <input type="file" id="scan-file" accept="image/*" capture="environment">
         </label>
-        <p class="center" id="barcode-row" style="margin:16px 0 0">
+        <div class="center" id="barcode-row" style="margin:16px 0 0">
           <button type="button" class="btn btn-ink" id="scan-barcode">Scan a barcode instead</button>
-        </p>
+          <div style="margin-top:10px">
+            <button type="button" id="barcode-manual-toggle" style="background:none;border:none;padding:6px;color:var(--ink-soft);font-size:14.5px;text-decoration:underline;cursor:pointer">Type the barcode number instead</button>
+          </div>
+          <div id="barcode-manual" hidden style="margin:12px auto 0;max-width:420px">
+            <div style="display:flex;gap:8px">
+              <input type="text" id="barcode-manual-input" inputmode="numeric" autocomplete="off" placeholder="e.g. 5449000000996" aria-label="Barcode number" style="flex:1;min-width:0;font-family:var(--font-ui);font-size:16px;padding:13px 15px;border:var(--line);border-radius:10px;background:var(--card);color:var(--ink)">
+              <button type="button" class="btn btn-ink" id="barcode-manual-btn">Look it up</button>
+            </div>
+            <p style="margin:8px 0 0;font-size:13.5px;color:var(--ink-soft)">The digits are printed under the bars on the package.</p>
+          </div>
+        </div>
         <div id="barcode-view" hidden style="margin-top:16px">
           <div style="position:relative;border-radius:12px;overflow:hidden;background:#111">
             <video id="barcode-video" playsinline muted style="width:100%;display:block;aspect-ratio:4/3;object-fit:cover"></video>
@@ -142,7 +152,7 @@
               <div style="width:72%;height:38%;border:3px solid rgba(255,255,255,.9);border-radius:12px;box-shadow:0 0 0 4000px rgba(0,0,0,.35)"></div>
             </div>
           </div>
-          <p class="center" style="margin:10px 0 0;font-size:14.5px;color:var(--ink-soft)">Point at the barcode — it reads automatically.</p>
+          <p class="center" style="margin:10px 0 0;font-size:14.5px;color:var(--ink-soft)">Hold the barcode in the frame — it reads automatically.</p>
           <p class="center" style="margin:8px 0 0"><button type="button" class="btn" id="barcode-cancel">Cancel</button></p>
         </div>
         <div id="scan-preview"></div>
@@ -205,7 +215,7 @@
 <script src="/js/config.js?v=5"></script>
 <script src="/js/ingredients-data.js?v=12"></script>
 <script src="/js/pet-data.js?v=1"></script>
-<script src="/js/site.js?v=25"></script>
+<script src="/js/site.js?v=27"></script>
 <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", function () {
