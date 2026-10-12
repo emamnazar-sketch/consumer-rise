@@ -475,3 +475,8 @@ button.inv-row:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
 .share-label{font-weight:800;font-size:15px;margin-right:4px}
 .share-btn{display:inline-block;padding:9px 16px;border:var(--line);border-radius:999px;background:var(--card);color:var(--ink);font-weight:700;font-size:14px;text-decoration:none;cursor:pointer;font-family:inherit}
 .share-btn:hover{background:var(--ink);color:var(--card)}
+
+/* ---------- real-product side-by-side hero ---------- */
+.hero-sidebyside .hero-pair{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.hero-sidebyside .hero-pair img{width:100%;height:auto;border-radius:var(--radius);box-shadow:var(--shadow);background:#fff}
+@media(max-width:640px){.hero-sidebyside .hero-pair{grid-template-columns:1fr}}
