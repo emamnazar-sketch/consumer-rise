@@ -828,11 +828,16 @@
     if (!product) h += ocrDetailsHTML(ocrText);
     h += barcodeAttributionHTML(product);
     h += '<p class="center mt"><button class="btn btn-ink" id="scan-again">Scan another label</button></p>';
-    h += '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:10px">Flagged results cover our 100-ingredient index. The inventory section below lists FDA-recorded names with no verdict attached. Results depend on photo quality. General information only — <a href="/disclaimer">not medical advice</a>.</p></div>';
+    h += '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:10px">Flagged results cover our 99-ingredient index. The inventory section below lists FDA-recorded names with no verdict attached. Results depend on photo quality. General information only — <a href="/disclaimer">not medical advice</a>.</p></div>';
     result.innerHTML = h;
     wireShare("food", { score: shareScore, hits: hits }, product);
     wireScanAgain();
     loadAlternatives(product);
+    if (!product) {
+      var pab = document.getElementById("alt-box");
+      if (pab) pab.innerHTML = '<div style="margin-top:22px"><div class="quiz-step-tag">Better alternatives</div>' +
+        '<p style="font-size:14.5px;color:var(--ink-soft)">Alternatives are matched by product category, and a label photo does not tell us the product. Scan the barcode on the package and we will show what scores higher in its category.</p></div>';
+    }
   }
 
   /* ---- Better alternatives: neutral, no purchase language.
@@ -848,7 +853,21 @@
       .then(function (d) {
         if (!d || !d.ok || !d.alternatives || !d.alternatives.length) {
           var b2 = document.getElementById("alt-box");
-          if (b2) b2.innerHTML = "";
+          if (b2) {
+            var note = (d && d.note) || "";
+            var msg;
+            if (note === "scores-well") {
+              msg = "Good news on this one — it already scores well, so nothing in its category beat it.";
+            } else if (note === "unavailable" || !d) {
+              msg = "The alternatives lookup is having a slow moment — your scan result above stands on its own.";
+            } else if (note === "no-ingredients" || note === "no-category") {
+              msg = "We do not have enough label data on this product yet to line up alternatives.";
+            } else {
+              msg = "No higher-scoring option found in this category yet. The product database grows every week — and our goal is to make you aware; you make the decision.";
+            }
+            b2.innerHTML = '<div style="margin-top:22px"><div class="quiz-step-tag">Better alternatives</div>' +
+              '<p style="font-size:14.5px;color:var(--ink-soft)">' + msg + "</p></div>";
+          }
           return;
         }
         lastAlternatives = d.alternatives;
@@ -872,7 +891,8 @@
       })
       .catch(function () {
         var b4 = document.getElementById("alt-box");
-        if (b4) b4.innerHTML = "";
+        if (b4) b4.innerHTML = '<div style="margin-top:22px"><div class="quiz-step-tag">Better alternatives</div>' +
+          '<p style="font-size:14.5px;color:var(--ink-soft)">The alternatives lookup is having a slow moment — your scan result above stands on its own.</p></div>';
       });
   }
 
