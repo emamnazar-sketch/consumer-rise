@@ -174,27 +174,29 @@ export async function onRequest(context) {
   var scannedRes = scoreIngredients(scannedIng);
   if (scannedRes.score >= 80) return json({ ok: true, alternatives: [], note: "scores-well", scannedScore: scannedRes.score }); /* already good */
 
-  /* 2. Category = most specific (first listed). */
-  var cats = String(scanned.categories || "").split(",").map(function (c) { return c.trim(); }).filter(Boolean);
+  /* 2. Categories: OFF data is messy — some products carry "en:" language
+        prefixes inside the names ("en:Breakfast cereals"). Strip prefixes,
+        dedupe, and try up to 3 categories until one yields alternatives. */
+  var cats = String(scanned.categories || "").split(",").map(function (c) {
+    return c.trim().replace(/^[a-z]{2}:/i, "").trim();
+  }).filter(Boolean);
+  var uniqCats = [];
+  cats.forEach(function (c) { if (uniqCats.indexOf(c) === -1) uniqCats.push(c); });
+  cats = uniqCats.slice(0, 3);
   if (!cats.length) return json({ ok: true, alternatives: [], note: "no-category" });
-  var category = cats[0];
 
-  /* 3. Category cache. */
-  var cachedList = null;
-  try {
-    var row = await env.DB.prepare(
-      "SELECT alternatives_json, fetched_at FROM alternative_cache WHERE category = ?"
-    ).bind(category).first();
-    if (row && row.alternatives_json && (Date.now() - row.fetched_at) < CACHE_TTL) {
-      var parsed = JSON.parse(row.alternatives_json);
-      if (Array.isArray(parsed) && parsed.length) cachedList = parsed;
-    }
-  } catch (e) { /* treat as miss */ }
-
-  /* 4. Cache miss: search Open Food Facts (v2 API — the legacy cgi/search.pl
-        503s constantly). US-market products first; widen if too few score. */
-  if (!cachedList) {
-    var slug = categorySlug(category);
+  async function resolveCategory(cat) {
+    /* cache first */
+    try {
+      var row = await env.DB.prepare(
+        "SELECT alternatives_json, fetched_at FROM alternative_cache WHERE category = ?"
+      ).bind(cat).first();
+      if (row && row.alternatives_json && (Date.now() - row.fetched_at) < CACHE_TTL) {
+        var parsed = JSON.parse(row.alternatives_json);
+        if (Array.isArray(parsed) && parsed.length) return parsed;
+      }
+    } catch (e) { /* treat as miss */ }
+    var slug = categorySlug(cat);
     var fields = "code,product_name,brands,ingredients_text";
     async function searchCategory(withUsFilter) {
       var u = "https://world.openfoodfacts.org/api/v2/search?categories_tags=" + encodeURIComponent(slug) +
@@ -231,38 +233,51 @@ export async function onRequest(context) {
       var wider = await searchCategory(false);
       if (wider !== null && wider.length > scoredList.length) scoredList = wider;
     }
-    if (scoredList === null) {
-      return json({ ok: true, alternatives: [], note: "unavailable", scannedScore: scannedRes.score, category: category });
-    }
-    cachedList = scoredList.slice(0, 15);
-    if (cachedList.length) {
+    if (scoredList === null) return null; /* upstream down */
+    var list = scoredList.slice(0, 15);
+    if (list.length) {
       try {
         await env.DB.prepare(
           "INSERT OR REPLACE INTO alternative_cache (category, alternatives_json, fetched_at) VALUES (?, ?, ?)"
-        ).bind(category, JSON.stringify(cachedList), Date.now()).run();
+        ).bind(cat, JSON.stringify(list), Date.now()).run();
       } catch (e) { /* non-fatal */ }
     }
+    return list;
   }
 
-  /* 5. Top 3 scoring higher than the scanned product (exclude itself). */
-  var scannedFlagged = {};
-  scannedRes.flagged.forEach(function (n) { scannedFlagged[n] = 1; });
-  var out = [];
-  for (var j = 0; j < cachedList.length && out.length < 3; j++) {
-    var c = cachedList[j];
-    if (c.barcode === barcode) continue;
-    if (!(c.score > scannedRes.score)) continue;
-    var whyBetter = [];
-    for (var k = 0; k < scannedRes.flagged.length && whyBetter.length < 3; k++) {
-      var fn = scannedRes.flagged[k];
-      if (!c.flagged || c.flagged.indexOf(fn) === -1) whyBetter.push(fn);
+  function pickAlternatives(list) {
+    var out = [];
+    for (var j = 0; j < list.length && out.length < 3; j++) {
+      var c = list[j];
+      if (c.barcode === barcode) continue;
+      if (!(c.score > scannedRes.score)) continue;
+      var whyBetter = [];
+      for (var k = 0; k < scannedRes.flagged.length && whyBetter.length < 3; k++) {
+        var fn = scannedRes.flagged[k];
+        if (!c.flagged || c.flagged.indexOf(fn) === -1) whyBetter.push(fn);
+      }
+      out.push({
+        barcode: c.barcode,
+        name: c.name, brands: c.brands, score: c.score,
+        whyBetter: whyBetter,
+        partner: false, sponsored: false
+      });
     }
-    out.push({
-      barcode: c.barcode,
-      name: c.name, brands: c.brands, score: c.score,
-      whyBetter: whyBetter,
-      partner: false, sponsored: false
-    });
+    return out;
   }
-  return json({ ok: true, alternatives: out, note: out.length ? "found" : "none-found", scannedScore: scannedRes.score, category: category });
+
+  var anyList = false;
+  for (var ci = 0; ci < cats.length; ci++) {
+    var catList = await resolveCategory(cats[ci]);
+    if (catList === null) continue; /* OFF down for this one — try next */
+    anyList = true;
+    var picked = pickAlternatives(catList);
+    if (picked.length) {
+      return json({ ok: true, alternatives: picked, note: "found", scannedScore: scannedRes.score, category: cats[ci] });
+    }
+  }
+  if (!anyList) {
+    return json({ ok: true, alternatives: [], note: "unavailable", scannedScore: scannedRes.score, category: cats[0] });
+  }
+  return json({ ok: true, alternatives: [], note: "none-found", scannedScore: scannedRes.score, category: cats[0] });
 }
