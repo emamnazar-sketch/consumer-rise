@@ -773,6 +773,24 @@
       " — ingredients matched against our index on your device.</p>";
   }
 
+  /* One named safer swap per flagged ingredient, from js/swaps-data.js.
+     Neutral and information-only: name the swap, say why it avoids the
+     flagged ingredient, cite the source. If there is no honest swap,
+     the entry says so and gives the workable move instead. */
+  function swapHTML(d) {
+    var s = (window.CR_SWAPS || {})[d.id];
+    if (!s) return "";
+    var inner;
+    if (s.none) {
+      inner = '<p style="font-size:14.5px;color:var(--ink-soft);margin:0"><strong style="color:var(--ink)">No clear swap.</strong> ' + escHtml(s.none) + "</p>";
+    } else {
+      inner = '<p style="font-size:14.5px;color:var(--ink-soft);margin:0 0 4px"><strong style="color:var(--ink)">One swap to look for:</strong> ' + escHtml(s.name) + ".</p>" +
+        '<p style="font-size:14.5px;color:var(--ink-soft);margin:0">' + escHtml(s.why) + "</p>" +
+        (s.source ? '<p style="font-size:13px;color:var(--ink-soft);margin:6px 0 0">Source: <a href="' + escHtml(s.source.url) + '" target="_blank" rel="noopener">' + escHtml(s.source.label) + "</a></p>" : "");
+    }
+    return '<div style="margin-top:12px;padding:12px 14px;background:var(--card);border:var(--line);border-radius:var(--radius)">' + inner + "</div>";
+  }
+
   function renderScanResults(hits, invHits, ocrText, product) {
     var h = '<div class="dossier scan-result" role="status">';
     h += barcodeProductHTML(product);
@@ -800,7 +818,8 @@
           "<strong>" + escHtml(d.name) + "</strong>" + riskBadge(d.risk) + "</div>" +
           (d.function ? '<p style="font-size:13px;color:var(--ink-soft);margin:0 0 6px">Function: ' + escHtml(d.function) + '</p>' : "") +
           '<p style="font-size:15px;color:var(--ink-soft);margin:0 0 8px">' + escHtml(d.description.split(".")[0]) + ".</p>" +
-          '<a href="/ingredients.html#ing-' + escHtml(d.id) + '" style="font-weight:800;font-size:14.5px">Read the full dossier →</a></div>';
+          '<a href="/ingredients.html#ing-' + escHtml(d.id) + '" style="font-weight:800;font-size:14.5px">Read the full dossier →</a>' +
+          swapHTML(d) + "</div>";
       });
       h += "</div>";
     }
