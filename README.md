@@ -54,6 +54,7 @@ All data lives in the owner's Cloudflare account (free tier). No other services.
 | `POST /api/subscribe` | `functions/api/subscribe.js` | `{email, source}` → dedupes by email → `{ok:true}` / `{ok:true, already:true}`. Rate-limited: 10 req/min per IP. |
 | `POST /api/contact` | `functions/api/contact.js` | `{name, email, subject, message}` → saved → `{ok:true}` |
 | `POST /api/scan` | `functions/api/scan.js` | `{email}` → counts scans in last 24h → `{ok:true, remaining}` or `{ok:false, reason:"limit", remaining:0}` (3/day). No photo bytes accepted or stored. |
+| `POST /api/request-check` | `functions/api/request-check.js` | `{product, email}` → the request is saved in `contact_messages` (name/subject "Product check request") and the email joins `subscribers` (source `/scanner#product-request`) → `{ok:true}`. Powers the "Want us to check a product?" box on the scanner page. |
 | `GET /api/admin/stats?key=…` | `functions/api/admin/stats.js` | Password-gated (`ADMIN_PASSWORD` env var). Returns totals, 30-day signups/scans series, top sources. Counts only — never emails. |
 
 `schema.sql` (repo root) creates `subscribers`, `contact_messages`, `scans`

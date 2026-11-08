@@ -191,6 +191,63 @@
     });
   }
 
+  /* ---- product check request (scanner page box) ---- */
+  var requestForm = document.getElementById("product-request-form");
+  if (requestForm) {
+    var reqEmailInput = requestForm.querySelector('[name="email"]');
+    var knownEmail = getSubscribedEmail();
+    if (knownEmail && reqEmailInput && !reqEmailInput.value) {
+      reqEmailInput.value = knownEmail;
+    }
+    requestForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      clearFormError(requestForm);
+      var productInput = requestForm.querySelector('[name="product"]');
+      var product = productInput ? productInput.value.trim() : "";
+      var email = reqEmailInput ? reqEmailInput.value.trim() : "";
+      if (!product) {
+        if (productInput) productInput.focus();
+        showFormError(requestForm, "Tell us the product name first.");
+        return;
+      }
+      if (!EMAIL_RE.test(email)) {
+        if (reqEmailInput) reqEmailInput.focus();
+        showFormError(requestForm, "Please enter a valid email address.");
+        return;
+      }
+      var done = function () {
+        setSubscribedEmail(email);
+        var box = document.createElement("div");
+        box.className = "form-ok";
+        box.setAttribute("role", "status");
+        box.innerHTML = okHTML(
+          "Request saved. We check products in the order readers ask for them, and we will email you what we find."
+        );
+        requestForm.replaceWith(box);
+      };
+      if (CFG.REQUEST_ENDPOINT) {
+        postJSON(CFG.REQUEST_ENDPOINT, { product: product, email: email })
+          .then(function (res) {
+            if (res && res.ok) { done(); }
+            else {
+              showFormError(requestForm,
+                "Something went wrong saving your request. Please email us the product name at " +
+                (CFG.CONTACT_EMAIL || "our contact address") + " instead.");
+            }
+          })
+          .catch(function () {
+            showFormError(requestForm,
+              "Could not reach our server. Please email us the product name at " +
+              (CFG.CONTACT_EMAIL || "our contact address") + " instead.");
+          });
+      } else {
+        showFormError(requestForm,
+          "Requests are not switched on right now. Please email us the product name at " +
+          (CFG.CONTACT_EMAIL || "our contact address") + " instead.");
+      }
+    });
+  }
+
   /* ---- scanner: email gate -> upload flow ---- */
   var gate = document.getElementById("scan-gate");
   var tool = document.getElementById("scan-tool");

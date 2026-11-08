@@ -12,6 +12,10 @@ window.CR_CONFIG = {
   // POST JSON {email} → /functions/api/scan.js — records scans per email (D1) — unlimited, free forever
   SCAN_ENDPOINT: "/api/scan",
 
+  // POST JSON {product, email} → /functions/api/request-check.js — a reader asks
+  // us to check a product; stored in D1 contact_messages + joins subscribers
+  REQUEST_ENDPOINT: "/api/request-check",
+
   // OCR runs on-device (Tesseract.js) — the photo never leaves the phone.
   // /api/scan only counts scans + stores the matched ingredient IDs and score.
 

@@ -56,7 +56,12 @@ export async function onRequest(context) {
       totals: {
         subscribers: await count(env.DB, "subscribers"),
         messages: await count(env.DB, "contact_messages"),
-        scans: await count(env.DB, "scans")
+        scans: await count(env.DB, "scans"),
+        productRequests: (
+          await env.DB.prepare(
+            "SELECT COUNT(*) AS n FROM contact_messages WHERE subject = ?"
+          ).bind("Product check request").first()
+        ).n
       },
       signupsByDay: await perDay(env.DB, "subscribers"),
       scansByDay: await perDay(env.DB, "scans"),

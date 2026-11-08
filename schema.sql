@@ -47,3 +47,8 @@ CREATE TABLE IF NOT EXISTS referrals (
   UNIQUE(code, referred_email)
 );
 CREATE INDEX IF NOT EXISTS idx_referrals_code ON referrals(code);
+
+-- Product check requests (scanner page box → POST /api/request-check) are
+-- stored in contact_messages with name/subject "Product check request" —
+-- no separate table. The requester's email also joins subscribers (source
+-- "/scanner#product-request") inside the same function.

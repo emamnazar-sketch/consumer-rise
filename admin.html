@@ -77,6 +77,7 @@
       <div class="stat-card"><div class="num" id="t-subs">–</div><div class="lbl">Newsletter subscribers</div></div>
       <div class="stat-card"><div class="num" id="t-msgs">–</div><div class="lbl">Contact messages</div></div>
       <div class="stat-card"><div class="num" id="t-scans">–</div><div class="lbl">Label scans (all time)</div></div>
+      <div class="stat-card"><div class="num" id="t-requests">–</div><div class="lbl">Product check requests</div></div>
     </div>
 
     <div class="chart-box">
@@ -169,6 +170,7 @@
         document.getElementById("t-subs").textContent = res.totals.subscribers;
         document.getElementById("t-msgs").textContent = res.totals.messages;
         document.getElementById("t-scans").textContent = res.totals.scans;
+        document.getElementById("t-requests").textContent = res.totals.productRequests;
         draw("ch-signups", fillSeries(res.signupsByDay), "Signups", "#2F7D4E", "line");
         draw("ch-scans", fillSeries(res.scansByDay), "Scans", "#D93A2B", "bar");
         var tb = document.getElementById("src-body");
