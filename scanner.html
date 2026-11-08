@@ -167,6 +167,9 @@
         <div id="scan-result"></div>
       </div>
 
+      <!-- My scans: the reader's own scan history, saved on their device only (localStorage) -->
+      <div id="my-scans" class="dossier gate-card" style="margin-top:26px"></div>
+
       <div class="disclaimer" style="max-width:820px;margin-left:auto;margin-right:auto">
         <strong>How your photos are handled:</strong> your photo is read right on your device — it is never uploaded to us or anyone else. Only the list of matched ingredients is saved (plus the score, in Food mode), so we can see which ingredients get flagged most. We never sell your photos or your data. See the <a href="/privacy">privacy policy</a> for details.
       </div>
@@ -223,7 +226,7 @@
 <script src="/js/ingredients-data.js?v=12"></script>
 <script src="/js/pet-data.js?v=1"></script>
 <script src="/js/swaps-data.js?v=1"></script>
-<script src="/js/site.js?v=29"></script>
+<script src="/js/site.js?v=30"></script>
 <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", function () {

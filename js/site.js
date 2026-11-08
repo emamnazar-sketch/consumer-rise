@@ -791,6 +791,106 @@
     return '<div style="margin-top:12px;padding:12px 14px;background:var(--card);border:var(--line);border-radius:var(--radius)">' + inner + "</div>";
   }
 
+  /* ---- My scans: the reader's own scan history. Saved ONLY in this
+     browser's localStorage — the list itself is never sent anywhere.
+     Each entry mirrors the result the scanner just showed: same score,
+     same flags, same words. Nothing here changes any verdict. ---- */
+  var MY_SCANS_KEY = "cr_my_scans";
+  var MY_SCANS_MAX = 30;
+  var MY_SCANS_ITEMS_MAX = 25;
+  var MY_SCAN_MODE_LABELS = { food: "Food label", pet: "Pet food label", skin: "Skin \u00B7 cosmetics", home: "Home \u00B7 cleaning" };
+
+  function getMyScans() {
+    try {
+      var list = JSON.parse(localStorage.getItem(MY_SCANS_KEY) || "[]");
+      return Array.isArray(list) ? list : [];
+    } catch (err) { return []; }
+  }
+  function saveMyScan(entry) {
+    try {
+      var list = getMyScans();
+      list.unshift(entry);
+      if (list.length > MY_SCANS_MAX) list = list.slice(0, MY_SCANS_MAX);
+      localStorage.setItem(MY_SCANS_KEY, JSON.stringify(list));
+    } catch (err) {}
+    renderMyScans();
+  }
+  function scanBand(score) {
+    return score >= 85 ? "Mostly clear" : score >= 65 ? "A few flags" : score >= 40 ? "Several concerns" : "Many concerns";
+  }
+  function myScanDate(ts) {
+    var d = new Date(ts);
+    return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" }) +
+      " \u00B7 " + d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+  }
+  function renderMyScans() {
+    var box = document.getElementById("my-scans");
+    if (!box) return;
+    var list = getMyScans();
+    var h = '<h2 style="font-weight:900;text-transform:uppercase;font-size:26px;margin-bottom:12px">My scans</h2>';
+    h += '<p style="color:var(--ink-soft);margin-bottom:18px">Your past scans, saved on this phone only. This list never leaves your device \u2014 nothing here is uploaded or shared.</p>';
+    if (!list.length) {
+      h += '<p style="color:var(--ink-soft)">Nothing here yet. Labels you scan will show up here, so you can check last week\u2019s scan without scanning the label again.</p>';
+    } else {
+      h += '<div style="display:flex;flex-direction:column;gap:12px">';
+      list.forEach(function (e) {
+        h += '<div style="background:var(--paper);border:var(--line);border-radius:var(--radius);padding:14px 16px">';
+        h += '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px">' +
+          "<strong>" + escHtml(e.product || MY_SCAN_MODE_LABELS[e.mode] || "Label scan") + "</strong>" +
+          '<span style="font-size:13.5px;color:var(--ink-soft)">' + escHtml(myScanDate(e.ts)) + "</span></div>";
+        if (e.product) h += '<p style="font-size:13.5px;color:var(--ink-soft);margin:0 0 6px">' + escHtml(MY_SCAN_MODE_LABELS[e.mode] || "") + "</p>";
+        if (e.mode === "food" || e.mode === "pet") {
+          if (e.flagCount) {
+            h += '<p style="margin:0 0 8px"><strong>Score ' + e.score + "/100</strong> \u00B7 " + escHtml(scanBand(e.score)) +
+              " \u00B7 " + e.flagCount + " flagged ingredient" + (e.flagCount > 1 ? "s" : "") + "</p>";
+          } else {
+            h += '<p style="margin:0 0 8px">No flagged ingredients detected</p>';
+          }
+        } else if (e.mode === "skin") {
+          if (!e.matched) {
+            h += '<p style="margin:0 0 8px">No cosmetic ingredients matched</p>';
+          } else {
+            h += '<p style="margin:0 0 8px">' + e.matched + " ingredient" + (e.matched === 1 ? "" : "s") + " matched" +
+              (e.items && e.items.length ? " \u2014 flagged:" : ". None are banned in the EU.") + "</p>";
+          }
+        } else if (e.mode === "home") {
+          if (!e.matched) {
+            h += '<p style="margin:0 0 8px">No household chemicals matched</p>';
+          } else {
+            h += '<p style="margin:0 0 8px">' + e.matched + " chemical" + (e.matched === 1 ? "" : "s") + " matched. Facts only \u2014 no verdicts:</p>";
+          }
+        }
+        if (e.items && e.items.length) {
+          h += '<div style="display:flex;flex-direction:column;gap:6px">';
+          e.items.forEach(function (it) {
+            var badge = "";
+            if (e.mode === "food" || e.mode === "pet") badge = riskBadge(it.risk);
+            else if (e.mode === "skin") badge = skinBanBadges(it);
+            h += '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px">' +
+              '<span style="font-size:15px">' + escHtml(it.name) + "</span>" +
+              (badge ? '<span style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">' + badge + "</span>" : "") + "</div>";
+          });
+          h += "</div>";
+          if (e.flagCount && e.flagCount > e.items.length) {
+            h += '<p style="font-size:13.5px;color:var(--ink-soft);margin:8px 0 0">+' + (e.flagCount - e.items.length) + " more flagged on this label.</p>";
+          }
+        }
+        h += "</div>";
+      });
+      h += "</div>";
+      h += '<p style="margin:18px 0 0"><button type="button" class="btn btn-ink" id="my-scans-clear">Clear my scans</button></p>' +
+        '<p style="font-size:13.5px;color:var(--ink-soft);margin:8px 0 0">Clearing removes the whole list from this phone. There is no copy anywhere else.</p>';
+    }
+    box.innerHTML = h;
+    var clearBtn = document.getElementById("my-scans-clear");
+    if (clearBtn) clearBtn.addEventListener("click", function () {
+      if (!window.confirm("Remove all your saved scans from this phone?")) return;
+      try { localStorage.removeItem(MY_SCANS_KEY); } catch (err) {}
+      renderMyScans();
+    });
+  }
+  renderMyScans();
+
   function renderScanResults(hits, invHits, ocrText, product) {
     var h = '<div class="dossier scan-result" role="status">';
     h += barcodeProductHTML(product);
@@ -849,6 +949,14 @@
     h += '<p class="center mt"><button class="btn btn-ink" id="scan-again">Scan another label</button></p>';
     h += '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:10px">Flagged results cover our 99-ingredient index. The inventory section below lists FDA-recorded names with no verdict attached. Results depend on photo quality. General information only — <a href="/disclaimer">not medical advice</a>.</p></div>';
     result.innerHTML = h;
+    saveMyScan({
+      ts: Date.now(),
+      mode: scanMode === "pet" ? "pet" : "food",
+      product: product ? (product.name || null) : null,
+      score: hits.length ? scanScore(hits) : 100,
+      flagCount: hits.length,
+      items: hits.slice(0, MY_SCANS_ITEMS_MAX).map(function (x) { return { name: x.ing.name, risk: x.ing.risk }; })
+    });
     wireShare("food", { score: shareScore, hits: hits }, product);
     wireScanAgain();
     loadAlternatives(product);
@@ -958,6 +1066,14 @@
     h += '<p class="center mt"><button class="btn btn-ink" id="scan-again">Scan another label</button></p>';
     h += '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:10px">Ban flags reflect regulator action only — no Consumer Rising verdicts. Results depend on photo quality. General information only — <a href="/disclaimer">not medical advice</a>.</p></div>';
     result.innerHTML = h;
+    saveMyScan({
+      ts: Date.now(),
+      mode: "skin",
+      product: product ? (product.name || null) : null,
+      matched: hits.length,
+      items: hits.filter(function (x) { return x.eu || x.us || x.ca; }).slice(0, MY_SCANS_ITEMS_MAX)
+        .map(function (x) { return { name: x.name, eu: !!x.eu, us: !!x.us, ca: !!x.ca }; })
+    });
     wireShare("skin", hits, product);
     wireScanAgain();
   }
@@ -1000,6 +1116,13 @@
     h += '<p class="center mt"><button class="btn btn-ink" id="scan-again">Scan another label</button></p>';
     h += '<p style="font-size:13.5px;color:var(--ink-soft);margin-top:10px">Results depend on photo quality. Facts and studies only — no verdicts. General information only — <a href="/disclaimer">not medical advice</a>.</p></div>';
     result.innerHTML = h;
+    saveMyScan({
+      ts: Date.now(),
+      mode: "home",
+      product: null,
+      matched: hits.length,
+      items: hits.slice(0, MY_SCANS_ITEMS_MAX).map(function (x) { return { name: x.entry.name }; })
+    });
     wireShare("home", hits);
     result.querySelectorAll(".home-expand").forEach(function (btn) {
       btn.addEventListener("click", function () {
